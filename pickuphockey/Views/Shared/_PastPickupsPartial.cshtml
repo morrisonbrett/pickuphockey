@@ -1,0 +1,15 @@
+﻿@model IEnumerable<pickuphockey.Models.Session>
+@{
+    var list = Model.Where(m => m.SessionDateTime.Date < DateTime.Now.Date).OrderByDescending(m => m.SessionDateTime);
+}
+
+<table class="table">
+    @foreach (var item in list)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SessionDateTime)
+            </td>
+        </tr>
+    }
+</table>

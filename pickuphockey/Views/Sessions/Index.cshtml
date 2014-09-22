@@ -1,0 +1,51 @@
+﻿@model IEnumerable<pickuphockey.Models.Session>
+
+@{
+    ViewBag.Title = "Pick-Up Sessions";
+}
+
+<h2>Pick-Up Sessions</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SessionId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SessionDateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateDateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpdateDateTime)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.SessionId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SessionDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreateDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UpdateDateTime)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.SessionId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.SessionId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.SessionId })
+        </td>
+    </tr>
+}
+
+</table>
