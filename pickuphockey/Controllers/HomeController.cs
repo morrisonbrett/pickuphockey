@@ -7,7 +7,7 @@ using pickuphockey.Models;
 
 namespace pickuphockey.Controllers
 {
-    [RequireHttps]
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
