@@ -45,6 +45,7 @@ namespace pickuphockey.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.SavePreferencesSuccess ? "Your preferences have been saved."
                 : "";
 
             var model = new IndexViewModel
@@ -310,6 +311,53 @@ namespace pickuphockey.Controllers
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
+        // GET: /Manage/Prefernces
+        public async Task<ActionResult> Preferences()
+        {
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return View();
+            }
+
+            return View(new PreferencesViewModel { FirstName = user.FirstName, LastName = user.LastName, PlayerJersey = user.PlayerJersey, PaymentPreference = user.PaymentPreference, TeamAssignment = user.TeamAssignment });
+        }
+
+        //
+        // POST: /Manage/Preferences
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Preferences(PreferencesViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+            if (user == null)
+            {
+                return View(model);
+            }
+
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.PlayerJersey = model.PlayerJersey;
+            user.PaymentPreference = model.PaymentPreference;
+            user.TeamAssignment = model.TeamAssignment;
+
+            var result = UserManager.Update(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", new {Message = ManageMessageId.SavePreferencesSuccess});
+            }
+            AddErrors(result);
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
 #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
@@ -364,6 +412,7 @@ namespace pickuphockey.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
+            SavePreferencesSuccess,
             Error
         }
 

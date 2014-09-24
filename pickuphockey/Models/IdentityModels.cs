@@ -5,9 +5,29 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace pickuphockey.Models
 {
+    public enum PaymentPreference
+    {
+        Cash,
+        PayPal,
+        Check
+    }
+
+    public enum TeamAssignment
+    {
+        Unknown,
+        Light,
+        Dark
+    }
+
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PlayerJersey { get; set; }
+        public PaymentPreference PaymentPreference { get; set; }
+        public TeamAssignment TeamAssignment { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -29,6 +49,6 @@ namespace pickuphockey.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<pickuphockey.Models.Session> Sessions { get; set; }
+        public System.Data.Entity.DbSet<Session> Sessions { get; set; }
     }
 }

@@ -203,6 +203,14 @@
     <Compile Include="Migrations\201409240342451_Session_DateRename.Designer.cs">
       <DependentUpon>201409240342451_Session_DateRename.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201409240421089_MoreUserInfo.cs" />
+    <Compile Include="Migrations\201409240421089_MoreUserInfo.Designer.cs">
+      <DependentUpon>201409240421089_MoreUserInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201409240613436_MoreUserInfo2.cs" />
+    <Compile Include="Migrations\201409240613436_MoreUserInfo2.Designer.cs">
+      <DependentUpon>201409240613436_MoreUserInfo2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -334,6 +342,7 @@
     <Content Include="Views\Shared\EditorTemplates\LocalDateTime.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\LocalDateTime.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\LocalDateTimeDay.cshtml" />
+    <Content Include="Views\Manage\Preferences.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -354,6 +363,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201409240342451_Session_DateRename.resx">
       <DependentUpon>201409240342451_Session_DateRename.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409240421089_MoreUserInfo.resx">
+      <DependentUpon>201409240421089_MoreUserInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409240613436_MoreUserInfo2.resx">
+      <DependentUpon>201409240613436_MoreUserInfo2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
