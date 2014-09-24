@@ -1,8 +1,8 @@
 Pick-Up Hockey
 ==============
-A project to buy, sell, and manage "spots" in a pick-up hockey session.
+A project to buy, sell, and manage "spots" in a pick-up hockey session.  In 2004, our commissioner, John Bryan, started a friendly pick-up game on Friday mornings.  It's been such a great, well run, enjoyable hockey experience for everyone, and a few years ago we added a Wednesday session.  We play at [Toyota Sports Center](http://www.toyotasportscenter.com/) in El Segundo, California, where the NHL Los Angeles Kings practice.
 
-For years, my Friday Pick-Up Ice Hockey team has been managing the buy / sell list via email.  About a week before each skating session, the commissioner sends an email as the "buy / sell thread".  Regulars and substitutes add their names as a buyer or seller, like:
+For years, my we have has been managing the buy / sell list via email.  About a week before each skating session, the commissioner sends an email as the "buy / sell thread".  Regulars and substitutes add their names as a buyer or seller, like:
 
     Bill sells to Bob
     TBD sells to Joe
@@ -11,4 +11,4 @@ And each player that responds is expected to modify the thread accordingly, and 
 
 And such, the 'Pick-Up Hockey' project was born.
 
-The project is built on .NET / MVC and uses OAuth2 to allow Google logins.  Feel free to clone, fork, and pull-request away.  And feedback is very welcome.  I imagine this is a very niche use-case.  I didn't build it to be a multi-purpose platform, but I can see it evolving into something a little bigger for league / practice management or something.
+The project is built on .NET / MVC / Bootstrap and uses OAuth2 to allow Google logins.  Feel free to clone, fork, and pull-request away.  Feedback is very welcome.
