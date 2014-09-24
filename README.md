@@ -4,8 +4,8 @@ A project to buy, sell, and manage "spots" in a pick-up hockey session.
 
 For years, my Friday Pick-Up Ice Hockey team has been managing the buy / sell list via email.  About a week before each skating session, the commissioner sends an email as the "buy / sell thread".  Regulars and substitutes add their names as a buyer or seller, like:
 
-Bill sells to Bob
-TBD sells to Joe
+    Bill sells to Bob
+    TBD sells to Joe
 
 And each player that responds is expected to modify the thread accordingly, and plug their name in or add it to the list.  There are 20 spots, and many more on the mailing list.  Inevitably, someone always manages to botch it and confuse everyone.
 
