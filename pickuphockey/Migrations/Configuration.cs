@@ -1,12 +1,10 @@
 namespace pickuphockey.Migrations
 {
     using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
-    using pickuphockey.Models;
+    using Models;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<pickuphockey.Models.ApplicationDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
         public Configuration()
         {
@@ -14,7 +12,7 @@ namespace pickuphockey.Migrations
             ContextKey = "pickuphockey.Models.ApplicationDbContext";
         }
 
-        protected override void Seed(pickuphockey.Models.ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
             context.Sessions.AddOrUpdate(p => p.SessionDate,
                 new Session

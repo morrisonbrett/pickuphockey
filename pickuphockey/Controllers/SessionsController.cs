@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using pickuphockey.Models;
 
@@ -12,12 +9,12 @@ namespace pickuphockey.Controllers
 {
     public class SessionsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         // GET: Sessions
         public ActionResult Index()
         {
-            return View(db.Sessions.ToList().OrderByDescending(t => t.SessionDate));
+            return View(_db.Sessions.ToList().OrderByDescending(t => t.SessionDate));
         }
 
         // GET: Sessions/Details/5
@@ -27,7 +24,7 @@ namespace pickuphockey.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Session session = db.Sessions.Find(id);
+            Session session = _db.Sessions.Find(id);
             if (session == null)
             {
                 return HttpNotFound();
@@ -52,8 +49,8 @@ namespace pickuphockey.Controllers
             {
                 session.CreateDateTime = DateTime.UtcNow;
                 session.UpdateDateTime = DateTime.UtcNow;
-                db.Sessions.Add(session);
-                db.SaveChanges();
+                _db.Sessions.Add(session);
+                _db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -67,7 +64,7 @@ namespace pickuphockey.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Session session = db.Sessions.Find(id);
+            Session session = _db.Sessions.Find(id);
             if (session == null)
             {
                 return HttpNotFound();
@@ -85,8 +82,8 @@ namespace pickuphockey.Controllers
             if (ModelState.IsValid)
             {
                 session.UpdateDateTime = DateTime.UtcNow;
-                db.Entry(session).State = EntityState.Modified;
-                db.SaveChanges();
+                _db.Entry(session).State = EntityState.Modified;
+                _db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(session);
@@ -99,7 +96,7 @@ namespace pickuphockey.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Session session = db.Sessions.Find(id);
+            Session session = _db.Sessions.Find(id);
             if (session == null)
             {
                 return HttpNotFound();
@@ -112,9 +109,9 @@ namespace pickuphockey.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Session session = db.Sessions.Find(id);
-            db.Sessions.Remove(session);
-            db.SaveChanges();
+            Session session = _db.Sessions.Find(id);
+            _db.Sessions.Remove(session);
+            _db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -122,7 +119,7 @@ namespace pickuphockey.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
