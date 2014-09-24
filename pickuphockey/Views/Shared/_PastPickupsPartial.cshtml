@@ -2,7 +2,7 @@
 @model IEnumerable<pickuphockey.Models.Session>
 @{
     var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
-    var list = Model.Where(m => m.SessionDateTime.Date < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date).OrderByDescending(m => m.SessionDateTime);
+    var list = Model.Where(m => m.SessionDate.Date < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date).OrderByDescending(m => m.SessionDate);
 }
 
 <table class="table">
@@ -10,7 +10,7 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.SessionDateTime)
+                @Html.DisplayFor(modelItem => item.SessionDate)
             </td>
         </tr>
     }

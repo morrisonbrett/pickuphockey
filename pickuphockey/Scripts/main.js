@@ -1,3 +1,3 @@
 ﻿$(document).ready(function () {
-    $('#SessionDateTime').datepicker({ dateFormat: "DD, mm/dd/yy" });
+    $('#SessionDate').datepicker({ dateFormat: "DD, mm/dd/yy" });
 });

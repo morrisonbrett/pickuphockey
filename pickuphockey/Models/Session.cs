@@ -12,7 +12,7 @@ namespace pickuphockey.Models
         public int SessionId { get; set; }
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dddd, MM/dd/yyyy}")]
-        public DateTime SessionDateTime { get; set; }
+        public DateTime SessionDate { get; set; }
 
         public DateTime CreateDateTime { get; set; }
         public DateTime UpdateDateTime { get; set; }

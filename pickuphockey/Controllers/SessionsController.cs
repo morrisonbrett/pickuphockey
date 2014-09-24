@@ -17,7 +17,7 @@ namespace pickuphockey.Controllers
         // GET: Sessions
         public ActionResult Index()
         {
-            return View(db.Sessions.ToList().OrderByDescending(t => t.SessionDateTime));
+            return View(db.Sessions.ToList().OrderByDescending(t => t.SessionDate));
         }
 
         // GET: Sessions/Details/5
@@ -46,7 +46,7 @@ namespace pickuphockey.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SessionId,SessionDateTime")] Session session)
+        public ActionResult Create([Bind(Include = "SessionId,SessionDate")] Session session)
         {
             if (ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace pickuphockey.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "SessionId,SessionDateTime,CreateDateTime")] Session session)
+        public ActionResult Edit([Bind(Include = "SessionId,SessionDate,CreateDateTime")] Session session)
         {
             if (ModelState.IsValid)
             {

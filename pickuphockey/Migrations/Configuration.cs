@@ -16,46 +16,46 @@ namespace pickuphockey.Migrations
 
         protected override void Seed(pickuphockey.Models.ApplicationDbContext context)
         {
-            context.Sessions.AddOrUpdate(p => p.SessionDateTime,
+            context.Sessions.AddOrUpdate(p => p.SessionDate,
                 new Session
                 {
-                    SessionDateTime = new DateTime(2014, 8, 29).Date,
+                    SessionDate = new DateTime(2014, 8, 29),
                     CreateDateTime = DateTime.UtcNow,
                     UpdateDateTime = DateTime.UtcNow
                 },
                 new Session
                 {
-                    SessionDateTime = new DateTime(2014, 9, 12).Date,
+                    SessionDate = new DateTime(2014, 9, 12),
                     CreateDateTime = DateTime.UtcNow,
                     UpdateDateTime = DateTime.UtcNow
                 },
                 new Session
                 {
-                    SessionDateTime = new DateTime(2014, 9, 19).Date,
+                    SessionDate = new DateTime(2014, 9, 19),
                     CreateDateTime = DateTime.UtcNow,
                     UpdateDateTime = DateTime.UtcNow
                 },
                 new Session
                 {
-                    SessionDateTime = new DateTime(2014, 9, 24).Date,
+                    SessionDate = new DateTime(2014, 9, 24),
                     CreateDateTime = DateTime.UtcNow,
                     UpdateDateTime = DateTime.UtcNow
                 },
                 new Session
                 {
-                    SessionDateTime = new DateTime(2014, 9, 26).Date,
+                    SessionDate = new DateTime(2014, 9, 26),
                     CreateDateTime = DateTime.UtcNow,
                     UpdateDateTime = DateTime.UtcNow
                 },
                 new Session
                 {
-                    SessionDateTime = new DateTime(2014, 10, 1).Date,
+                    SessionDate = new DateTime(2014, 10, 1),
                     CreateDateTime = DateTime.UtcNow,
                     UpdateDateTime = DateTime.UtcNow
                 },
                 new Session
                 {
-                    SessionDateTime = new DateTime(2014, 10, 3).Date,
+                    SessionDate = new DateTime(2014, 10, 3),
                     CreateDateTime = DateTime.UtcNow,
                     UpdateDateTime = DateTime.UtcNow
                 }
