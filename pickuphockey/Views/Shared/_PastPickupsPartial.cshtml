@@ -1,6 +1,8 @@
-﻿@model IEnumerable<pickuphockey.Models.Session>
+﻿@using pickuphockey.Models
+@model IEnumerable<pickuphockey.Models.Session>
 @{
-    var list = Model.Where(m => m.SessionDateTime.Date < DateTime.Now.Date).OrderByDescending(m => m.SessionDateTime);
+    var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
+    var list = Model.Where(m => m.SessionDateTime.Date < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date).OrderByDescending(m => m.SessionDateTime);
 }
 
 <table class="table">

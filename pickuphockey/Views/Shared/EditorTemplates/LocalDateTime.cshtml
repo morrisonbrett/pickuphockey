@@ -1,0 +1,6 @@
+﻿@using pickuphockey.Models
+@model DateTime?
+@{
+    var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
+}
+@Html.TextBox("", (Model.HasValue ? TimeZoneInfo.ConvertTimeFromUtc(Model.Value, pstZone).ToString("dddd, MM/dd/yyyy") : string.Empty), new { @class = "form-control text-box single-line", @type = "datetime" })

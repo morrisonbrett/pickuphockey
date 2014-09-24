@@ -35,10 +35,10 @@
             @Html.DisplayFor(modelItem => item.SessionDateTime)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.CreateDateTime)
+            @Html.DisplayFor(modelItem => item.CreateDateTime, "LocalDateTime")
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.UpdateDateTime)
+            @Html.DisplayFor(modelItem => item.UpdateDateTime, "LocalDateTime")
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.SessionId }) |
