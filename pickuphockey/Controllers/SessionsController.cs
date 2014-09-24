@@ -43,7 +43,7 @@ namespace pickuphockey.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SessionId,SessionDate")] Session session)
+        public ActionResult Create([Bind(Include = "SessionId,SessionDate,Note")] Session session)
         {
             if (ModelState.IsValid)
             {
@@ -77,7 +77,7 @@ namespace pickuphockey.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "SessionId,SessionDate,CreateDateTime")] Session session)
+        public ActionResult Edit([Bind(Include = "SessionId,SessionDate,CreateDateTime,Note")] Session session)
         {
             if (ModelState.IsValid)
             {

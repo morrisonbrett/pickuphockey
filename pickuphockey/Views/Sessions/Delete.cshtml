@@ -1,4 +1,5 @@
-﻿@model pickuphockey.Models.Session
+﻿@using Microsoft.Ajax.Utilities
+@model pickuphockey.Models.Session
 
 @{
     ViewBag.Title = "Delete";
@@ -14,13 +15,19 @@
         <dt>
             @Html.DisplayNameFor(model => model.SessionDate)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.SessionDate)
         </dd>
-
+        @if (!Model.Note.IsNullOrWhiteSpace())
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Note)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Note)
+            </dd>
+        }
     </dl>
-
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 

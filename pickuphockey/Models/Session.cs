@@ -12,5 +12,7 @@ namespace pickuphockey.Models
 
         public DateTime CreateDateTime { get; set; }
         public DateTime UpdateDateTime { get; set; }
+
+        public string Note { get; set; }
     }
 }
