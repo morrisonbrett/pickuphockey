@@ -1,4 +1,21 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.Owin
+@{
+    // TODO Move this to .cs file or maybe even ajax
+    var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+    if (userManager != null)
+    {
+        if (User.Identity != null)
+        {
+            var userid = User.Identity.GetUserId();
+            if (!string.IsNullOrEmpty(userid))
+            {
+                ViewBag.FirstName = userManager.FindById(userid).FirstName;
+            }
+        }
+    }
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
