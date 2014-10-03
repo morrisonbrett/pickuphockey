@@ -374,8 +374,19 @@ namespace pickuphockey.Controllers
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
+                        // TODO possibly push this out to the provider layer, and have a common dictionary - would make this below more comatible with other social authentication providers
+                        var firstName = info.ExternalIdentity.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"));
+                        if (firstName != null) user.FirstName = firstName.Value;
+                        var lastName = info.ExternalIdentity.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"));
+                        if (lastName != null) user.LastName = lastName.Value;
+
+                        var updateResult = await UserManager.UpdateAsync(user);
+                        if (updateResult.Succeeded)
+                        {
+                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                            return RedirectToLocal(returnUrl);
+                        }
+                        AddErrors(updateResult);
                     }
                 }
                 AddErrors(result);
