@@ -10,7 +10,11 @@
             var userid = User.Identity.GetUserId();
             if (!string.IsNullOrEmpty(userid))
             {
-                ViewBag.FirstName = userManager.FindById(userid).FirstName;
+                var user = userManager.FindById(userid);
+                if (user != null)
+                {
+                    ViewBag.FirstName = user.FirstName;
+                }
             }
         }
     }
