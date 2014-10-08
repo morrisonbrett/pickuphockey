@@ -7,6 +7,7 @@ namespace pickuphockey.Models
 {
     public enum PaymentPreference
     {
+        Unknown,
         Cash,
         PayPal,
         Check
@@ -14,7 +15,7 @@ namespace pickuphockey.Models
 
     public enum TeamAssignment
     {
-        Unknown,
+        Unassigned,
         Light,
         Dark
     }
