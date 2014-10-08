@@ -20,7 +20,6 @@ namespace pickuphockey.Controllers
         public SessionsController(ApplicationUserManager userManager)
         {
             UserManager = userManager;
-           
         }
 
         private ApplicationUserManager _userManager;
