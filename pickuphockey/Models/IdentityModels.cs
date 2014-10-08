@@ -24,7 +24,6 @@ namespace pickuphockey.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string PlayerJersey { get; set; }
         public PaymentPreference PaymentPreference { get; set; }
         public TeamAssignment TeamAssignment { get; set; }
 

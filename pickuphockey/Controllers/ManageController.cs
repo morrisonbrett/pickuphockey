@@ -320,7 +320,7 @@ namespace pickuphockey.Controllers
                 return View();
             }
 
-            return View(new PreferencesViewModel { FirstName = user.FirstName, LastName = user.LastName, PlayerJersey = user.PlayerJersey, PaymentPreference = user.PaymentPreference, TeamAssignment = user.TeamAssignment });
+            return View(new PreferencesViewModel { FirstName = user.FirstName, LastName = user.LastName, PaymentPreference = user.PaymentPreference, TeamAssignment = user.TeamAssignment });
         }
 
         //
@@ -343,7 +343,6 @@ namespace pickuphockey.Controllers
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-            user.PlayerJersey = model.PlayerJersey;
             user.PaymentPreference = model.PaymentPreference;
             user.TeamAssignment = model.TeamAssignment;
 

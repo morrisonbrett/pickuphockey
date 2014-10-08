@@ -215,6 +215,10 @@
     <Compile Include="Migrations\201410052300068_SessionActivity.Designer.cs">
       <DependentUpon>201410052300068_SessionActivity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201410080706045_RemovePlayerJersey.cs" />
+    <Compile Include="Migrations\201410080706045_RemovePlayerJersey.Designer.cs">
+      <DependentUpon>201410080706045_RemovePlayerJersey.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -378,6 +382,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201410052300068_SessionActivity.resx">
       <DependentUpon>201410052300068_SessionActivity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410080706045_RemovePlayerJersey.resx">
+      <DependentUpon>201410080706045_RemovePlayerJersey.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
