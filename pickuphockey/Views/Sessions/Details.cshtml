@@ -1,4 +1,5 @@
 ﻿@using Microsoft.Ajax.Utilities
+@using pickuphockey.Models
 @model pickuphockey.Models.Session
 
 @{
@@ -24,6 +25,25 @@
             </dt>
             <dd>
                 @Html.DisplayFor(model => model.Note)
+            </dd>
+        }
+        @if (Model.ActivityLogs.Count > 0)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.ActivityLogs)
+            </dt>
+            <dd>
+                @foreach (var item in Model.ActivityLogs.OrderByDescending(i => i.CreateDateTime))
+                {
+                    @Html.DisplayFor(modelItem => item.CreateDateTime, "LocalDateTime")
+                    <span> - </span>
+                    @Html.DisplayFor(modelItem => item.User.FirstName)
+                    <span> </span>
+                    @Html.DisplayFor(modelItem => item.User.LastName)
+                    <span> </span>
+                    @Html.DisplayFor(modelItem => item.Activity)
+                    <br />
+                }
             </dd>
         }
     </dl>

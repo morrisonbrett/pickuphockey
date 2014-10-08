@@ -17,24 +17,6 @@ namespace pickuphockey.Migrations
             context.Sessions.AddOrUpdate(p => p.SessionDate,
                 new Session
                 {
-                    SessionDate = new DateTime(2014, 8, 29),
-                    CreateDateTime = DateTime.UtcNow,
-                    UpdateDateTime = DateTime.UtcNow
-                },
-                new Session
-                {
-                    SessionDate = new DateTime(2014, 9, 12),
-                    CreateDateTime = DateTime.UtcNow,
-                    UpdateDateTime = DateTime.UtcNow
-                },
-                new Session
-                {
-                    SessionDate = new DateTime(2014, 9, 19),
-                    CreateDateTime = DateTime.UtcNow,
-                    UpdateDateTime = DateTime.UtcNow
-                },
-                new Session
-                {
                     SessionDate = new DateTime(2014, 9, 24),
                     CreateDateTime = DateTime.UtcNow,
                     UpdateDateTime = DateTime.UtcNow
@@ -54,6 +36,30 @@ namespace pickuphockey.Migrations
                 new Session
                 {
                     SessionDate = new DateTime(2014, 10, 3),
+                    CreateDateTime = DateTime.UtcNow,
+                    UpdateDateTime = DateTime.UtcNow
+                },
+                new Session
+                {
+                    SessionDate = new DateTime(2014, 10, 8),
+                    CreateDateTime = DateTime.UtcNow,
+                    UpdateDateTime = DateTime.UtcNow
+                },
+                new Session
+                {
+                    SessionDate = new DateTime(2014, 10, 10),
+                    CreateDateTime = DateTime.UtcNow,
+                    UpdateDateTime = DateTime.UtcNow
+                },
+                new Session
+                {
+                    SessionDate = new DateTime(2014, 10, 15),
+                    CreateDateTime = DateTime.UtcNow,
+                    UpdateDateTime = DateTime.UtcNow
+                },
+                new Session
+                {
+                    SessionDate = new DateTime(2014, 10, 17),
                     CreateDateTime = DateTime.UtcNow,
                     UpdateDateTime = DateTime.UtcNow
                 }

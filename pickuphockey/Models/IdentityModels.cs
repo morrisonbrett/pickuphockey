@@ -50,5 +50,6 @@ namespace pickuphockey.Models
         }
 
         public System.Data.Entity.DbSet<Session> Sessions { get; set; }
+        public System.Data.Entity.DbSet<ActivityLog> ActivityLogs { get; set; }
     }
 }

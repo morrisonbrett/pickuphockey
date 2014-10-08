@@ -7,13 +7,13 @@ namespace pickuphockey.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.1-30610")]
-    public sealed partial class SessionNote : IMigrationMetadata
+    public sealed partial class SessionActivity : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(SessionNote));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(SessionActivity));
         
         string IMigrationMetadata.Id
         {
-            get { return "201409240755061_SessionNote"; }
+            get { return "201410052300068_SessionActivity"; }
         }
         
         string IMigrationMetadata.Source

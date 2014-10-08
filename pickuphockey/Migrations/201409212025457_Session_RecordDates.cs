@@ -9,12 +9,14 @@ namespace pickuphockey.Migrations
         {
             AddColumn("dbo.Sessions", "CreateDateTime", c => c.DateTime(nullable: false));
             AddColumn("dbo.Sessions", "UpdateDateTime", c => c.DateTime(nullable: false));
+            AddColumn("dbo.Sessions", "Note", c => c.String());
         }
         
         public override void Down()
         {
             DropColumn("dbo.Sessions", "UpdateDateTime");
             DropColumn("dbo.Sessions", "CreateDateTime");
+            DropColumn("dbo.Sessions", "Note");
         }
     }
 }

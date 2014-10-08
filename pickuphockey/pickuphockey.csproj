@@ -211,12 +211,13 @@
     <Compile Include="Migrations\201409240613436_MoreUserInfo2.Designer.cs">
       <DependentUpon>201409240613436_MoreUserInfo2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201409240755061_SessionNote.cs" />
-    <Compile Include="Migrations\201409240755061_SessionNote.Designer.cs">
-      <DependentUpon>201409240755061_SessionNote.cs</DependentUpon>
+    <Compile Include="Migrations\201410052300068_SessionActivity.cs" />
+    <Compile Include="Migrations\201410052300068_SessionActivity.Designer.cs">
+      <DependentUpon>201410052300068_SessionActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ActivityLog.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Session.cs" />
@@ -375,8 +376,8 @@
     <EmbeddedResource Include="Migrations\201409240613436_MoreUserInfo2.resx">
       <DependentUpon>201409240613436_MoreUserInfo2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201409240755061_SessionNote.resx">
-      <DependentUpon>201409240755061_SessionNote.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201410052300068_SessionActivity.resx">
+      <DependentUpon>201410052300068_SessionActivity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
