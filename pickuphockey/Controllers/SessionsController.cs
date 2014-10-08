@@ -66,6 +66,7 @@ namespace pickuphockey.Controllers
         }
 
         // GET: Sessions/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -76,6 +77,7 @@ namespace pickuphockey.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "SessionId,SessionDate,Note")] Session session)
         {
             if (!ModelState.IsValid) return View(session);
@@ -91,6 +93,7 @@ namespace pickuphockey.Controllers
         }
 
         // GET: Sessions/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -111,6 +114,7 @@ namespace pickuphockey.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "SessionId,SessionDate,CreateDateTime,Note")] Session session)
         {
             if (!ModelState.IsValid) return View(session);
@@ -124,6 +128,7 @@ namespace pickuphockey.Controllers
         }
 
         // GET: Sessions/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -142,6 +147,7 @@ namespace pickuphockey.Controllers
         // POST: Sessions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             var session = _db.Sessions.Find(id);

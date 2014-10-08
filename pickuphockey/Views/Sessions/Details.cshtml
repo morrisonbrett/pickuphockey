@@ -18,6 +18,18 @@
         <dd>
             @Html.DisplayFor(model => model.SessionDate)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDateTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreateDateTime, "LocalDateTime")
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdateDateTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UpdateDateTime, "LocalDateTime")
+        </dd>
         @if (!Model.Note.IsNullOrWhiteSpace())
         {
             <dt>
@@ -49,6 +61,9 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.SessionId }) |
+    @if (User.IsInRole("Admin")) {
+    @Html.ActionLink("Edit", "Edit", new {id = Model.SessionId})
+    <span> | </span>
+    }
     @Html.ActionLink("Back to List", "Index")
 </p>

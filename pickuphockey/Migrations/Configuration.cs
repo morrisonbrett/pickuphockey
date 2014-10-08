@@ -1,3 +1,7 @@
+using System.Data.Entity;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+
 namespace pickuphockey.Migrations
 {
     using System;
@@ -12,8 +16,36 @@ namespace pickuphockey.Migrations
             ContextKey = "pickuphockey.Models.ApplicationDbContext";
         }
 
+        void AddAdminRole(DbContext context)
+        {
+            var rm = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+
+            rm.Create(new IdentityRole("Admin"));
+        }
+
+        static void AddAdminUser(DbContext context, string email)
+        {
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+
+            var user = um.FindByEmail(email);
+
+            if (user != null)
+                um.AddToRole(user.Id, "Admin");
+        }
+
         protected override void Seed(ApplicationDbContext context)
         {
+            AddAdminRole(context);
+
+            var listofAdmins = System.Configuration.ConfigurationManager.AppSettings["ListOfAdmins"];
+            if (!string.IsNullOrEmpty(listofAdmins))
+            {
+                var listofAdminsList = listofAdmins.Split(',');
+
+                foreach (var a in listofAdminsList)
+                    AddAdminUser(context, a);
+            }
+
             context.Sessions.AddOrUpdate(p => p.SessionDate,
                 new Session
                 {
