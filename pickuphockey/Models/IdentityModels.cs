@@ -1,5 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Data.Entity;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -47,8 +50,7 @@ namespace pickuphockey.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+        public ApplicationDbContext() : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
 
@@ -57,7 +59,23 @@ namespace pickuphockey.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<Session> Sessions { get; set; }
-        public System.Data.Entity.DbSet<ActivityLog> ActivityLogs { get; set; }
+        public void AddActivity(int sessionId, string activity)
+        {
+            var userid = Thread.CurrentPrincipal.Identity.GetUserId();
+            
+            var activitylog = ActivityLogs.Create();
+
+            activitylog.UserId = userid;
+            activitylog.SessionId = sessionId;
+            activitylog.Activity = activity;
+            activitylog.CreateDateTime = DateTime.UtcNow;
+
+            Entry(activitylog).State = EntityState.Added;
+            SaveChanges();
+        }
+
+        public DbSet<Session> Sessions { get; set; }
+        public DbSet<ActivityLog> ActivityLogs { get; set; }
+        public DbSet<BuySell> BuySell { get; set; }
     }
 }

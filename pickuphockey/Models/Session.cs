@@ -10,8 +10,10 @@ namespace pickuphockey.Models
         public Session()
         {
             ActivityLogs = new HashSet<ActivityLog>();
+            BuySells = new HashSet<BuySell>();
         }
 
+        [Key]
         public int SessionId { get; set; }
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dddd, MM/dd/yyyy}")]
@@ -29,5 +31,8 @@ namespace pickuphockey.Models
 
         [DisplayName("Activity")]
         public ICollection<ActivityLog> ActivityLogs { get; set; }
+
+        [DisplayName("Buyers and Sellers")]
+        public ICollection<BuySell> BuySells { get; set; }
     }
 }

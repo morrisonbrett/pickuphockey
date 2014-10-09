@@ -3,6 +3,8 @@
 
 @{
     ViewBag.Title = "Session Detail";
+    var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
+    var pastSession = Model.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date;
 }
 
 <h2>@Html.DisplayFor(model => model.SessionDate)</h2>
@@ -12,24 +14,23 @@
     {
         <h4>@Html.DisplayFor(model => model.Note)</h4>
     }
-
-    <hr />
-       Buy | Sell
-    <hr />
-    @if (Model.ActivityLogs.Count > 0)
-    {
-        foreach (var item in Model.ActivityLogs.OrderByDescending(i => i.CreateDateTime))
-        {
-            @Html.DisplayFor(modelItem => item.CreateDateTime, "LocalDateTime")
-            <span> - </span>
-            @Html.DisplayFor(modelItem => item.User.FirstName)
-            <span> </span>
-            @Html.DisplayFor(modelItem => item.User.LastName)
-            <span> - </span>
-            @Html.DisplayFor(modelItem => item.Activity)
-            <br />
-        }
+    
+    <hr/>
+    @if (!pastSession) {
+        <div class="form-group">
+            <div>
+                <button onclick="location.href='@Url.Action("Sell", "BuySells", new { id = Model.SessionId })';return false;" class="btn">SELL MY SPOT</button>
+                <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">BUY A SPOT</button>
+            </div>
+        </div>
+    } else {
+        <div>This session has passed and is now closed to buys / sells.</div>
     }
+    <hr />
+    @Html.Partial("_BuySellsPartial", Model.BuySells)
+    <hr />
+    @Html.Partial("_ActivityLogsPartial", Model.ActivityLogs.OrderByDescending(i => i.CreateDateTime))
+    <hr />
 </div>
 <hr />
 <p>

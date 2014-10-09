@@ -185,6 +185,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Attributes\DateValidator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BuySellsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -220,9 +221,18 @@
     <Compile Include="Migrations\201410080706045_RemovePlayerJersey.Designer.cs">
       <DependentUpon>201410080706045_RemovePlayerJersey.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201410090452526_BuySell.cs" />
+    <Compile Include="Migrations\201410090452526_BuySell.Designer.cs">
+      <DependentUpon>201410090452526_BuySell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201410091558202_BuySell2.cs" />
+    <Compile Include="Migrations\201410091558202_BuySell2.Designer.cs">
+      <DependentUpon>201410091558202_BuySell2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
+    <Compile Include="Models\BuySell.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Session.cs" />
@@ -355,6 +365,10 @@
     <Content Include="Views\Shared\DisplayTemplates\LocalDateTimeDay.cshtml" />
     <Content Include="Views\Manage\Preferences.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\BuySells\Buy.cshtml" />
+    <Content Include="Views\BuySells\Sell.cshtml" />
+    <Content Include="Views\Shared\_BuySellsPartial.cshtml" />
+    <Content Include="Views\Shared\_ActivityLogsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -387,6 +401,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201410080706045_RemovePlayerJersey.resx">
       <DependentUpon>201410080706045_RemovePlayerJersey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410090452526_BuySell.resx">
+      <DependentUpon>201410090452526_BuySell.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410091558202_BuySell2.resx">
+      <DependentUpon>201410091558202_BuySell2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

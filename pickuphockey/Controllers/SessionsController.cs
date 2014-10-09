@@ -59,7 +59,17 @@ namespace pickuphockey.Controllers
 
             // TODO Optimize this query into one statement
             session.ActivityLogs = _db.ActivityLogs.Where(q => q.SessionId == session.SessionId).ToList();
-            session.ActivityLogs.ForEach(t => { t.User = UserManager.FindById(t.UserId); });
+            session.ActivityLogs.ForEach(t =>
+            {
+                t.User = UserManager.FindById(t.UserId);
+            });
+
+            session.BuySells = _db.BuySell.Where(q => q.SessionId == session.SessionId).ToList();
+            session.BuySells.ForEach(t =>
+            {
+                t.SellerUser = UserManager.FindById(t.SellerUserId);
+                t.BuyerUser = UserManager.FindById(t.BuyerUserId);
+            });
 
             return View(session);
         }
@@ -86,7 +96,7 @@ namespace pickuphockey.Controllers
             var newSession = _db.Sessions.Add(session);
             _db.SaveChanges();
 
-            AddActivity(newSession.SessionId, "Created Session");
+            _db.AddActivity(newSession.SessionId, "Created Session");
             
             return RedirectToAction("Index");
         }
@@ -118,7 +128,7 @@ namespace pickuphockey.Controllers
         {
             if (!ModelState.IsValid) return View(session);
 
-            AddActivity(session.SessionId, "Edited Session");
+            _db.AddActivity(session.SessionId, "Edited Session");
 
             session.UpdateDateTime = DateTime.UtcNow;
             _db.Entry(session).State = EntityState.Modified;
@@ -153,21 +163,6 @@ namespace pickuphockey.Controllers
             _db.Sessions.Remove(session);
             _db.SaveChanges();
             return RedirectToAction("Index");
-        }
-
-        private void AddActivity(int sessionId, string activity)
-        {
-            var user = UserManager.FindById(User.Identity.GetUserId());
-
-            var activitylog = _db.ActivityLogs.Create();
-
-            activitylog.UserId = user.Id;
-            activitylog.SessionId = sessionId;
-            activitylog.Activity = activity;
-            activitylog.CreateDateTime = DateTime.UtcNow;
-
-            _db.Entry(activitylog).State = EntityState.Added;
-            _db.SaveChanges();
         }
 
         protected override void Dispose(bool disposing)

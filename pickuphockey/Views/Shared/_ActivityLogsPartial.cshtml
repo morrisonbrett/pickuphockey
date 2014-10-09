@@ -1,0 +1,17 @@
+﻿@model IEnumerable<pickuphockey.Models.ActivityLog>
+
+@if (Model.Any())
+{
+    <h2>Activity Log</h2>
+    foreach (var item in Model)
+    {
+        @Html.DisplayFor(modelItem => item.CreateDateTime, "LocalDateTime")
+        <span> - </span>
+        @Html.DisplayFor(modelItem => item.User.FirstName)
+        <span> </span>
+        @Html.DisplayFor(modelItem => item.User.LastName)
+        <span> - </span>
+        @Html.DisplayFor(modelItem => item.Activity)
+        <br />
+    }
+}

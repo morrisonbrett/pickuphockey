@@ -1,0 +1,57 @@
+﻿@model pickuphockey.Models.BuySell
+
+@{
+    ViewBag.Title = "Sell a Spot";
+}
+
+<h2>Sell a Spot for @ViewBag.SessionDate.ToString("dddd, MM/dd/yyyy")</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.BuySellId)
+    @Html.HiddenFor(model => model.SessionId)
+    @Html.HiddenFor(model => model.BuyerUserId)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-horizontal">
+        @if (!string.IsNullOrEmpty(Model.BuyerUserId)) {
+            <h4>Selling spot to @Model.BuyerUser.FirstName @Model.BuyerUser.LastName</h4>
+        }
+        else {
+            <h4>Selling spot to TBD</h4>
+        }
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.SellerNote, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.SellerNote, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SellerNote, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentPreference, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.PaymentPreference, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.TeamAssignment, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.TeamAssignment, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                @if (Html.ViewData.ModelState.IsValid) {
+                    <input type="submit" value="SELL MY SPOT" class="btn btn-default" />
+                }
+                <button onclick="location.href='@Url.Action("Details", "Sessions", new { id = Model.SessionId })';return false;" class="btn">CANCEL</button>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
