@@ -1,69 +1,42 @@
 ﻿@using Microsoft.Ajax.Utilities
-@using pickuphockey.Models
 @model pickuphockey.Models.Session
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Session Detail";
 }
 
-<h2>Details</h2>
+<h2>@Html.DisplayFor(model => model.SessionDate)</h2>
 
 <div>
-    <h4>Session</h4>
+    @if (!Model.Note.IsNullOrWhiteSpace())
+    {
+        <h4>@Html.DisplayFor(model => model.Note)</h4>
+    }
+
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.SessionDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.SessionDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CreateDateTime)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CreateDateTime, "LocalDateTime")
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.UpdateDateTime)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.UpdateDateTime, "LocalDateTime")
-        </dd>
-        @if (!Model.Note.IsNullOrWhiteSpace())
+       Buy | Sell
+    <hr />
+    @if (Model.ActivityLogs.Count > 0)
+    {
+        foreach (var item in Model.ActivityLogs.OrderByDescending(i => i.CreateDateTime))
         {
-            <dt>
-                @Html.DisplayNameFor(model => model.Note)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Note)
-            </dd>
+            @Html.DisplayFor(modelItem => item.CreateDateTime, "LocalDateTime")
+            <span> - </span>
+            @Html.DisplayFor(modelItem => item.User.FirstName)
+            <span> </span>
+            @Html.DisplayFor(modelItem => item.User.LastName)
+            <span> - </span>
+            @Html.DisplayFor(modelItem => item.Activity)
+            <br />
         }
-        @if (Model.ActivityLogs.Count > 0)
-        {
-            <dt>
-                @Html.DisplayNameFor(model => model.ActivityLogs)
-            </dt>
-            <dd>
-                @foreach (var item in Model.ActivityLogs.OrderByDescending(i => i.CreateDateTime))
-                {
-                    @Html.DisplayFor(modelItem => item.CreateDateTime, "LocalDateTime")
-                    <span> - </span>
-                    @Html.DisplayFor(modelItem => item.User.FirstName)
-                    <span> </span>
-                    @Html.DisplayFor(modelItem => item.User.LastName)
-                    <span> </span>
-                    @Html.DisplayFor(modelItem => item.Activity)
-                    <br />
-                }
-            </dd>
-        }
-    </dl>
+    }
 </div>
+<hr />
 <p>
-    @if (User.IsInRole("Admin")) {
-    @Html.ActionLink("Edit", "Edit", new {id = Model.SessionId})
-    <span> | </span>
+    @if (User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.SessionId })
+        <span> | </span>
     }
     @Html.ActionLink("Back to List", "Index")
 </p>

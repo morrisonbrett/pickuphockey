@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
-using Microsoft.AspNet.Identity;
 
 namespace pickuphockey.Models
 {
@@ -18,10 +15,13 @@ namespace pickuphockey.Models
 
         public int ActivityLogId { get; set; }
 
+        [DisplayName("Created")]
         public DateTime CreateDateTime { get; set; }
 
+        [DisplayName("Activity")]
         public string Activity { get; set; }
 
+        [DisplayName("Session")]
         public virtual Session Session { get; set; }
     }
 }

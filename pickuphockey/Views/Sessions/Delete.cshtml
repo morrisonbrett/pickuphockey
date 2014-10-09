@@ -2,33 +2,24 @@
 @model pickuphockey.Models.Session
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Delete Session";
 }
 
-<h2>Delete</h2>
+<h2>Delete Session</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete this Session?</h3>
 <div>
-    <h4>Session</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.SessionDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.SessionDate)
-        </dd>
-        @if (!Model.Note.IsNullOrWhiteSpace())
-        {
-            <dt>
-                @Html.DisplayNameFor(model => model.Note)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Note)
-            </dd>
-        }
-    </dl>
-    @using (Html.BeginForm()) {
+    @Html.DisplayFor(model => model.SessionDate)
+    @if (!Model.Note.IsNullOrWhiteSpace())
+    {
+        <br/>
+        @Html.DisplayFor(model => model.Note)
+    }
+    <br/><br/>
+
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

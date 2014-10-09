@@ -26,7 +26,6 @@
          @if (User.IsInRole("Admin")) {
          <td>
              @Html.ActionLink("Edit", "Edit", new {id = item.SessionId}) |
-             @Html.ActionLink("Details", "Details", new {id = item.SessionId}) |
              @Html.ActionLink("Delete", "Delete", new {id = item.SessionId})
          </td>
          }
