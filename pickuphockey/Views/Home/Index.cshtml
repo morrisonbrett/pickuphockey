@@ -12,21 +12,21 @@
     <div class="col-md-4 text-center container-fluid">
         <div class="row">
             <h1>@System.Configuration.ConfigurationManager.AppSettings["SiteTitle"]</h1>
-            <p class="lead text-left">Welcome to the @System.Configuration.ConfigurationManager.AppSettings["SiteTitle"] official player management portal.  This is your headquarters for viewing, buying, and selling your pick-up spots.</p>
+            <p class="lead text-left">Welcome to the @System.Configuration.ConfigurationManager.AppSettings["SiteTitle"] official player management portal.  This is your headquarters for viewing, buying, and selling your pickup spots.</p>
         </div>
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-3">
-        <h2>Upcoming Pick-ups</h2>
+        <h2>Upcoming Pickups</h2>
         @Html.Partial("_CurrentPickupsPartial", Model)
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-3">
-        <h2>Past Pick-ups</h2>
+        <h2>Past Pickups</h2>
         @Html.Partial("_PastPickupsPartial", Model)
     </div>
 </div>

@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<pickuphockey.Models.Session>
 
 @{
-    ViewBag.Title = "Pick-Up Sessions";
+    ViewBag.Title = "Pickup Sessions";
 }
 
-<h2>Pick-Up Sessions</h2>
+<h2>Pickup Sessions</h2>
 
 @if (User.IsInRole("Admin")) {
     <p>
@@ -22,6 +22,9 @@
      <tr>
          <td>
              @Html.ActionLink(item.SessionDate.ToString("dddd, MM/dd/yyyy"), "Details", "Sessions", new {id = item.SessionId}, null)
+         </td>
+         <td>
+             @Html.DisplayFor(modelItem => item.Note)
          </td>
          @if (User.IsInRole("Admin")) {
          <td>
