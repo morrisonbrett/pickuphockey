@@ -1,4 +1,6 @@
-﻿@model IEnumerable<pickuphockey.Models.BuySell>
+﻿@using Microsoft.AspNet.Identity
+@using pickuphockey.Models
+@model IEnumerable<pickuphockey.Models.BuySell>
 
 <h2>Buys / Sells</h2>
 
@@ -13,17 +15,14 @@
         <th>
             @Html.DisplayNameFor(model => model.BuyerNote)
         </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.PaymentSent)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PaymentReceived)
-        </th>*@
         <th>
             @Html.DisplayNameFor(model => model.PaymentPreference)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.TeamAssignment)
+        </th>
+        <th>
+            Payment
         </th>
     </tr>
 
@@ -57,17 +56,46 @@
         <td>
             @Html.DisplayFor(modelItem => item.BuyerNote)
         </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.PaymentSent)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PaymentReceived)
-        </td>*@
         <td>
             @Html.DisplayFor(modelItem => item.PaymentPreference)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.TeamAssignment)
+        </td>
+        <td>
+            @if (item.PaymentPreference == PaymentPreference.PayPal && !string.IsNullOrEmpty(item.BuyerUserId))
+            {
+                <div>
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                        <input type="hidden" name="cmd" value="_xclick">
+                        <input type="hidden" name="business" value="@item.SellerUser.Email">
+                        <input type="hidden" name="lc" value="US">
+                        <input type="hidden" name="item_name" value="John Bryan Pickup Hockey">
+                        <input type="hidden" name="amount" value="22.00">
+                        <input type="hidden" name="currency_code" value="USD">
+                        <input type="hidden" name="button_subtype" value="services">
+                        <input type="hidden" name="no_note" value="0">
+                        <input type="hidden" name="tax_rate" value="0.000">
+                        <input type="hidden" name="shipping" value="0.00">
+                        <input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynow_SM.gif:NonHostedGuest">
+                        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynow_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                        <img alt="" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                    </form>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(item.BuyerUserId) && !string.IsNullOrEmpty(item.SellerUserId))
+            {
+                var canModifySent = item.BuyerUserId == User.Identity.GetUserId();
+                var canModifyReceived = item.SellerUserId == User.Identity.GetUserId();
+                
+                <div>
+                    @(canModifySent ? Html.CheckBoxFor(modelItem => item.PaymentSent, htmlAttributes: new { id = "PaymentSent_" + item.BuySellId }) : Html.CheckBoxFor(modelItem => item.PaymentSent, htmlAttributes: new {disabled = "disabled"}))
+                    <span>Sent</span>
+                    <br />
+                    @(canModifyReceived ? Html.CheckBoxFor(modelItem => item.PaymentReceived, htmlAttributes: new { id = "PaymentReceived_" + item.BuySellId }) : Html.CheckBoxFor(modelItem => item.PaymentReceived, htmlAttributes: new { disabled = "disabled" }))
+                    <span>Received</span>
+                </div>
+            }
         </td>
     </tr>
 }

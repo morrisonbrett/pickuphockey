@@ -229,6 +229,10 @@
     <Compile Include="Migrations\201410091558202_BuySell2.Designer.cs">
       <DependentUpon>201410091558202_BuySell2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201410100023005_Blank.cs" />
+    <Compile Include="Migrations\201410100023005_Blank.Designer.cs">
+      <DependentUpon>201410100023005_Blank.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -407,6 +411,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201410091558202_BuySell2.resx">
       <DependentUpon>201410091558202_BuySell2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410100023005_Blank.resx">
+      <DependentUpon>201410100023005_Blank.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
