@@ -1,24 +1,31 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using pickuphockey.Services;
 using pickuphockey.Models;
 
 namespace pickuphockey.Controllers
 {
     public class BuySellsController : Controller
     {
+        private readonly EmailServices _emailServices;
+
         public BuySellsController()
         {
+            _emailServices = new EmailServices();
         }
 
         public BuySellsController(ApplicationUserManager userManager)
         {
             UserManager = userManager;
+            _emailServices = new EmailServices();
         }
 
         private ApplicationUserManager _userManager;
@@ -33,8 +40,37 @@ namespace pickuphockey.Controllers
                 _userManager = value;
             }
         }
-        
+
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
+
+        private void SendSessionEmail(Session session, ApplicationUser seller, ApplicationUser buyer, SessionAction sessionAction)
+        {
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+
+            switch (sessionAction)
+            {
+                case SessionAction.Buy:
+                case SessionAction.Sell:
+                {
+                    var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " SOLD";
+                    var body = "Your spot has been sold to " + buyer.FirstName + " " + buyer.LastName + "." + Environment.NewLine + Environment.NewLine;
+                    body += "Click here for the details: " + sessionurl + Environment.NewLine;
+                    _emailServices.SendMail(subject, body, seller.Email);
+
+                    subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " BOUGHT";
+                    body = "You bought a spot from " + seller.FirstName + " " + seller.LastName + "." + Environment.NewLine + Environment.NewLine;
+                    body += "Click here for the details: " + sessionurl + Environment.NewLine;
+                    _emailServices.SendMail(subject, body, buyer.Email);
+
+                    break;
+                }
+
+                default:
+                {
+                    throw new NotImplementedException();
+                }
+            }
+        }
 
         // GET: BuySells/Buy/5
         public ActionResult Buy(int? id)
@@ -45,7 +81,7 @@ namespace pickuphockey.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
+            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(ConfigurationManager.AppSettings["DisplayTimeZone"]);
             if (session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -89,7 +125,7 @@ namespace pickuphockey.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
+            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(ConfigurationManager.AppSettings["DisplayTimeZone"]);
             if (session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -118,8 +154,9 @@ namespace pickuphockey.Controllers
                     updateBuySell.BuyerUserId = buyer.Id;
                     updateBuySell.BuyerNote = buySell.BuyerNote;
                     updateBuySell.UpdateDateTime = DateTime.UtcNow;
-
                     _db.Entry(updateBuySell).State = EntityState.Modified;
+
+                    SendSessionEmail(session, seller, buyer, SessionAction.Buy);
                 }
                 else
                 {
@@ -155,7 +192,7 @@ namespace pickuphockey.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
+            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(ConfigurationManager.AppSettings["DisplayTimeZone"]);
             if (session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -209,7 +246,7 @@ namespace pickuphockey.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
+            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(ConfigurationManager.AppSettings["DisplayTimeZone"]);
             if (session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -249,6 +286,8 @@ namespace pickuphockey.Controllers
                     updateBuySell.UpdateDateTime = DateTime.UtcNow;
 
                     _db.Entry(updateBuySell).State = EntityState.Modified;
+
+                    SendSessionEmail(session, seller, buyer, SessionAction.Sell);
                 }
                 else
                 {

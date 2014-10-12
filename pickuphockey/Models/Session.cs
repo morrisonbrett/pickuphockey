@@ -5,6 +5,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace pickuphockey.Models
 {
+    public enum SessionAction
+    {
+        Buy,
+        Sell
+    }
+
     public class Session
     {
         public Session()

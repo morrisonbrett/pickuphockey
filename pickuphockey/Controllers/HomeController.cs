@@ -8,9 +8,13 @@ namespace pickuphockey.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
-        
-        public ActionResult Index()
+
+        public ActionResult Index(ManageController.ManageMessageId? message)
         {
+            ViewBag.StatusMessage =
+                message == ManageController.ManageMessageId.CheckEmailVerification ? "Check your email to confirm your account"
+                : "";
+
             return View(_db.Sessions.ToList());
         }
 

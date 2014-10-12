@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using pickuphockey.Models;
+using pickuphockey.Services;
 using WebGrease.Css.Extensions;
 
 namespace pickuphockey.Controllers
@@ -97,8 +100,32 @@ namespace pickuphockey.Controllers
             _db.SaveChanges();
 
             _db.AddActivity(newSession.SessionId, "Created Session");
+
+            EmailSession(newSession);
             
             return RedirectToAction("Index");
+        }
+
+        private void EmailSession(Session session)
+        {
+            var userid = Thread.CurrentPrincipal.Identity.GetUserId();
+
+            var user = UserManager.FindById(userid);
+
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+
+            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " CREATED";
+            var body = "A new pickup session has been created by " + user.FirstName + " " + user.LastName + " for " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + "." + Environment.NewLine + Environment.NewLine;
+            if (!string.IsNullOrEmpty(session.Note))
+            {
+                body += session.Note + Environment.NewLine + Environment.NewLine;
+            }
+            body += "Click here for the details: " + sessionurl + Environment.NewLine;
+
+            var users = UserManager.Users.ToList();
+            var emailServices = new EmailServices();
+            foreach (var u in users)
+                emailServices.SendMail(subject, body, u.Email);
         }
 
         // GET: Sessions/Edit/5

@@ -412,6 +412,7 @@ namespace pickuphockey.Controllers
             RemoveLoginSuccess,
             RemovePhoneSuccess,
             SavePreferencesSuccess,
+            CheckEmailVerification,
             Error
         }
 

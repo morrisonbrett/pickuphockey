@@ -1,11 +1,11 @@
 ﻿@model pickuphockey.Models.ForgotPasswordViewModel
 @{
-    ViewBag.Title = "Forgot your password?";
+    ViewBag.Title = "Resend Verification";
 }
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm("ForgotPassword", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("ResendVerification", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Enter your email</h4>
