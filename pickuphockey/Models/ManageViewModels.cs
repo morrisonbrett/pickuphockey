@@ -97,6 +97,11 @@ namespace pickuphockey.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+        [Required]
+        [Display(Name = "Email")]
+        [EmailAddress]
+        public string Email { get; set; }
+
         [Display(Name = "Payment Preference")]
         public PaymentPreference PaymentPreference { get; set; }
 
