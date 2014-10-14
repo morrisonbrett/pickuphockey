@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
@@ -54,12 +55,14 @@ namespace pickuphockey.Controllers
                     var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " SOLD";
                     var body = "Your spot has been sold to " + buyer.FirstName + " " + buyer.LastName + "." + Environment.NewLine + Environment.NewLine;
                     body += "Click here for the details: " + sessionurl + Environment.NewLine;
-                    _emailServices.SendMail(subject, body, seller.Email);
+                    if (seller.NotificationPreference != NotificationPreference.None)
+                        _emailServices.SendMail(subject, body, seller.Email);
 
                     subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " BOUGHT";
                     body = "You bought a spot from " + seller.FirstName + " " + seller.LastName + "." + Environment.NewLine + Environment.NewLine;
                     body += "Click here for the details: " + sessionurl + Environment.NewLine;
-                    _emailServices.SendMail(subject, body, buyer.Email);
+                    if (seller.NotificationPreference != NotificationPreference.None)
+                        _emailServices.SendMail(subject, body, buyer.Email);
 
                     break;
                 }
@@ -131,6 +134,7 @@ namespace pickuphockey.Controllers
             }
 
             var buyer = UserManager.FindById(User.Identity.GetUserId());
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
 
             // Can't buy from self
             if (buySell.SellerUserId == buyer.Id)
@@ -141,6 +145,7 @@ namespace pickuphockey.Controllers
             if (ModelState.IsValid)
             {
                 string activity;
+                IEnumerable<ApplicationUser> users;
 
                 if (!string.IsNullOrEmpty(buySell.SellerUserId))
                 {
@@ -156,6 +161,7 @@ namespace pickuphockey.Controllers
                     _db.Entry(updateBuySell).State = EntityState.Modified;
 
                     SendSessionEmail(session, seller, buyer, SessionAction.Buy);
+                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Id != seller.Id && t.Id != buyer.Id);
                 }
                 else
                 {
@@ -168,11 +174,22 @@ namespace pickuphockey.Controllers
                     buySell.CreateDateTime = DateTime.UtcNow;
 
                     _db.BuySell.Add(buySell);
+
+                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Id != buyer.Id);
                 }
 
                 _db.SaveChanges();
 
                 _db.AddActivity(buySell.SessionId, activity);
+
+                foreach (var u in users)
+                {
+                    var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
+                    var body = activity + "." + Environment.NewLine + Environment.NewLine;
+                    body += "Click here for the details: " + sessionurl + Environment.NewLine;
+
+                    _emailServices.SendMail(subject, body, u.Email);
+                }
 
                 return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId});
             }
@@ -252,6 +269,7 @@ namespace pickuphockey.Controllers
             }
 
             var seller = UserManager.FindById(User.Identity.GetUserId());
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
 
             // Can't sell to self
             if (buySell.BuyerUserId == seller.Id)
@@ -269,6 +287,7 @@ namespace pickuphockey.Controllers
             if (ModelState.IsValid)
             {
                 string activity;
+                IEnumerable<ApplicationUser> users;
 
                 if (!string.IsNullOrEmpty(buySell.BuyerUserId))
                 {
@@ -287,6 +306,7 @@ namespace pickuphockey.Controllers
                     _db.Entry(updateBuySell).State = EntityState.Modified;
 
                     SendSessionEmail(session, seller, buyer, SessionAction.Sell);
+                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Id != seller.Id && t.Id != buyer.Id);
                 }
                 else
                 {
@@ -296,7 +316,10 @@ namespace pickuphockey.Controllers
                     buySell.UpdateDateTime = DateTime.UtcNow;
                     buySell.SellerUserId = User.Identity.GetUserId();
                     buySell.SellerNote = buySell.SellerNote;
+
                     _db.BuySell.Add(buySell);
+
+                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Id != seller.Id);
                 }
 
                 _db.SaveChanges();
@@ -308,6 +331,15 @@ namespace pickuphockey.Controllers
                 user.PaymentPreference = buySell.PaymentPreference;
                 user.TeamAssignment = buySell.TeamAssignment;
                 UserManager.Update(user);
+
+                foreach (var u in users)
+                {
+                    var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
+                    var body = activity + "." + Environment.NewLine + Environment.NewLine;
+                    body += "Click here for the details: " + sessionurl + Environment.NewLine;
+
+                    _emailServices.SendMail(subject, body, u.Email);
+                }
 
                 return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
             }

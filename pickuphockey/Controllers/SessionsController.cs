@@ -125,7 +125,10 @@ namespace pickuphockey.Controllers
             var users = UserManager.Users.ToList();
             var emailServices = new EmailServices();
             foreach (var u in users)
-                emailServices.SendMail(subject, body, u.Email);
+            {
+                if (u.NotificationPreference != NotificationPreference.None)
+                    emailServices.SendMail(subject, body, u.Email);
+            }
         }
 
         // GET: Sessions/Edit/5
