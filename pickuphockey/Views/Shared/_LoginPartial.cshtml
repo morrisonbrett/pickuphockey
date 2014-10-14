@@ -1,6 +1,9 @@
 ﻿@using Microsoft.AspNet.Identity
 @{
-    var greeting = "Hello " + (!string.IsNullOrEmpty(ViewBag.FirstName) ? ViewBag.FirstName : User.Identity.GetUserName() + "!");
+    var greeting = "Hello ";
+    greeting += !string.IsNullOrEmpty(ViewBag.FirstName) ? ViewBag.FirstName : User.Identity.GetUserName();
+    greeting += !string.IsNullOrEmpty(ViewBag.IsAdmin) && ViewBag.IsAdmin.Equals("true") ? " (Admin)" : "";
+    greeting += "!";
 }
 @if (Request.IsAuthenticated)
 {
