@@ -239,6 +239,10 @@
     <Compile Include="Migrations\201410100023005_Blank.Designer.cs">
       <DependentUpon>201410100023005_Blank.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201410140337546_Add-NotificationPreference.cs" />
+    <Compile Include="Migrations\201410140337546_Add-NotificationPreference.Designer.cs">
+      <DependentUpon>201410140337546_Add-NotificationPreference.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -422,6 +426,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201410100023005_Blank.resx">
       <DependentUpon>201410100023005_Blank.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410140337546_Add-NotificationPreference.resx">
+      <DependentUpon>201410140337546_Add-NotificationPreference.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

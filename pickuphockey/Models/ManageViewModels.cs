@@ -107,5 +107,8 @@ namespace pickuphockey.Models
 
         [Display(Name = "Team Assignment")]
         public TeamAssignment TeamAssignment { get; set; }
+
+        [Display(Name = "Notification Preference")]
+        public NotificationPreference NotificationPreference { get; set; }
     }
 }
