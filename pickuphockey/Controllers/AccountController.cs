@@ -170,7 +170,13 @@ namespace pickuphockey.Controllers
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here.</a>");
 
-                    return RedirectToAction("Index", "Home", new { Message = ManageController.ManageMessageId.CheckEmailVerification });
+                    user.NotificationPreference = NotificationPreference.All;
+                    var updateResult = await UserManager.UpdateAsync(user);
+                    if (updateResult.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home", new { Message = ManageController.ManageMessageId.CheckEmailVerification });
+                    }
+                    AddErrors(updateResult);
                 }
                 AddErrors(result);
             }
@@ -386,6 +392,7 @@ namespace pickuphockey.Controllers
                         if (firstName != null) user.FirstName = firstName.Value;
                         var lastName = info.ExternalIdentity.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"));
                         if (lastName != null) user.LastName = lastName.Value;
+                        user.NotificationPreference = NotificationPreference.All;
 
                         var updateResult = await UserManager.UpdateAsync(user);
                         if (updateResult.Succeeded)
