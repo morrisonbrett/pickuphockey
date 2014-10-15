@@ -29,6 +29,9 @@ namespace pickuphockey.Models
         [DisplayName("Payment Preference")]
         public PaymentPreference PaymentPreference { get; set; }
 
+        [DisplayName("Payment Info")]
+        public string PaymentInfo { get; set; }
+
         [DisplayName("Team Assignment")]
         public TeamAssignment TeamAssignment { get; set; }
 

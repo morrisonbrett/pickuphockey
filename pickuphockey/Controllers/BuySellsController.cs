@@ -234,6 +234,8 @@ namespace pickuphockey.Controllers
             buySell.SellerUser = seller;
             buySell.SellerUserId = seller.Id;
             buySell.PaymentPreference = seller.PaymentPreference;
+            if (buySell.PaymentPreference == PaymentPreference.PayPal)
+                buySell.PaymentInfo = seller.PayPalEmail;
             buySell.TeamAssignment = seller.TeamAssignment;
 
             // Can't sell to self
@@ -257,7 +259,7 @@ namespace pickuphockey.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Sell([Bind(Include = "BuySellId,SessionId,SellerNote,PaymentPreference,TeamAssignment,BuyerUserId")] BuySell buySell)
+        public ActionResult Sell([Bind(Include = "BuySellId,SessionId,SellerNote,PaymentPreference,TeamAssignment,BuyerUserId,PaymentInfo")] BuySell buySell)
         {
             var session = _db.Sessions.Find(buySell.SessionId);
             if (InvalidSession(buySell.SessionId, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -295,6 +297,7 @@ namespace pickuphockey.Controllers
                     updateBuySell.SellerNote = buySell.SellerNote;
                     updateBuySell.PaymentPreference = buySell.PaymentPreference;
                     updateBuySell.TeamAssignment = buySell.TeamAssignment;
+                    updateBuySell.PaymentInfo = buySell.PaymentInfo;
                     updateBuySell.UpdateDateTime = DateTime.UtcNow;
 
                     _db.Entry(updateBuySell).State = EntityState.Modified;
@@ -309,7 +312,6 @@ namespace pickuphockey.Controllers
                     buySell.CreateDateTime = DateTime.UtcNow;
                     buySell.UpdateDateTime = DateTime.UtcNow;
                     buySell.SellerUserId = User.Identity.GetUserId();
-                    buySell.SellerNote = buySell.SellerNote;
 
                     _db.BuySell.Add(buySell);
 
@@ -323,6 +325,8 @@ namespace pickuphockey.Controllers
                 // Update the users preferences with the values from this sell.
                 var user = UserManager.FindById(User.Identity.GetUserId());
                 user.PaymentPreference = buySell.PaymentPreference;
+                if (user.PaymentPreference == PaymentPreference.PayPal)
+                    user.PayPalEmail = buySell.PaymentInfo;
                 user.TeamAssignment = buySell.TeamAssignment;
                 UserManager.Update(user);
 

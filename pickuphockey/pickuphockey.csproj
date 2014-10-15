@@ -243,6 +243,14 @@
     <Compile Include="Migrations\201410140337546_Add-NotificationPreference.Designer.cs">
       <DependentUpon>201410140337546_Add-NotificationPreference.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201410150548257_PaypalEmail.cs" />
+    <Compile Include="Migrations\201410150548257_PaypalEmail.Designer.cs">
+      <DependentUpon>201410150548257_PaypalEmail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201410150632442_PaymentInfo.cs" />
+    <Compile Include="Migrations\201410150632442_PaymentInfo.Designer.cs">
+      <DependentUpon>201410150632442_PaymentInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -429,6 +437,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201410140337546_Add-NotificationPreference.resx">
       <DependentUpon>201410140337546_Add-NotificationPreference.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410150548257_PaypalEmail.resx">
+      <DependentUpon>201410150548257_PaypalEmail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410150632442_PaymentInfo.resx">
+      <DependentUpon>201410150632442_PaymentInfo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

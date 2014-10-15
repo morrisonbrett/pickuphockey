@@ -102,6 +102,11 @@ namespace pickuphockey.Models
         [EmailAddress]
         public string Email { get; set; }
 
+        [Required]
+        [EmailAddress]
+        [Display(Name = "PayPal Email")]
+        public string PayPalEmail { get; set; }
+
         [Display(Name = "Payment Preference")]
         public PaymentPreference PaymentPreference { get; set; }
 

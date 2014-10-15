@@ -179,7 +179,7 @@ namespace pickuphockey.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, PayPalEmail = model.Email, FirstName = model.FirstName, LastName = model.LastName };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -192,6 +192,7 @@ namespace pickuphockey.Controllers
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here.</a>");
 
                     user.NotificationPreference = NotificationPreference.All;
+                    user.PaymentPreference = PaymentPreference.PayPal;
                     var updateResult = await UserManager.UpdateAsync(user);
                     if (updateResult.Succeeded)
                     {
@@ -403,7 +404,7 @@ namespace pickuphockey.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, PayPalEmail = model.Email };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -416,6 +417,7 @@ namespace pickuphockey.Controllers
                         var lastName = info.ExternalIdentity.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"));
                         if (lastName != null) user.LastName = lastName.Value;
                         user.NotificationPreference = NotificationPreference.All;
+                        user.PaymentPreference = PaymentPreference.PayPal;
 
                         AlertAdmin(user);
 
