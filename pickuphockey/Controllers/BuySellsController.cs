@@ -43,6 +43,22 @@ namespace pickuphockey.Controllers
 
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
+        private static bool InvalidSession(int? id, Session session)
+        {
+            if (id == null || session == null)
+            {
+                return true;
+            }
+
+            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(ConfigurationManager.AppSettings["DisplayTimeZone"]);
+            if (session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private void SendSessionEmail(Session session, ApplicationUser seller, ApplicationUser buyer, SessionAction sessionAction)
         {
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
@@ -78,16 +94,7 @@ namespace pickuphockey.Controllers
         public ActionResult Buy(int? id)
         {
             var session = _db.Sessions.Find(id);
-            if (id == null || session == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(ConfigurationManager.AppSettings["DisplayTimeZone"]);
-            if (session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            if (InvalidSession(id, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             ViewBag.SessionDate = session.SessionDate;
             var buyer = UserManager.FindById(User.Identity.GetUserId());
@@ -106,9 +113,17 @@ namespace pickuphockey.Controllers
             buySell.BuyerUser = buyer;
             buySell.BuyerUserId = buyer.Id;
 
+            // Can't buy from self
             if (buySell.SellerUserId == buyer.Id)
             {
                 ModelState.AddModelError("", "You cannot buy from yourself");
+            }
+
+            // Already bought in this session
+            var alreadyBuyer = _db.BuySell.Where(q => q.SessionId == id && !string.IsNullOrEmpty(q.BuyerUserId) && q.BuyerUserId == buyer.Id).OrderBy(d => d.CreateDateTime).FirstOrDefault();
+            if (alreadyBuyer != null)
+            {
+                ModelState.AddModelError("", "You have already bought a spot for this session");
             }
 
             return View(buySell);
@@ -122,28 +137,26 @@ namespace pickuphockey.Controllers
         public ActionResult Buy([Bind(Include = "BuySellId,SessionId,BuyerNote,SellerUserId")] BuySell buySell)
         {
             var session = _db.Sessions.Find(buySell.SessionId);
-            if (session == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(ConfigurationManager.AppSettings["DisplayTimeZone"]);
-            if (session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            if (InvalidSession(buySell.SessionId, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var buyer = UserManager.FindById(User.Identity.GetUserId());
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
 
-            // Can't buy from self
-            if (buySell.SellerUserId == buyer.Id)
-            {
-                return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
-            }
-
             if (ModelState.IsValid)
             {
+                // Can't buy from self
+                if (buySell.SellerUserId == buyer.Id)
+                {
+                    return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
+                }
+
+                // Already bought in this session
+                var alreadyBuyer = _db.BuySell.Where(q => q.SessionId == buySell.SessionId && !string.IsNullOrEmpty(q.BuyerUserId) && q.BuyerUserId == buyer.Id).OrderBy(d => d.CreateDateTime).FirstOrDefault();
+                if (alreadyBuyer != null)
+                {
+                    return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
+                }
+
                 string activity;
                 IEnumerable<ApplicationUser> users;
 
@@ -203,16 +216,7 @@ namespace pickuphockey.Controllers
         public ActionResult Sell(int? id)
         {
             var session = _db.Sessions.Find(id);
-            if (id == null || session == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(ConfigurationManager.AppSettings["DisplayTimeZone"]);
-            if (session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            if (InvalidSession(id, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             ViewBag.SessionDate = session.SessionDate;
             var seller = UserManager.FindById(User.Identity.GetUserId());
@@ -257,35 +261,26 @@ namespace pickuphockey.Controllers
         public ActionResult Sell([Bind(Include = "BuySellId,SessionId,SellerNote,PaymentPreference,TeamAssignment,BuyerUserId")] BuySell buySell)
         {
             var session = _db.Sessions.Find(buySell.SessionId);
-            if (session == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(ConfigurationManager.AppSettings["DisplayTimeZone"]);
-            if (session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            if (InvalidSession(buySell.SessionId, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var seller = UserManager.FindById(User.Identity.GetUserId());
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
 
-            // Can't sell to self
-            if (buySell.BuyerUserId == seller.Id)
-            {
-                return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
-            }
-
-            // Look if self already has a spot that's unsold
-            var openSell = _db.BuySell.Where(q => q.SessionId == buySell.SessionId && q.SellerUserId == seller.Id && string.IsNullOrEmpty(q.BuyerUserId));
-            if (openSell.Any())
-            {
-                return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
-            }
-
             if (ModelState.IsValid)
             {
+                // Can't sell to self
+                if (buySell.BuyerUserId == seller.Id)
+                {
+                    return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
+                }
+
+                // Look if self already has a spot that's unsold
+                var openSell = _db.BuySell.Where(q => q.SessionId == buySell.SessionId && q.SellerUserId == seller.Id && string.IsNullOrEmpty(q.BuyerUserId));
+                if (openSell.Any())
+                {
+                    return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
+                }
+
                 string activity;
                 IEnumerable<ApplicationUser> users;
 
