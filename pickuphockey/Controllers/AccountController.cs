@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using pickuphockey.Models;
+using pickuphockey.Services;
 
 namespace pickuphockey.Controllers
 {
@@ -13,15 +15,18 @@ namespace pickuphockey.Controllers
     public class AccountController : Controller
     {
         private ApplicationUserManager _userManager;
+        private readonly EmailServices _emailServices;
 
         public AccountController()
         {
+            _emailServices = new EmailServices();
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            _emailServices = new EmailServices();
         }
 
         public ApplicationUserManager UserManager
@@ -33,6 +38,22 @@ namespace pickuphockey.Controllers
             private set
             {
                 _userManager = value;
+            }
+        }
+
+        // Alert admins on new registration
+        private void AlertAdmin(ApplicationUser user)
+        {
+            var usersurl = Url.Action("Index", "Users", null, protocol: Request.Url.Scheme);
+
+            var admins = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && UserManager.IsInRole(t.Id, "Admin"));
+            const string subject = "New User Registration";
+            var body = user.FirstName + " " + user.LastName + " (" + user.Email + ") registered." + Environment.NewLine + Environment.NewLine;
+            body += "Click here for the details: " + usersurl + Environment.NewLine;
+
+            foreach (var u in admins)
+            {
+                _emailServices.SendMail(subject, body, u.Email);
             }
         }
 
@@ -174,6 +195,8 @@ namespace pickuphockey.Controllers
                     var updateResult = await UserManager.UpdateAsync(user);
                     if (updateResult.Succeeded)
                     {
+                        AlertAdmin(user);
+
                         return RedirectToAction("Index", "Home", new { Message = ManageController.ManageMessageId.CheckEmailVerification });
                     }
                     AddErrors(updateResult);
@@ -393,6 +416,8 @@ namespace pickuphockey.Controllers
                         var lastName = info.ExternalIdentity.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"));
                         if (lastName != null) user.LastName = lastName.Value;
                         user.NotificationPreference = NotificationPreference.All;
+
+                        AlertAdmin(user);
 
                         var updateResult = await UserManager.UpdateAsync(user);
                         if (updateResult.Succeeded)

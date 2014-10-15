@@ -195,12 +195,11 @@ namespace pickuphockey.Controllers
 
                 _db.AddActivity(buySell.SessionId, activity);
 
+                var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
+                var body = activity + "." + Environment.NewLine + Environment.NewLine;
+                body += "Click here for the details: " + sessionurl + Environment.NewLine;
                 foreach (var u in users)
                 {
-                    var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
-                    var body = activity + "." + Environment.NewLine + Environment.NewLine;
-                    body += "Click here for the details: " + sessionurl + Environment.NewLine;
-
                     _emailServices.SendMail(subject, body, u.Email);
                 }
 
@@ -327,12 +326,11 @@ namespace pickuphockey.Controllers
                 user.TeamAssignment = buySell.TeamAssignment;
                 UserManager.Update(user);
 
+                var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
+                var body = activity + "." + Environment.NewLine + Environment.NewLine;
+                body += "Click here for the details: " + sessionurl + Environment.NewLine;
                 foreach (var u in users)
                 {
-                    var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
-                    var body = activity + "." + Environment.NewLine + Environment.NewLine;
-                    body += "Click here for the details: " + sessionurl + Environment.NewLine;
-
                     _emailServices.SendMail(subject, body, u.Email);
                 }
 
