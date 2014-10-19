@@ -162,7 +162,7 @@ namespace pickuphockey.Controllers
 
                 if (!string.IsNullOrEmpty(buySell.SellerUserId))
                 {
-                    var updateBuySell = _db.BuySell.First(q => q.BuySellId == buySell.BuySellId);
+                    var updateBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == buySell.BuySellId);
 
                     var seller = UserManager.FindById(updateBuySell.SellerUserId);
 
@@ -287,7 +287,7 @@ namespace pickuphockey.Controllers
 
                 if (!string.IsNullOrEmpty(buySell.BuyerUserId))
                 {
-                    var updateBuySell = _db.BuySell.First(q => q.BuySellId == buySell.BuySellId);
+                    var updateBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == buySell.BuySellId);
 
                     var buyer = UserManager.FindById(updateBuySell.BuyerUserId);
 
@@ -344,6 +344,74 @@ namespace pickuphockey.Controllers
             var newbuySell = new BuySell { SessionId = buySell.SessionId, SellerUserId = User.Identity.GetUserId() };
 
             return View(newbuySell);
+        }
+
+        public ActionResult RemoveSeller(int id)
+        {
+            var deleteBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
+            if (deleteBuySell == null || (!string.IsNullOrEmpty(deleteBuySell.SellerUserId) && !string.IsNullOrEmpty(deleteBuySell.BuyerUserId))) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var session = _db.Sessions.Find(deleteBuySell.SessionId);
+            if (InvalidSession(deleteBuySell.SessionId, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var seller = UserManager.FindById(deleteBuySell.SellerUserId);
+            if (seller == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            // Make sure person has rights to do this
+            if (seller.Id != User.Identity.GetUserId() && !User.IsInRole("Admin")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            // Remove this buySell from the DB
+            _db.Entry(deleteBuySell).State = EntityState.Deleted;
+            _db.SaveChanges();
+
+            var activity = seller.FirstName + " " + seller.LastName + " removed from SELLING list";
+            _db.AddActivity(deleteBuySell.SessionId, activity);
+
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+            var users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All);
+            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
+            var body = activity + "." + Environment.NewLine + Environment.NewLine;
+            body += "Click here for the details: " + sessionurl + Environment.NewLine;
+            foreach (var u in users)
+            {
+                _emailServices.SendMail(subject, body, u.Email);
+            }
+
+            return RedirectToAction("Details", "Sessions", new { id = deleteBuySell.SessionId });
+        }
+
+        public ActionResult RemoveBuyer(int id)
+        {
+            var deleteBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
+            if (deleteBuySell == null || (!string.IsNullOrEmpty(deleteBuySell.SellerUserId) && !string.IsNullOrEmpty(deleteBuySell.BuyerUserId))) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var session = _db.Sessions.Find(deleteBuySell.SessionId);
+            if (InvalidSession(deleteBuySell.SessionId, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var buyer = UserManager.FindById(deleteBuySell.BuyerUserId);
+            if (buyer == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            // Make sure person has rights to do this
+            if (buyer.Id != User.Identity.GetUserId() && !User.IsInRole("Admin")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            // Remove this buySell from the DB
+            _db.Entry(deleteBuySell).State = EntityState.Deleted;
+            _db.SaveChanges();
+
+            var activity = buyer.FirstName + " " + buyer.LastName + " removed from BUYING list";
+            _db.AddActivity(deleteBuySell.SessionId, activity);
+
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+            var users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All);
+            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
+            var body = activity + "." + Environment.NewLine + Environment.NewLine;
+            body += "Click here for the details: " + sessionurl + Environment.NewLine;
+            foreach (var u in users)
+            {
+                _emailServices.SendMail(subject, body, u.Email);
+            }
+
+            return RedirectToAction("Details", "Sessions", new { id = deleteBuySell.SessionId });
         }
 
         protected override void Dispose(bool disposing)

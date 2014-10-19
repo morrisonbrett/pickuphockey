@@ -1,7 +1,11 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@using System.Diagnostics.Eventing.Reader
+@using Microsoft.AspNet.Identity
 @using pickuphockey.Models
 @model IEnumerable<pickuphockey.Models.BuySell>
-
+@{
+    var isAdmin = User.IsInRole("Admin");
+    var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
+}
 <h2>Buys / Sells</h2>
 
 <table class="table">
@@ -16,13 +20,13 @@
             @Html.DisplayNameFor(model => model.BuyerNote)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PaymentPreference)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.TeamAssignment)
         </th>
         <th>
             Payment
+        </th>
+        <th>
+            Action
         </th>
     </tr>
 
@@ -57,9 +61,6 @@
             @Html.DisplayFor(modelItem => item.BuyerNote)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PaymentPreference)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.TeamAssignment)
         </td>
         <td>
@@ -71,7 +72,7 @@
                         <input type="hidden" name="business" value="@item.SellerUser.PayPalEmail">
                         <input type="hidden" name="lc" value="US">
                         <input type="hidden" name="item_name" value="@System.Configuration.ConfigurationManager.AppSettings["SiteTitle"]">
-                        <input type="hidden" name="amount" value="22.00">
+                        <input type="hidden" name="amount" value="23.00">
                         <input type="hidden" name="currency_code" value="USD">
                         <input type="hidden" name="button_subtype" value="services">
                         <input type="hidden" name="no_note" value="0">
@@ -95,6 +96,22 @@
                     @(canModifyReceived ? Html.CheckBoxFor(modelItem => item.PaymentReceived, htmlAttributes: new { id = "PaymentReceived_" + item.BuySellId }) : Html.CheckBoxFor(modelItem => item.PaymentReceived, htmlAttributes: new { disabled = "disabled" }))
                     <span>Received</span>
                 </div>
+            }
+        </td>
+        <td>
+            @{
+                var pastSession = item.Session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date;
+                if (!pastSession)
+                {
+                    if (!string.IsNullOrEmpty(item.SellerUserId) && string.IsNullOrEmpty(item.BuyerUserId) && (item.SellerUserId == User.Identity.GetUserId() || isAdmin))
+                    {
+                        @Html.ActionLink("Remove Seller Spot", "RemoveSeller", "BuySells", new {id = item.BuySellId}, null)
+                    }
+                    else if (string.IsNullOrEmpty(item.SellerUserId) && !string.IsNullOrEmpty(item.BuyerUserId) && (item.BuyerUserId == User.Identity.GetUserId() || isAdmin))
+                    {
+                        @Html.ActionLink("Remove Buyer Spot", "RemoveBuyer", "BuySells", new {id = item.BuySellId}, null)
+                    }
+                }
             }
         </td>
     </tr>
