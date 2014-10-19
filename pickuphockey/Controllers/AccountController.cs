@@ -411,11 +411,45 @@ namespace pickuphockey.Controllers
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
-                        // TODO possibly push this out to the provider layer, and have a common dictionary - would make this below more comatible with other social authentication providers
-                        var firstName = info.ExternalIdentity.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"));
-                        if (firstName != null) user.FirstName = firstName.Value;
-                        var lastName = info.ExternalIdentity.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"));
-                        if (lastName != null) user.LastName = lastName.Value;
+                        string firstName = null;
+                        string lastName = null;
+
+                        // If this fails, it's OK to swollow the exception
+                        try
+                        {
+                            switch (info.Login.LoginProvider.ToLower())
+                            {
+                                case "google":
+                                    {
+                                        var fn = info.ExternalIdentity.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"));
+                                        if (fn != null) firstName = fn.Value;
+                                        var ln = info.ExternalIdentity.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"));
+                                        if (ln != null) lastName = ln.Value;
+
+                                        break;
+                                    }
+                                case "facebook":
+                                    {
+                                        var fn = info.ExternalIdentity.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"));
+                                        if (fn != null)
+                                        {
+                                            string fullName = null;
+                                            fullName = fn.Value;
+                                            firstName = fullName.Substring(0, fullName.IndexOf(' '));
+                                            lastName = fullName.Substring(fullName.IndexOf(' ') + 1);
+                                        }
+
+                                        break;
+                                    }
+                            }
+                        }
+                        catch
+                        {
+                            // We didn't get the name from the external provider, but that's OK
+                        }
+                        
+                        if (firstName != null) user.FirstName = firstName;
+                        if (lastName != null) user.LastName = lastName;
                         user.NotificationPreference = NotificationPreference.All;
                         user.PaymentPreference = PaymentPreference.PayPal;
 
