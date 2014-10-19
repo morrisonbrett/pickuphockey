@@ -24,6 +24,10 @@ namespace pickuphockey
             // Configure the sign in cookie
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
+                CookieSecure = CookieSecureOption.Always,
+                ExpireTimeSpan = TimeSpan.FromDays(Convert.ToDouble(System.Configuration.ConfigurationManager.AppSettings["NumberOfDaysCookieExpiration"])),
+                SlidingExpiration = true,
+                CookieHttpOnly = false,
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
                 Provider = new CookieAuthenticationProvider
@@ -55,6 +59,7 @@ namespace pickuphockey
             //   consumerSecret: "");
 
             app.UseFacebookAuthentication(
+                
                appId: System.Configuration.ConfigurationManager.AppSettings["FacebookAppId"],
                appSecret: System.Configuration.ConfigurationManager.AppSettings["FacebookAppSecret"]);
 
