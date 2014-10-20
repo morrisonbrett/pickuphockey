@@ -434,6 +434,77 @@ namespace pickuphockey.Controllers
             return RedirectToAction("Details", "Sessions", new { id = deleteBuySell.SessionId });
         }
 
+        public ActionResult PayPalResponse()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        public JsonResult TogglePaymentSent(int id, bool paymentSent)
+        {
+            var toggleBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
+            if (toggleBuySell == null || (string.IsNullOrEmpty(toggleBuySell.SellerUserId) || string.IsNullOrEmpty(toggleBuySell.BuyerUserId) || toggleBuySell.BuyerUserId != User.Identity.GetUserId())) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var session = _db.Sessions.Find(toggleBuySell.SessionId);
+            if (InvalidSession(toggleBuySell.SessionId, session)) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var buyer = UserManager.FindById(toggleBuySell.BuyerUserId);
+            if (buyer == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var seller = UserManager.FindById(toggleBuySell.SellerUserId);
+            if (seller == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            toggleBuySell.PaymentSent = paymentSent;
+            _db.Entry(toggleBuySell).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            var activity = buyer.FirstName + " " + buyer.LastName + " (BUYER) set PAYMENT STATUS to " + (paymentSent ? "sent" : "unsent");
+            _db.AddActivity(toggleBuySell.SessionId, activity);
+
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
+            var body = activity + "." + Environment.NewLine + Environment.NewLine;
+            body += "Click here for the details: " + sessionurl + Environment.NewLine;
+
+            if (seller.NotificationPreference != NotificationPreference.None)
+                _emailServices.SendMail(subject, body, seller.Email);
+
+            return Json(new { Success = true, Message = "Updated" });
+        }
+
+        [HttpPost]
+        public JsonResult TogglePaymentReceived(int id, bool paymentReceived)
+        {
+            var toggleBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
+            if (toggleBuySell == null || (string.IsNullOrEmpty(toggleBuySell.SellerUserId) || string.IsNullOrEmpty(toggleBuySell.BuyerUserId) || toggleBuySell.SellerUserId != User.Identity.GetUserId())) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var session = _db.Sessions.Find(toggleBuySell.SessionId);
+            if (InvalidSession(toggleBuySell.SessionId, session)) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var buyer = UserManager.FindById(toggleBuySell.BuyerUserId);
+            if (buyer == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var seller = UserManager.FindById(toggleBuySell.SellerUserId);
+            if (seller == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            toggleBuySell.PaymentReceived = paymentReceived;
+            _db.Entry(toggleBuySell).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            var activity = buyer.FirstName + " " + buyer.LastName + " (SELLER) set PAYMENT STATUS to " + (paymentReceived ? "received" : "unreceived");
+            _db.AddActivity(toggleBuySell.SessionId, activity);
+
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
+            var body = activity + "." + Environment.NewLine + Environment.NewLine;
+            body += "Click here for the details: " + sessionurl + Environment.NewLine;
+
+            if (buyer.NotificationPreference != NotificationPreference.None)
+                _emailServices.SendMail(subject, body, buyer.Email);
+
+            return Json(new { Success = true, Message = "Updated" });
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

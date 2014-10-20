@@ -5,10 +5,34 @@
 $(document).ready(function () {
     $("[id^=PaymentSent_]").change(function () {
         var checked = $(this).is(':checked');
+        var id = $(this).attr('id').replace(/PaymentSent_/, '');
+        var data = { id: id, paymentSent: checked };
+
+        $.ajax({
+            type: "POST",
+            url: "/BuySells/TogglePaymentSent",
+            data: data,
+            dataType: "json",
+            success: function (result) {
+                location.reload();
+            }
+        });
     });
 
     $("[id^=PaymentReceived_]").change(function () {
         var checked = $(this).is(':checked');
+        var id = $(this).attr('id').replace(/PaymentReceived_/, '');
+        var data = { id: id, paymentReceived: checked };
+
+        $.ajax({
+            type: "POST",
+            url: "/BuySells/TogglePaymentReceived",
+            data: data,
+            dataType: "json",
+            success: function (result) {
+                location.reload();
+            }
+        });
     });
 
     $("[id^=UserActive_]").change(function () {
