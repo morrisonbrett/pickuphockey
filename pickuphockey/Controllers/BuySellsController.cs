@@ -98,6 +98,10 @@ namespace pickuphockey.Controllers
 
             ViewBag.SessionDate = session.SessionDate;
             var buyer = UserManager.FindById(User.Identity.GetUserId());
+            if (!buyer.Active)
+            {
+                ModelState.AddModelError("", "You account is inactive.  Contact the commissioner.");
+            }
 
             // Look for open sell spot, if none, just create empty model
             var buySell = _db.BuySell.Where(q => q.SessionId == id && !string.IsNullOrEmpty(q.SellerUserId) && string.IsNullOrEmpty(q.BuyerUserId)).OrderBy(d => d.CreateDateTime).FirstOrDefault();
@@ -139,11 +143,17 @@ namespace pickuphockey.Controllers
             var session = _db.Sessions.Find(buySell.SessionId);
             if (InvalidSession(buySell.SessionId, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
+            ViewBag.SessionDate = session.SessionDate;
             var buyer = UserManager.FindById(User.Identity.GetUserId());
-            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
-
+            if (!buyer.Active)
+            {
+                ModelState.AddModelError("", "You account is inactive.  Contact the commissioner.");
+            }
+            
             if (ModelState.IsValid)
             {
+                var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+
                 // Can't buy from self
                 if (buySell.SellerUserId == buyer.Id)
                 {
@@ -174,7 +184,7 @@ namespace pickuphockey.Controllers
                     _db.Entry(updateBuySell).State = EntityState.Modified;
 
                     SendSessionEmail(session, seller, buyer, SessionAction.Buy);
-                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Id != seller.Id && t.Id != buyer.Id);
+                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != seller.Id && t.Id != buyer.Id);
                 }
                 else
                 {
@@ -188,7 +198,7 @@ namespace pickuphockey.Controllers
 
                     _db.BuySell.Add(buySell);
 
-                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Id != buyer.Id);
+                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != buyer.Id);
                 }
 
                 _db.SaveChanges();
@@ -206,7 +216,7 @@ namespace pickuphockey.Controllers
                 return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId});
             }
 
-            var newbuySell = new BuySell { SessionId = buySell.SessionId, BuyerUserId = User.Identity.GetUserId() };
+            var newbuySell = new BuySell { SessionId = buySell.SessionId, BuyerUserId = User.Identity.GetUserId(), BuyerUser = buyer };
 
             return View(newbuySell);
         }
@@ -219,6 +229,10 @@ namespace pickuphockey.Controllers
 
             ViewBag.SessionDate = session.SessionDate;
             var seller = UserManager.FindById(User.Identity.GetUserId());
+            if (!seller.Active)
+            {
+                ModelState.AddModelError("", "You account is inactive.  Contact the commissioner.");
+            }
 
             // Look for open buy spot, if none, just create empty model
             var buySell = _db.BuySell.Where(q => q.SessionId == id && string.IsNullOrEmpty(q.SellerUserId) && !string.IsNullOrEmpty(q.BuyerUserId)).OrderBy(d => d.CreateDateTime).FirstOrDefault();
@@ -264,11 +278,17 @@ namespace pickuphockey.Controllers
             var session = _db.Sessions.Find(buySell.SessionId);
             if (InvalidSession(buySell.SessionId, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
+            ViewBag.SessionDate = session.SessionDate;
             var seller = UserManager.FindById(User.Identity.GetUserId());
-            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+            if (!seller.Active)
+            {
+                ModelState.AddModelError("", "You account is inactive.  Contact the commissioner.");
+            }
 
             if (ModelState.IsValid)
             {
+                var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+
                 // Can't sell to self
                 if (buySell.BuyerUserId == seller.Id)
                 {
@@ -303,7 +323,7 @@ namespace pickuphockey.Controllers
                     _db.Entry(updateBuySell).State = EntityState.Modified;
 
                     SendSessionEmail(session, seller, buyer, SessionAction.Sell);
-                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Id != seller.Id && t.Id != buyer.Id);
+                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != seller.Id && t.Id != buyer.Id);
                 }
                 else
                 {
@@ -315,7 +335,7 @@ namespace pickuphockey.Controllers
 
                     _db.BuySell.Add(buySell);
 
-                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Id != seller.Id);
+                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != seller.Id);
                 }
 
                 _db.SaveChanges();
@@ -341,7 +361,7 @@ namespace pickuphockey.Controllers
                 return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
             }
 
-            var newbuySell = new BuySell { SessionId = buySell.SessionId, SellerUserId = User.Identity.GetUserId() };
+            var newbuySell = new BuySell { SessionId = buySell.SessionId, SellerUserId = User.Identity.GetUserId(), SellerUser = seller };
 
             return View(newbuySell);
         }
@@ -368,7 +388,7 @@ namespace pickuphockey.Controllers
             _db.AddActivity(deleteBuySell.SessionId, activity);
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
-            var users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All);
+            var users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active);
             var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
             var body = activity + "." + Environment.NewLine + Environment.NewLine;
             body += "Click here for the details: " + sessionurl + Environment.NewLine;
@@ -402,7 +422,7 @@ namespace pickuphockey.Controllers
             _db.AddActivity(deleteBuySell.SessionId, activity);
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
-            var users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All);
+            var users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active);
             var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
             var body = activity + "." + Environment.NewLine + Environment.NewLine;
             body += "Click here for the details: " + sessionurl + Environment.NewLine;

@@ -251,6 +251,10 @@
     <Compile Include="Migrations\201410150632442_PaymentInfo.Designer.cs">
       <DependentUpon>201410150632442_PaymentInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201410192240455_AddingActiveStatus.cs" />
+    <Compile Include="Migrations\201410192240455_AddingActiveStatus.Designer.cs">
+      <DependentUpon>201410192240455_AddingActiveStatus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -445,6 +449,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201410150632442_PaymentInfo.resx">
       <DependentUpon>201410150632442_PaymentInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410192240455_AddingActiveStatus.resx">
+      <DependentUpon>201410192240455_AddingActiveStatus.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

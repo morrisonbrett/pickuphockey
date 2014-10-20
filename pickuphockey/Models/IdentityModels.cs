@@ -56,6 +56,9 @@ namespace pickuphockey.Models
         [DisplayName("PayPal Email")]
         public string PayPalEmail { get; set; }
 
+        [DisplayName("Active")]
+        public bool Active { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

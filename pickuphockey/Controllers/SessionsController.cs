@@ -122,12 +122,11 @@ namespace pickuphockey.Controllers
             }
             body += "Click here for the details: " + sessionurl + Environment.NewLine;
 
-            var users = UserManager.Users.ToList();
             var emailServices = new EmailServices();
+            var users = UserManager.Users.ToList().Where(t => t.Active && t.NotificationPreference != NotificationPreference.None);
             foreach (var u in users)
             {
-                if (u.NotificationPreference != NotificationPreference.None)
-                    emailServices.SendMail(subject, body, u.Email);
+                emailServices.SendMail(subject, body, u.Email);
             }
         }
 
