@@ -162,3 +162,4 @@ packages/
 *.pubxml
 Properties/PublishProfiles/*
 
+pickuphockey/keys.config
