@@ -174,6 +174,12 @@ namespace pickuphockey.Controllers
                 {
                     var updateBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == buySell.BuySellId);
 
+                    // Make sure this spot is available to buy
+                    if (!string.IsNullOrEmpty(updateBuySell.BuyerUserId))
+                    {
+                        return RedirectToAction("Sell", "BuySells", new { id = buySell.SessionId });
+                    }
+
                     var seller = UserManager.FindById(updateBuySell.SellerUserId);
 
                     activity = buyer.FirstName + " " + buyer.LastName + " BOUGHT SPOT FROM " + seller.FirstName + " " + seller.LastName;
@@ -308,6 +314,12 @@ namespace pickuphockey.Controllers
                 if (!string.IsNullOrEmpty(buySell.BuyerUserId))
                 {
                     var updateBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == buySell.BuySellId);
+
+                    // Make sure this spot is available to sell
+                    if (!string.IsNullOrEmpty(updateBuySell.SellerUserId))
+                    {
+                        return RedirectToAction("Sell", "BuySells", new { id = buySell.SessionId });
+                    }
 
                     var buyer = UserManager.FindById(updateBuySell.BuyerUserId);
 

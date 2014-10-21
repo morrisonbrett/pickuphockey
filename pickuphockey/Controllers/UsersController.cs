@@ -32,7 +32,7 @@ namespace pickuphockey.Controllers
         
         public ActionResult Index()
         {
-            return View(UserManager.Users.ToList());
+            return View(UserManager.Users.ToList().OrderBy(u => u.LastName));
         }
 
         [HttpPost]
