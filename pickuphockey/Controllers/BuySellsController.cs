@@ -503,7 +503,7 @@ namespace pickuphockey.Controllers
             _db.Entry(toggleBuySell).State = EntityState.Modified;
             _db.SaveChanges();
 
-            var activity = buyer.FirstName + " " + buyer.LastName + " (SELLER) set PAYMENT STATUS to " + (paymentReceived ? "received" : "unreceived");
+            var activity = seller.FirstName + " " + seller.LastName + " (SELLER) set PAYMENT STATUS to " + (paymentReceived ? "received" : "unreceived");
             _db.AddActivity(toggleBuySell.SessionId, activity);
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);

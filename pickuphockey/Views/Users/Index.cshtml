@@ -18,15 +18,15 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.PayPalEmail)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.TeamAssignment)
             </th>
             @if (User.IsInRole("Admin"))
             {
                 <th>
                     @Html.DisplayNameFor(model => model.NotificationPreference)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PayPalEmail)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Active)
@@ -46,15 +46,15 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.PayPalEmail)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.TeamAssignment)
             </td>
             @if (User.IsInRole("Admin"))
             {
                 <td>
                     @Html.DisplayFor(modelItem => item.NotificationPreference)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PayPalEmail)
                 </td>
                 <td>
                     @Html.CheckBoxFor(modelItem => item.Active, htmlAttributes: new { id = "UserActive_" + item.Id })
