@@ -179,7 +179,7 @@ namespace pickuphockey.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, PayPalEmail = model.Email, FirstName = model.FirstName, LastName = model.LastName, Active = true };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, PayPalEmail = model.PayPalEmail, FirstName = model.FirstName, LastName = model.LastName, Active = true };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

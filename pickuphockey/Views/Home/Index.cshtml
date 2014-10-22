@@ -16,7 +16,9 @@
         </div>
     </div>
 </div>
-<p class="text-success">@ViewBag.StatusMessage</p>
+@if (!string.IsNullOrEmpty(ViewBag.StatusMessage)) {
+<span class="alert-success alert">@ViewBag.StatusMessage</span>
+}
 <div class="row">
     <div class="col-md-3">
         <h2>Upcoming Pickups</h2>
