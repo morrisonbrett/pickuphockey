@@ -66,5 +66,15 @@
 </div>
 
 @section Scripts {
+    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript" defer>
+        $(document).ready(function () {
+            $('#Email').bind('input', function () {
+                var stt = $(this).val();
+                $('#PayPalEmail').val(stt);
+            });
+        });
+    </script>
 }
