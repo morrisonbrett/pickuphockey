@@ -241,10 +241,24 @@ namespace pickuphockey.Controllers
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                if (user == null)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
+                    // Don't reveal that the user does not exist
                     return View("ForgotPasswordConfirmation");
+                }
+
+                if (string.IsNullOrEmpty(user.PasswordHash))
+                {
+                    ModelState.AddModelError("", "You account was registered via 3rd party authentication.  You have no password.  Sign in with the same service you created the account with.");
+
+                    return View(model);
+                }
+
+                if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+                {
+                    ModelState.AddModelError("", "You account has not been confirmed.  You must click the confirmation link.  Check your email.");
+
+                    return View(model);
                 }
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
