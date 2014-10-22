@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using pickuphockey.Models;
 using pickuphockey.Services;
+// ReSharper disable PossibleNullReferenceException
 
 namespace pickuphockey.Controllers
 {
@@ -107,7 +108,7 @@ namespace pickuphockey.Controllers
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
+                //case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
@@ -155,7 +156,7 @@ namespace pickuphockey.Controllers
                     return RedirectToLocal(model.ReturnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
-                case SignInStatus.Failure:
+                //case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid code.");
                     return View(model);
@@ -375,7 +376,7 @@ namespace pickuphockey.Controllers
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
-                case SignInStatus.Failure:
+                //case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
@@ -433,8 +434,7 @@ namespace pickuphockey.Controllers
                                         var fn = info.ExternalIdentity.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"));
                                         if (fn != null)
                                         {
-                                            string fullName = null;
-                                            fullName = fn.Value;
+                                            var fullName = fn.Value;
                                             firstName = fullName.Substring(0, fullName.IndexOf(' '));
                                             lastName = fullName.Substring(fullName.IndexOf(' ') + 1);
                                         }
@@ -443,6 +443,7 @@ namespace pickuphockey.Controllers
                                     }
                             }
                         }
+// ReSharper disable once EmptyGeneralCatchClause
                         catch
                         {
                             // We didn't get the name from the external provider, but that's OK
@@ -459,7 +460,10 @@ namespace pickuphockey.Controllers
                         if (updateResult.Succeeded)
                         {
                             await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                            return RedirectToLocal(returnUrl);
+                            
+                            //return RedirectToLocal(returnUrl);
+                            // Ignoring "Redirect to local.  Instead, send them to the preferences screen
+                            return RedirectToAction("Preferences", "Manage");
                         }
                         AddErrors(updateResult);
                     }
@@ -590,3 +594,4 @@ namespace pickuphockey.Controllers
         #endregion
     }
 }
+// ReSharper restore PossibleNullReferenceException
