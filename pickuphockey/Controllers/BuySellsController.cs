@@ -50,13 +50,7 @@ namespace pickuphockey.Controllers
                 return true;
             }
 
-            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(ConfigurationManager.AppSettings["DisplayTimeZone"]);
-            if (session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date)
-            {
-                return true;
-            }
-
-            return false;
+            return session.IsPast;
         }
 
         private void SendSessionEmail(Session session, ApplicationUser seller, ApplicationUser buyer, SessionAction sessionAction)

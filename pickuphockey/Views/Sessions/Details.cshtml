@@ -3,8 +3,6 @@
 
 @{
     ViewBag.Title = "Session Detail";
-    var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
-    var pastSession = Model.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date;
 }
 
 <h2>@Html.DisplayFor(model => model.SessionDate)</h2>
@@ -16,7 +14,7 @@
     }
     
     <hr/>
-    @if (!pastSession) {
+    @if (!Model.IsPast) {
         <div class="form-group">
             <div>
                 <button onclick="location.href='@Url.Action("Sell", "BuySells", new { id = Model.SessionId })';return false;" class="btn">SELL MY SPOT</button>
@@ -34,7 +32,7 @@
 </div>
 <hr />
 <p>
-    @if (User.IsInRole("Admin"))
+    @if (User.IsInRole("Admin") && Model.CanEdit)
     {
         @Html.ActionLink("Edit", "Edit", new { id = Model.SessionId })
         <span> | </span>

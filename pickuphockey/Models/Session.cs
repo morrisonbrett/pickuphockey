@@ -45,6 +45,15 @@ namespace pickuphockey.Models
         public ICollection<BuySell> BuySells { get; set; }
 
         [NotMapped]
+        public bool IsPast
+        {
+            get
+            {
+                return SessionDate.Date < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
+            }
+        }
+
+        [NotMapped]
         public bool CanDelete
         {
             get

@@ -4,7 +4,6 @@
 @model IEnumerable<pickuphockey.Models.BuySell>
 @{
     var isAdmin = User.IsInRole("Admin");
-    var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
 }
 <h2>Buys / Sells</h2>
 
@@ -100,8 +99,7 @@
         </td>
         <td>
             @{
-                var pastSession = item.Session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone).Date;
-                if (!pastSession)
+                if (!item.Session.IsPast)
                 {
                     if (!string.IsNullOrEmpty(item.SellerUserId) && string.IsNullOrEmpty(item.BuyerUserId) && (item.SellerUserId == User.Identity.GetUserId() || isAdmin))
                     {
