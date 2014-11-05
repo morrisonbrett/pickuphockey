@@ -15,11 +15,14 @@ namespace pickuphockey.Models
     public class Session
     {
         private readonly TimeZoneInfo _pstZone;
+        private readonly TimeSpan _sessionEndTime;
+
         public Session()
         {
             ActivityLogs = new HashSet<ActivityLog>();
             BuySells = new HashSet<BuySell>();
             _pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
+            _sessionEndTime = TimeSpan.Parse(System.Configuration.ConfigurationManager.AppSettings["SessionEndTime"]);
         }
 
         [Key]
@@ -49,7 +52,9 @@ namespace pickuphockey.Models
         {
             get
             {
-                return SessionDate.Date < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
+                return SessionDate.Date < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date ||
+                    (SessionDate.Date == TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date &&
+                     TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).TimeOfDay > _sessionEndTime);
             }
         }
 
@@ -58,7 +63,7 @@ namespace pickuphockey.Models
         {
             get
             {
-                return SessionDate.Date >= TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
+                return SessionDate.Date > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
             }
         }
 
@@ -67,7 +72,7 @@ namespace pickuphockey.Models
         {
             get
             {
-                return SessionDate.Date >= TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
+                return SessionDate.Date > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
             }
         }
     }
