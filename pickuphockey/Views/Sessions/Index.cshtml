@@ -28,8 +28,14 @@
          </td>
          @if (User.IsInRole("Admin")) {
          <td>
-             @Html.ActionLink("Edit", "Edit", new {id = item.SessionId}) |
-             @Html.ActionLink("Delete", "Delete", new {id = item.SessionId})
+            @if (item.CanEdit)
+            {
+                @Html.ActionLink("Edit", "Edit", new {id = item.SessionId}) <span>|</span>
+            }
+            @if (item.CanDelete)
+            {
+                @Html.ActionLink("Delete", "Delete", new {id = item.SessionId})
+            }
          </td>
          }
      </tr>

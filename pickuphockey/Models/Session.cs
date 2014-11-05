@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace pickuphockey.Models
 {
@@ -13,10 +14,12 @@ namespace pickuphockey.Models
 
     public class Session
     {
+        private readonly TimeZoneInfo _pstZone;
         public Session()
         {
             ActivityLogs = new HashSet<ActivityLog>();
             BuySells = new HashSet<BuySell>();
+            _pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
         }
 
         [Key]
@@ -40,5 +43,23 @@ namespace pickuphockey.Models
 
         [DisplayName("Buyers and Sellers")]
         public ICollection<BuySell> BuySells { get; set; }
+
+        [NotMapped]
+        public bool CanDelete
+        {
+            get
+            {
+                return SessionDate.Date >= TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
+            }
+        }
+
+        [NotMapped]
+        public bool CanEdit
+        {
+            get
+            {
+                return SessionDate.Date >= TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
+            }
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -157,6 +156,12 @@ namespace pickuphockey.Controllers
         {
             if (!ModelState.IsValid) return View(session);
 
+            var fsession = _db.Sessions.Find(session.SessionId);
+            if (fsession == null || !fsession.CanEdit)
+            {
+                return HttpNotFound();
+            }
+
             _db.AddActivity(session.SessionId, "Edited Session");
 
             session.UpdateDateTime = DateTime.UtcNow;
@@ -189,6 +194,11 @@ namespace pickuphockey.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             var session = _db.Sessions.Find(id);
+            if (session == null || !session.CanDelete)
+            {
+                return HttpNotFound();
+            }
+
             _db.Sessions.Remove(session);
             _db.SaveChanges();
             return RedirectToAction("Index");
