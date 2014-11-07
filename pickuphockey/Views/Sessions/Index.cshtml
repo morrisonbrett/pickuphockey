@@ -4,40 +4,21 @@
     ViewBag.Title = "Pickup Sessions";
 }
 
-<h2>Pickup Sessions</h2>
-
 @if (User.IsInRole("Admin")) {
     <p>
-        @Html.ActionLink("Create New", "Create")
+        <br/>@Html.ActionLink("Create New", "Create")
     </p>
 }
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.SessionDate)
-        </th>
-        <th></th>
-    </tr>
-    @foreach (var item in Model) {
-     <tr>
-         <td>
-             @Html.ActionLink(item.SessionDate.ToString("dddd, MM/dd/yyyy"), "Details", "Sessions", new {id = item.SessionId}, null)
-         </td>
-         <td>
-             @Html.DisplayFor(modelItem => item.Note)
-         </td>
-         @if (User.IsInRole("Admin")) {
-         <td>
-            @if (item.CanEdit)
-            {
-                @Html.ActionLink("Edit", "Edit", new {id = item.SessionId}) <span>|</span>
-            }
-            @if (item.CanDelete)
-            {
-                @Html.ActionLink("Delete", "Delete", new {id = item.SessionId})
-            }
-         </td>
-         }
-     </tr>
-    }
-</table>
+<div class="row">
+    <div class="col-md-7">
+        <h2>Upcoming Pickups</h2>
+        @Html.Partial("_CurrentPickupsPartial", Model)
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <h2>Past Pickups</h2>
+        @Html.Partial("_PastPickupsPartial", Model)
+    </div>
+</div>

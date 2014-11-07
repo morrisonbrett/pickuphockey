@@ -13,6 +13,19 @@
             <td>
                 @Html.DisplayFor(itemList => item.Note)
             </td>
+            @if (User!= null && User.IsInRole("Admin"))
+            {
+                <td>
+                    @if (item.CanEdit)
+                    {
+                        @Html.ActionLink("Edit", "Edit", "Sessions", new { id = item.SessionId }, null) <span>|</span>
+                    }
+                    @if (item.CanDelete)
+                    {
+                        @Html.ActionLink("Delete", "Delete", "Sessions", new { id = item.SessionId }, null)
+                    }
+                </td>
+            }
         </tr>
     }
 </table>
