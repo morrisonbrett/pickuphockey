@@ -16,6 +16,7 @@ namespace pickuphockey.Models
     {
         private readonly TimeZoneInfo _pstZone;
         private readonly TimeSpan _sessionEndTime;
+        private readonly int _buyDayMinimum;
 
         public Session()
         {
@@ -23,6 +24,7 @@ namespace pickuphockey.Models
             BuySells = new HashSet<BuySell>();
             _pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
             _sessionEndTime = TimeSpan.Parse(System.Configuration.ConfigurationManager.AppSettings["SessionEndTime"]);
+            _buyDayMinimum = int.Parse(System.Configuration.ConfigurationManager.AppSettings["BuyDayMinimum"]);
         }
 
         [Key]
@@ -73,6 +75,24 @@ namespace pickuphockey.Models
             get
             {
                 return SessionDate.Date > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
+            }
+        }
+
+        [NotMapped]
+        public bool CanBuy
+        {
+            get
+            {
+                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date >= SessionDate.Date.AddDays(-1 * _buyDayMinimum);
+            }
+        }
+
+        [NotMapped]
+        public DateTime BuyDateTime
+        {
+            get
+            {
+                return SessionDate.Date.AddDays(-1 * _buyDayMinimum);
             }
         }
     }

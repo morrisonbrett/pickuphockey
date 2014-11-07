@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -143,7 +142,12 @@ namespace pickuphockey.Controllers
             {
                 ModelState.AddModelError("", "You account is inactive.  Contact the commissioner.");
             }
-            
+
+            if (!session.CanBuy)
+            {
+                ModelState.AddModelError("", "Spots cannot be bought until " + session.BuyDateTime.Date + ".");
+            }
+
             if (ModelState.IsValid)
             {
                 var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);

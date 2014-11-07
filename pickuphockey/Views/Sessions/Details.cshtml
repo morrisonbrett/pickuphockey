@@ -12,16 +12,25 @@
     {
         <h4>@Html.DisplayFor(model => model.Note)</h4>
     }
-    
-    <hr/>
-    @if (!Model.IsPast) {
+
+    <hr />
+    @if (!Model.IsPast)
+    {
         <div class="form-group">
             <div>
                 <button onclick="location.href='@Url.Action("Sell", "BuySells", new { id = Model.SessionId })';return false;" class="btn">SELL MY SPOT</button>
-                <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">BUY A SPOT</button>
+                @if (Model.CanBuy) {
+                    <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">BUY A SPOT</button>
+                }
+                else
+                {
+                    <div>Spots cannot be bought until @Model.BuyDateTime.Date.</div>
+                }
             </div>
         </div>
-    } else {
+    }
+    else
+    {
         <div>This session is past and closed to buys / sells.</div>
     }
     <hr />
