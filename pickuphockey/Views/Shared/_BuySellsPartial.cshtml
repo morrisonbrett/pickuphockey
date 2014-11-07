@@ -85,14 +85,14 @@
             }
             @if (!string.IsNullOrEmpty(item.BuyerUserId) && !string.IsNullOrEmpty(item.SellerUserId))
             {
-                var canModifySent = item.BuyerUserId == User.Identity.GetUserId();
-                var canModifyReceived = item.SellerUserId == User.Identity.GetUserId();
+                var canModifySent = (item.BuyerUserId == User.Identity.GetUserId()) || isAdmin;
+                var canModifyReceived = (item.SellerUserId == User.Identity.GetUserId()) || isAdmin;
                 
                 <div>
-                    @(canModifySent ? Html.CheckBoxFor(modelItem => item.PaymentSent, htmlAttributes: new { id = "PaymentSent_" + item.BuySellId }) : Html.CheckBoxFor(modelItem => item.PaymentSent, htmlAttributes: new {disabled = "disabled"}))
+                    @(canModifySent ? Html.CheckBoxFor(modelItem => item.PaymentSent, htmlAttributes: new { id = "PaymentSent_" + item.BuySellId }) : Html.CheckBoxFor(modelItem => item.PaymentSent, htmlAttributes: new { id = "PaymentSent_" + item.BuySellId, disabled = "disabled" }))
                     <span>Sent</span>
                     <br />
-                    @(canModifyReceived ? Html.CheckBoxFor(modelItem => item.PaymentReceived, htmlAttributes: new { id = "PaymentReceived_" + item.BuySellId }) : Html.CheckBoxFor(modelItem => item.PaymentReceived, htmlAttributes: new { disabled = "disabled" }))
+                    @(canModifyReceived ? Html.CheckBoxFor(modelItem => item.PaymentReceived, htmlAttributes: new { id = "PaymentReceived_" + item.BuySellId }) : Html.CheckBoxFor(modelItem => item.PaymentReceived, htmlAttributes: new { id = "PaymentReceived_" + item.BuySellId, disabled = "disabled" }))
                     <span>Received</span>
                 </div>
             }
@@ -101,13 +101,16 @@
             @{
                 if (!item.Session.IsPast)
                 {
-                    if (!string.IsNullOrEmpty(item.SellerUserId) && string.IsNullOrEmpty(item.BuyerUserId) && (item.SellerUserId == User.Identity.GetUserId() || isAdmin))
+                    var canRemoveSeller = !string.IsNullOrEmpty(item.SellerUserId) && string.IsNullOrEmpty(item.BuyerUserId) && ((item.SellerUserId == User.Identity.GetUserId()) || isAdmin);
+                    var canRemoveBuyer = string.IsNullOrEmpty(item.SellerUserId) && !string.IsNullOrEmpty(item.BuyerUserId) && ((item.BuyerUserId == User.Identity.GetUserId()) || isAdmin);
+                    
+                    if (canRemoveSeller)
                     {
-                        @Html.ActionLink("Remove Seller Spot", "RemoveSeller", "BuySells", new {id = item.BuySellId}, null)
+                        @Html.ActionLink("Remove Seller Spot", "RemoveSeller", "BuySells", new { id = item.BuySellId }, null)
                     }
-                    else if (string.IsNullOrEmpty(item.SellerUserId) && !string.IsNullOrEmpty(item.BuyerUserId) && (item.BuyerUserId == User.Identity.GetUserId() || isAdmin))
+                    if (canRemoveBuyer)
                     {
-                        @Html.ActionLink("Remove Buyer Spot", "RemoveBuyer", "BuySells", new {id = item.BuySellId}, null)
+                        @Html.ActionLink("Remove Buyer Spot", "RemoveBuyer", "BuySells", new { id = item.BuySellId }, null)
                     }
                 }
             }

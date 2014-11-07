@@ -44,12 +44,7 @@ namespace pickuphockey.Controllers
 
         private static bool InvalidSession(int? id, Session session)
         {
-            if (id == null || session == null)
-            {
-                return true;
-            }
-
-            return session.IsPast;
+            return id == null || session == null;
         }
 
         private void SendSessionEmail(Session session, ApplicationUser seller, ApplicationUser buyer, SessionAction sessionAction)
@@ -141,6 +136,11 @@ namespace pickuphockey.Controllers
             if (!buyer.Active)
             {
                 ModelState.AddModelError("", "You account is inactive.  Contact the commissioner.");
+            }
+
+            if (session.IsPast)
+            {
+                ModelState.AddModelError("", "You cannot buy from a session that has past.");
             }
 
             if (!session.CanBuy)
@@ -287,6 +287,11 @@ namespace pickuphockey.Controllers
             if (!seller.Active)
             {
                 ModelState.AddModelError("", "You account is inactive.  Contact the commissioner.");
+            }
+
+            if (session.IsPast)
+            {
+                ModelState.AddModelError("", "You cannot sell from a session that has past.");
             }
 
             if (ModelState.IsValid)
@@ -453,7 +458,7 @@ namespace pickuphockey.Controllers
         public JsonResult TogglePaymentSent(int id, bool paymentSent)
         {
             var toggleBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
-            if (toggleBuySell == null || (string.IsNullOrEmpty(toggleBuySell.SellerUserId) || string.IsNullOrEmpty(toggleBuySell.BuyerUserId) || toggleBuySell.BuyerUserId != User.Identity.GetUserId())) return Json(new { Success = false, Message = "Invalid Request" });
+            if (toggleBuySell == null || (!User.IsInRole("Admin") && (string.IsNullOrEmpty(toggleBuySell.SellerUserId) || string.IsNullOrEmpty(toggleBuySell.BuyerUserId) || toggleBuySell.BuyerUserId != User.Identity.GetUserId()))) return Json(new { Success = false, Message = "Invalid Request" });
 
             var session = _db.Sessions.Find(toggleBuySell.SessionId);
             if (InvalidSession(toggleBuySell.SessionId, session)) return Json(new { Success = false, Message = "Invalid Request" });
@@ -486,7 +491,7 @@ namespace pickuphockey.Controllers
         public JsonResult TogglePaymentReceived(int id, bool paymentReceived)
         {
             var toggleBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
-            if (toggleBuySell == null || (string.IsNullOrEmpty(toggleBuySell.SellerUserId) || string.IsNullOrEmpty(toggleBuySell.BuyerUserId) || toggleBuySell.SellerUserId != User.Identity.GetUserId())) return Json(new { Success = false, Message = "Invalid Request" });
+            if (toggleBuySell == null || (!User.IsInRole("Admin") && (string.IsNullOrEmpty(toggleBuySell.SellerUserId) || string.IsNullOrEmpty(toggleBuySell.BuyerUserId) || toggleBuySell.SellerUserId != User.Identity.GetUserId()))) return Json(new { Success = false, Message = "Invalid Request" });
 
             var session = _db.Sessions.Find(toggleBuySell.SessionId);
             if (InvalidSession(toggleBuySell.SessionId, session)) return Json(new { Success = false, Message = "Invalid Request" });
