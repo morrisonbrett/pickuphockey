@@ -156,7 +156,7 @@ namespace pickuphockey.Controllers
         {
             if (!ModelState.IsValid) return View(session);
 
-            var fsession = _db.Sessions.Find(session.SessionId);
+            var fsession = _db.Sessions.AsNoTracking().FirstOrDefault(t => t.SessionId == session.SessionId);
             if (fsession == null || !fsession.CanEdit)
             {
                 return HttpNotFound();
