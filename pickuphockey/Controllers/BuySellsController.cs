@@ -42,14 +42,11 @@ namespace pickuphockey.Controllers
 
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
-        private static bool InvalidSession(int? id, Session session)
-        {
-            return id == null || session == null;
-        }
-
         private void SendSessionEmail(Session session, ApplicationUser seller, ApplicationUser buyer, SessionAction sessionAction)
         {
-            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+            if (Request.Url == null) return;
+
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
 
             switch (sessionAction)
             {
@@ -81,8 +78,10 @@ namespace pickuphockey.Controllers
         // GET: BuySells/Buy/5
         public ActionResult Buy(int? id)
         {
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            
             var session = _db.Sessions.Find(id);
-            if (InvalidSession(id, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (session == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             ViewBag.SessionDate = session.SessionDate;
             var buyer = UserManager.FindById(User.Identity.GetUserId());
@@ -128,8 +127,10 @@ namespace pickuphockey.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Buy([Bind(Include = "BuySellId,SessionId,BuyerNote,SellerUserId")] BuySell buySell)
         {
+            if (Request.Url == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             var session = _db.Sessions.Find(buySell.SessionId);
-            if (InvalidSession(buySell.SessionId, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (session == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             ViewBag.SessionDate = session.SessionDate;
             var buyer = UserManager.FindById(User.Identity.GetUserId());
@@ -150,7 +151,7 @@ namespace pickuphockey.Controllers
 
             if (ModelState.IsValid)
             {
-                var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+                var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
 
                 // Can't buy from self
                 if (buySell.SellerUserId == buyer.Id)
@@ -171,6 +172,7 @@ namespace pickuphockey.Controllers
                 if (!string.IsNullOrEmpty(buySell.SellerUserId))
                 {
                     var updateBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == buySell.BuySellId);
+                    if (updateBuySell == null) return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
 
                     // Make sure this spot is available to buy
                     if (!string.IsNullOrEmpty(updateBuySell.BuyerUserId))
@@ -228,8 +230,10 @@ namespace pickuphockey.Controllers
         // GET: BuySells/Sell/5
         public ActionResult Sell(int? id)
         {
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             var session = _db.Sessions.Find(id);
-            if (InvalidSession(id, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (session == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             ViewBag.SessionDate = session.SessionDate;
             var seller = UserManager.FindById(User.Identity.GetUserId());
@@ -279,8 +283,10 @@ namespace pickuphockey.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Sell([Bind(Include = "BuySellId,SessionId,SellerNote,PaymentPreference,TeamAssignment,BuyerUserId,PaymentInfo")] BuySell buySell)
         {
+            if (Request.Url == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             var session = _db.Sessions.Find(buySell.SessionId);
-            if (InvalidSession(buySell.SessionId, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (session == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             ViewBag.SessionDate = session.SessionDate;
             var seller = UserManager.FindById(User.Identity.GetUserId());
@@ -296,7 +302,7 @@ namespace pickuphockey.Controllers
 
             if (ModelState.IsValid)
             {
-                var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+                var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
 
                 // Can't sell to self
                 if (buySell.BuyerUserId == seller.Id)
@@ -317,6 +323,7 @@ namespace pickuphockey.Controllers
                 if (!string.IsNullOrEmpty(buySell.BuyerUserId))
                 {
                     var updateBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == buySell.BuySellId);
+                    if (updateBuySell == null) return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
 
                     // Make sure this spot is available to sell
                     if (!string.IsNullOrEmpty(updateBuySell.SellerUserId))
@@ -383,11 +390,13 @@ namespace pickuphockey.Controllers
 
         public ActionResult RemoveSeller(int id)
         {
+            if (Request.Url == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             var deleteBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
             if (deleteBuySell == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var session = _db.Sessions.Find(deleteBuySell.SessionId);
-            if (InvalidSession(deleteBuySell.SessionId, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (session == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var seller = UserManager.FindById(deleteBuySell.SellerUserId);
             if (seller == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -402,6 +411,7 @@ namespace pickuphockey.Controllers
             {
                 deleteBuySell.SellerUserId = null;
                 deleteBuySell.SellerNote = null;
+                deleteBuySell.TeamAssignment = TeamAssignment.Unassigned;
                 deleteBuySell.UpdateDateTime = DateTime.UtcNow;
                 _db.Entry(deleteBuySell).State = EntityState.Modified;
             }
@@ -415,7 +425,7 @@ namespace pickuphockey.Controllers
             var activity = seller.FirstName + " " + seller.LastName + " removed from SELLING list";
             _db.AddActivity(deleteBuySell.SessionId, activity);
 
-            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
             var users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active);
             var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
             var body = activity + "." + Environment.NewLine + Environment.NewLine;
@@ -430,11 +440,13 @@ namespace pickuphockey.Controllers
 
         public ActionResult RemoveBuyer(int id)
         {
+            if (Request.Url == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             var deleteBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
             if (deleteBuySell == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var session = _db.Sessions.Find(deleteBuySell.SessionId);
-            if (InvalidSession(deleteBuySell.SessionId, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (session == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var buyer = UserManager.FindById(deleteBuySell.BuyerUserId);
             if (buyer == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -462,7 +474,7 @@ namespace pickuphockey.Controllers
             var activity = buyer.FirstName + " " + buyer.LastName + " removed from BUYING list";
             _db.AddActivity(deleteBuySell.SessionId, activity);
 
-            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
             var users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active);
             var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
             var body = activity + "." + Environment.NewLine + Environment.NewLine;
@@ -483,11 +495,13 @@ namespace pickuphockey.Controllers
         [HttpPost]
         public JsonResult TogglePaymentSent(int id, bool paymentSent)
         {
+            if (Request.Url == null) return Json(new { Success = false, Message = "Invalid Request" });
+
             var toggleBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
             if (toggleBuySell == null || (!User.IsInRole("Admin") && (string.IsNullOrEmpty(toggleBuySell.SellerUserId) || string.IsNullOrEmpty(toggleBuySell.BuyerUserId) || toggleBuySell.BuyerUserId != User.Identity.GetUserId()))) return Json(new { Success = false, Message = "Invalid Request" });
 
             var session = _db.Sessions.Find(toggleBuySell.SessionId);
-            if (InvalidSession(toggleBuySell.SessionId, session)) return Json(new { Success = false, Message = "Invalid Request" });
+            if (session == null) return Json(new { Success = false, Message = "Invalid Request" });
 
             var buyer = UserManager.FindById(toggleBuySell.BuyerUserId);
             if (buyer == null) return Json(new { Success = false, Message = "Invalid Request" });
@@ -502,7 +516,7 @@ namespace pickuphockey.Controllers
             var activity = buyer.FirstName + " " + buyer.LastName + " (BUYER) set PAYMENT STATUS to " + (paymentSent ? "sent" : "unsent");
             _db.AddActivity(toggleBuySell.SessionId, activity);
 
-            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
             var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
             var body = activity + "." + Environment.NewLine + Environment.NewLine;
             body += "Click here for the details: " + sessionurl + Environment.NewLine;
@@ -516,11 +530,13 @@ namespace pickuphockey.Controllers
         [HttpPost]
         public JsonResult TogglePaymentReceived(int id, bool paymentReceived)
         {
+            if (Request.Url == null) return Json(new { Success = false, Message = "Invalid Request" });
+
             var toggleBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
             if (toggleBuySell == null || (!User.IsInRole("Admin") && (string.IsNullOrEmpty(toggleBuySell.SellerUserId) || string.IsNullOrEmpty(toggleBuySell.BuyerUserId) || toggleBuySell.SellerUserId != User.Identity.GetUserId()))) return Json(new { Success = false, Message = "Invalid Request" });
 
             var session = _db.Sessions.Find(toggleBuySell.SessionId);
-            if (InvalidSession(toggleBuySell.SessionId, session)) return Json(new { Success = false, Message = "Invalid Request" });
+            if (session == null) return Json(new { Success = false, Message = "Invalid Request" });
 
             var buyer = UserManager.FindById(toggleBuySell.BuyerUserId);
             if (buyer == null) return Json(new { Success = false, Message = "Invalid Request" });
@@ -535,7 +551,7 @@ namespace pickuphockey.Controllers
             var activity = seller.FirstName + " " + seller.LastName + " (SELLER) set PAYMENT STATUS to " + (paymentReceived ? "received" : "unreceived");
             _db.AddActivity(toggleBuySell.SessionId, activity);
 
-            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
             var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
             var body = activity + "." + Environment.NewLine + Environment.NewLine;
             body += "Click here for the details: " + sessionurl + Environment.NewLine;

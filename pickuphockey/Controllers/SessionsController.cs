@@ -107,11 +107,13 @@ namespace pickuphockey.Controllers
 
         private void EmailSession(Session session)
         {
+            if (Request.Url == null) return;
+
             var userid = Thread.CurrentPrincipal.Identity.GetUserId();
 
             var user = UserManager.FindById(userid);
 
-            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, protocol: Request.Url.Scheme);
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
 
             var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " CREATED";
             var body = "A new pickup session has been created by " + user.FirstName + " " + user.LastName + " for " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + "." + Environment.NewLine + Environment.NewLine;
