@@ -384,7 +384,7 @@ namespace pickuphockey.Controllers
         public ActionResult RemoveSeller(int id)
         {
             var deleteBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
-            if (deleteBuySell == null || (!string.IsNullOrEmpty(deleteBuySell.SellerUserId) && !string.IsNullOrEmpty(deleteBuySell.BuyerUserId))) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (deleteBuySell == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var session = _db.Sessions.Find(deleteBuySell.SessionId);
             if (InvalidSession(deleteBuySell.SessionId, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -392,11 +392,24 @@ namespace pickuphockey.Controllers
             var seller = UserManager.FindById(deleteBuySell.SellerUserId);
             if (seller == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            // Make sure person has rights to do this
-            if (seller.Id != User.Identity.GetUserId() && !User.IsInRole("Admin")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var canRemoveSeller = !string.IsNullOrEmpty(deleteBuySell.SellerUserId) && (string.IsNullOrEmpty(deleteBuySell.BuyerUserId) || User.IsInRole("Admin")) && ((deleteBuySell.SellerUserId == User.Identity.GetUserId()) || User.IsInRole("Admin"));
 
-            // Remove this buySell from the DB
-            _db.Entry(deleteBuySell).State = EntityState.Deleted;
+            // Make sure person has rights to do this
+            if (!canRemoveSeller) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            // If this is a matched buy / sell, just null the buyer userid
+            if (!string.IsNullOrEmpty(deleteBuySell.BuyerUserId) && !string.IsNullOrEmpty(deleteBuySell.SellerUserId))
+            {
+                deleteBuySell.SellerUserId = null;
+                deleteBuySell.SellerNote = null;
+                deleteBuySell.UpdateDateTime = DateTime.UtcNow;
+                _db.Entry(deleteBuySell).State = EntityState.Modified;
+            }
+            else
+            {
+                // Remove this buySell from the DB
+                _db.Entry(deleteBuySell).State = EntityState.Deleted;
+            }
             _db.SaveChanges();
 
             var activity = seller.FirstName + " " + seller.LastName + " removed from SELLING list";
@@ -418,7 +431,7 @@ namespace pickuphockey.Controllers
         public ActionResult RemoveBuyer(int id)
         {
             var deleteBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
-            if (deleteBuySell == null || (!string.IsNullOrEmpty(deleteBuySell.SellerUserId) && !string.IsNullOrEmpty(deleteBuySell.BuyerUserId))) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (deleteBuySell == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var session = _db.Sessions.Find(deleteBuySell.SessionId);
             if (InvalidSession(deleteBuySell.SessionId, session)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -426,11 +439,24 @@ namespace pickuphockey.Controllers
             var buyer = UserManager.FindById(deleteBuySell.BuyerUserId);
             if (buyer == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            // Make sure person has rights to do this
-            if (buyer.Id != User.Identity.GetUserId() && !User.IsInRole("Admin")) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var canRemoveBuyer = !string.IsNullOrEmpty(deleteBuySell.BuyerUserId) && (string.IsNullOrEmpty(deleteBuySell.SellerUserId) || User.IsInRole("Admin")) && ((deleteBuySell.BuyerUserId == User.Identity.GetUserId()) || User.IsInRole("Admin"));
 
-            // Remove this buySell from the DB
-            _db.Entry(deleteBuySell).State = EntityState.Deleted;
+            // Make sure person has rights to do this
+            if (!canRemoveBuyer) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            // If this is a matched buy / sell, just null the buyer userid
+            if (!string.IsNullOrEmpty(deleteBuySell.BuyerUserId) && !string.IsNullOrEmpty(deleteBuySell.SellerUserId))
+            {
+                deleteBuySell.BuyerUserId = null;
+                deleteBuySell.BuyerNote = null;
+                deleteBuySell.UpdateDateTime = DateTime.UtcNow;
+                _db.Entry(deleteBuySell).State = EntityState.Modified;
+            }
+            else
+            {
+                // Remove this buySell from the DB
+                _db.Entry(deleteBuySell).State = EntityState.Deleted;
+            }
             _db.SaveChanges();
 
             var activity = buyer.FirstName + " " + buyer.LastName + " removed from BUYING list";

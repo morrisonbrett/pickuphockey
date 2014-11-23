@@ -1,7 +1,6 @@
-﻿@using System.Diagnostics.Eventing.Reader
-@using Microsoft.AspNet.Identity
+﻿@using Microsoft.AspNet.Identity
 @using pickuphockey.Models
-@model IEnumerable<pickuphockey.Models.BuySell>
+@model IEnumerable<BuySell>
 @{
     var isAdmin = User.IsInRole("Admin");
 }
@@ -101,12 +100,16 @@
             @{
                 if (!item.Session.IsPast)
                 {
-                    var canRemoveSeller = !string.IsNullOrEmpty(item.SellerUserId) && string.IsNullOrEmpty(item.BuyerUserId) && ((item.SellerUserId == User.Identity.GetUserId()) || isAdmin);
-                    var canRemoveBuyer = string.IsNullOrEmpty(item.SellerUserId) && !string.IsNullOrEmpty(item.BuyerUserId) && ((item.BuyerUserId == User.Identity.GetUserId()) || isAdmin);
+                    var canRemoveSeller = !string.IsNullOrEmpty(item.SellerUserId) && (string.IsNullOrEmpty(item.BuyerUserId) || isAdmin) && ((item.SellerUserId == User.Identity.GetUserId()) || isAdmin);
+                    var canRemoveBuyer = !string.IsNullOrEmpty(item.BuyerUserId) && (string.IsNullOrEmpty(item.SellerUserId) || isAdmin)  && ((item.BuyerUserId == User.Identity.GetUserId()) || isAdmin);
                     
                     if (canRemoveSeller)
                     {
                         @Html.ActionLink("Remove Seller Spot", "RemoveSeller", "BuySells", new { id = item.BuySellId }, null)
+                    }
+                    if (canRemoveSeller && canRemoveBuyer)
+                    {
+                        <br/>
                     }
                     if (canRemoveBuyer)
                     {
