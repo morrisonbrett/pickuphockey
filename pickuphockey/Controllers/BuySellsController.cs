@@ -268,7 +268,7 @@ namespace pickuphockey.Controllers
 
             // Look if self already has a spot that's unsold
             var openSell = _db.BuySell.Where(q => q.SessionId == id && q.SellerUserId == seller.Id && string.IsNullOrEmpty(q.BuyerUserId));
-            if (openSell.Any())
+            if (openSell.Any() && !User.IsInRole("Admin"))
             {
                 ModelState.AddModelError("", "You already have a spot for sale");
             }
@@ -312,7 +312,7 @@ namespace pickuphockey.Controllers
 
                 // Look if self already has a spot that's unsold
                 var openSell = _db.BuySell.Where(q => q.SessionId == buySell.SessionId && q.SellerUserId == seller.Id && string.IsNullOrEmpty(q.BuyerUserId));
-                if (openSell.Any())
+                if (openSell.Any() && !User.IsInRole("Admin"))
                 {
                     return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
                 }
