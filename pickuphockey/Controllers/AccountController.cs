@@ -192,7 +192,7 @@ namespace pickuphockey.Controllers
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here.</a>");
 
-                    user.NotificationPreference = NotificationPreference.All;
+                    user.NotificationPreference = NotificationPreference.OnlyMyBuySell;
                     user.PaymentPreference = PaymentPreference.PayPal;
                     var updateResult = await UserManager.UpdateAsync(user);
                     if (updateResult.Succeeded)
@@ -465,7 +465,7 @@ namespace pickuphockey.Controllers
                         
                         if (firstName != null) user.FirstName = firstName;
                         if (lastName != null) user.LastName = lastName;
-                        user.NotificationPreference = NotificationPreference.All;
+                        user.NotificationPreference = NotificationPreference.OnlyMyBuySell;
                         user.PaymentPreference = PaymentPreference.PayPal;
 
                         AlertAdmin(user);
