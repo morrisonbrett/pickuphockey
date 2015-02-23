@@ -264,6 +264,7 @@ namespace pickuphockey.Controllers
             if (buySell.BuyerUserId == seller.Id)
             {
                 ModelState.AddModelError("", "You cannot sell to yourself");
+                return View(buySell);
             }
 
             // Look if self already has a spot that's unsold
@@ -271,6 +272,16 @@ namespace pickuphockey.Controllers
             if (openSell.Any() && !User.IsInRole("Admin"))
             {
                 ModelState.AddModelError("", "You already have a spot for sale");
+                return View(buySell);
+            }
+
+            // Look if self already has sold and hasn't bought
+            var numberofSells = _db.BuySell.Count(q => q.SessionId == buySell.SessionId && q.SellerUserId == seller.Id);
+            var numberofBuys = _db.BuySell.Count(q => q.SessionId == buySell.SessionId && q.BuyerUserId == seller.Id);
+            if ((numberofSells > numberofBuys) && !User.IsInRole("Admin"))
+            {
+                ModelState.AddModelError("", "You already have sold a spot and cannot sell again unless you have bought");
+                return View(buySell);
             }
 
             return View(buySell);
@@ -313,6 +324,14 @@ namespace pickuphockey.Controllers
                 // Look if self already has a spot that's unsold
                 var openSell = _db.BuySell.Where(q => q.SessionId == buySell.SessionId && q.SellerUserId == seller.Id && string.IsNullOrEmpty(q.BuyerUserId));
                 if (openSell.Any() && !User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
+                }
+
+                // Look if self already has sold and hasn't bought
+                var numberofSells = _db.BuySell.Count(q => q.SessionId == buySell.SessionId && q.SellerUserId == seller.Id);
+                var numberofBuys = _db.BuySell.Count(q => q.SessionId == buySell.SessionId && q.BuyerUserId == seller.Id);
+                if ((numberofSells > numberofBuys) && !User.IsInRole("Admin"))
                 {
                     return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
                 }
