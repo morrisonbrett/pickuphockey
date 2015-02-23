@@ -1,0 +1,14 @@
+﻿@model pickuphockey.Models.Session
+<h2>Comments</h2>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '@System.Configuration.ConfigurationManager.AppSettings["DisqusShortname"]';
+    var disqus_identifier = '@Model.SessionId';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>

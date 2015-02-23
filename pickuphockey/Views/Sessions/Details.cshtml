@@ -2,7 +2,7 @@
 @model pickuphockey.Models.Session
 
 @{
-    ViewBag.Title = "Session Detail";
+    ViewBag.Title = "Session Detail - " + Model.SessionDate.ToString("dddd, MM/dd/yyyy");
 }
 
 <h2>@Html.DisplayFor(model => model.SessionDate)</h2>
@@ -38,6 +38,10 @@
     <hr />
     @Html.Partial("_ActivityLogsPartial", Model.ActivityLogs.OrderByDescending(i => i.CreateDateTime))
     <hr />
+    @if (!string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["DisqusShortname"])) {
+        @Html.Partial("_DisqusPartial", Model)
+        <hr />
+    }
 </div>
 <hr />
 <p>

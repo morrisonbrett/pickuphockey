@@ -401,6 +401,7 @@
     <Content Include="Views\Shared\_BuySellsPartial.cshtml" />
     <Content Include="Views\Shared\_ActivityLogsPartial.cshtml" />
     <Content Include="Views\Account\ResendVerification.cshtml" />
+    <Content Include="Views\Shared\_DisqusPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
