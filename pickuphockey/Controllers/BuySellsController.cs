@@ -87,7 +87,7 @@ namespace pickuphockey.Controllers
             var buyer = UserManager.FindById(User.Identity.GetUserId());
             if (!buyer.Active)
             {
-                ModelState.AddModelError("", "You account is inactive.  Contact the commissioner.");
+                ModelState.AddModelError("", "Your account is inactive.  Contact the commissioner.");
             }
 
             // Look for open sell spot, if none, just create empty model
@@ -136,7 +136,7 @@ namespace pickuphockey.Controllers
             var buyer = UserManager.FindById(User.Identity.GetUserId());
             if (!buyer.Active)
             {
-                ModelState.AddModelError("", "You account is inactive.  Contact the commissioner.");
+                ModelState.AddModelError("", "Your account is inactive.  Contact the commissioner.");
             }
 
             if (session.IsPast)
@@ -239,7 +239,7 @@ namespace pickuphockey.Controllers
             var seller = UserManager.FindById(User.Identity.GetUserId());
             if (!seller.Active)
             {
-                ModelState.AddModelError("", "You account is inactive.  Contact the commissioner.");
+                ModelState.AddModelError("", "Your account is inactive.  Contact the commissioner.");
             }
 
             // Look for open buy spot, if none, just create empty model
@@ -292,7 +292,7 @@ namespace pickuphockey.Controllers
             var seller = UserManager.FindById(User.Identity.GetUserId());
             if (!seller.Active)
             {
-                ModelState.AddModelError("", "You account is inactive.  Contact the commissioner.");
+                ModelState.AddModelError("", "Your account is inactive.  Contact the commissioner.");
             }
 
             if (session.IsPast)
