@@ -1,5 +1,7 @@
 Pickup Hockey
 ==============
+
+[![Join the chat at https://gitter.im/morrisonbrett/pickuphockey](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/morrisonbrett/pickuphockey?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 A project to buy, sell, and manage "spots" in a pickup hockey session.  In 2004, our commissioner, John Bryan, started a friendly pickup game on Friday mornings.  It's been such a great, well run, enjoyable hockey experience for everyone, and a few years ago we added a Wednesday session.  We play at [Toyota Sports Center](http://www.toyotasportscenter.com/) in El Segundo, California, where the NHL Los Angeles Kings practice.
 
 For years, we have has been managing the buy / sell list via email.  About a week before each skating session, the commissioner sends an email as the "buy / sell thread".  Regulars and substitutes add their names as a buyer or seller, like:
