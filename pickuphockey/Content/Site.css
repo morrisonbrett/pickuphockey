@@ -38,3 +38,18 @@ textarea {
 .jumbotron.btn {
     padding: 0.5em;
 }
+
+.navbar-inverse {
+    background-color: #013E82;
+    border-color: #080808;
+}
+
+.navbar-inverse .navbar-brand {
+  color: #E2E2E2;
+}
+.navbar-inverse .navbar-text {
+  color: #E2E2E2;
+}
+.navbar-inverse .navbar-nav > li > a {
+  color: #E2E2E2;
+}

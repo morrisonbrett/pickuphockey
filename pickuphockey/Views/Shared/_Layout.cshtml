@@ -1,5 +1,4 @@
-﻿@using System.Web.UI.WebControls
-@using Microsoft.AspNet.Identity
+﻿@using Microsoft.AspNet.Identity
 @using Microsoft.AspNet.Identity.Owin
 @{
     // TODO Move this to .cs file or maybe even ajax
@@ -31,14 +30,29 @@
     @Scripts.Render("~/bundles/modernizr")
 
     <script type="text/javascript">
-        window.appInsights=window.appInsights||function(ai){
-            function f(t){ai[t]=function(){var i=arguments;ai.queue.push(function(){ai[t].apply(ai,i)})}}
-            var t=document,r="script",u=t.createElement(r),i;for(u.src=ai.url||"//az416426.vo.msecnd.net/scripts/a/ai.0.10.js",t.getElementsByTagName(r)[0].parentNode.appendChild(u),ai.cookie=t.cookie,ai.queue=[],i=["Event","Exception","Metric","PageView","Trace"];i.length;)f("track"+i.pop());
-            return ai;
-        }({
-            iKey:"a3174067-0f92-4eb6-b7b5-06338c5dd9af"
-        });
+        var appInsights = window.appInsights ||
+            function (config) {
+                function r(config) {
+                    t[config] = function () {
+                        var i = arguments;
+                        t.queue.push(function () { t[config].apply(t, i) })
+                    }
+                }
 
+                var t = { config: config }, u = document, e = window, o = "script", s = u.createElement(o), i, f;
+                for (s.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js", u.getElementsByTagName(o)[0]
+                        .parentNode.appendChild(s), t.cookie = u
+                        .cookie, t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace"];
+                    i.length;
+                ) r("track" + i.pop());
+                return r("setAuthenticatedUserContext"), r("clearAuthenticatedUserContext"),
+                    config.disableExceptionTracking ||
+                    (i = "onerror", r("_" + i), f = e[i], e[i] = function (config, r, u, e, o) {
+                        var s = f && f(config, r, u, e, o);
+                        return s !== !0 && t["_" + i](config, r, u, e, o), s
+                    }), t
+            }({ instrumentationKey: "a3174067-0f92-4eb6-b7b5-06338c5dd9af" });
+        window.appInsights = appInsights;
         appInsights.trackPageView();
     </script>
     <meta name="description" content="@System.Configuration.ConfigurationManager.AppSettings["SiteTitle"]" />
