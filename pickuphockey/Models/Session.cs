@@ -50,50 +50,20 @@ namespace pickuphockey.Models
         public ICollection<BuySell> BuySells { get; set; }
 
         [NotMapped]
-        public bool IsPast
-        {
-            get
-            {
-                return SessionDate.Date < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date ||
-                    (SessionDate.Date == TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date &&
-                     TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).TimeOfDay > _sessionEndTime);
-            }
-        }
+        public bool IsPast => SessionDate.Date < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date ||
+                              (SessionDate.Date == TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date &&
+                               TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).TimeOfDay > _sessionEndTime);
 
         [NotMapped]
-        public bool CanDelete
-        {
-            get
-            {
-                return SessionDate.Date > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
-            }
-        }
+        public bool CanDelete => SessionDate.Date > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
 
         [NotMapped]
-        public bool CanEdit
-        {
-            get
-            {
-                return SessionDate.Date > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
-            }
-        }
+        public bool CanEdit => SessionDate.Date > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
 
         [NotMapped]
-        public bool CanBuy
-        {
-            get
-            {
-                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date >= SessionDate.Date.AddDays(-1 * _buyDayMinimum);
-            }
-        }
+        public bool CanBuy => TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date >= SessionDate.Date.AddDays(-1 * _buyDayMinimum);
 
         [NotMapped]
-        public DateTime BuyDateTime
-        {
-            get
-            {
-                return SessionDate.Date.AddDays(-1 * _buyDayMinimum);
-            }
-        }
+        public DateTime BuyDateTime => SessionDate.Date.AddDays(-1 * _buyDayMinimum);
     }
 }

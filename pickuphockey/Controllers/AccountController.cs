@@ -9,6 +9,7 @@ using Microsoft.Owin.Security;
 using pickuphockey.Models;
 using pickuphockey.Services;
 // ReSharper disable PossibleNullReferenceException
+// ReSharper disable RedundantAnonymousTypePropertyName
 
 namespace pickuphockey.Controllers
 {
@@ -128,7 +129,7 @@ namespace pickuphockey.Controllers
             var user = await UserManager.FindByIdAsync(await SignInManager.GetVerifiedUserIdAsync());
             if (user != null)
             {
-                var code = await UserManager.GenerateTwoFactorTokenAsync(user.Id, provider);
+                await UserManager.GenerateTwoFactorTokenAsync(user.Id, provider);
             }
             return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
@@ -552,13 +553,7 @@ namespace pickuphockey.Controllers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
+        private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
 
         private void AddErrors(IdentityResult result)
         {
