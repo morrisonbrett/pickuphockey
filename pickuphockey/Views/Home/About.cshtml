@@ -1,5 +1,9 @@
-﻿@{
+﻿@using System.Reflection
+@* ReSharper disable once AssignNullToNotNullAttribute *@
+@{
     ViewBag.Title = "About";
+    var version = Assembly.GetAssembly(HttpContext.Current.ApplicationInstance.GetType().BaseType).GetName().Version.ToString();
+
 }
 <h2>@ViewBag.Title</h2>
 <h3>@ViewBag.Message</h3>
@@ -8,3 +12,4 @@
 <p>The source code for this project is on @Html.RouteLink("github", new { }, new { href = "https://github.com/morrisonbrett/pickuphockey" }) as Open Source, MIT license.</p>
 <p>For feedback, feature requests, or bug reports, please leave them @Html.RouteLink("here", new { }, new { href = "https://github.com/morrisonbrett/pickuphockey/issues" }).</p>
 <p>See you on the ice.  Enjoy, and long may you glide...</p>
+<p>Version @version</p>
