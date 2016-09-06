@@ -307,6 +307,32 @@
     <Content Include="Content\facebook_signin.png" />
     <Content Include="Content\google_signin.png" />
     <Content Include="Content\hockey-puck.jpg" />
+    <Content Include="Content\images\icon\android-icon-144x144.png" />
+    <Content Include="Content\images\icon\android-icon-192x192.png" />
+    <Content Include="Content\images\icon\android-icon-36x36.png" />
+    <Content Include="Content\images\icon\android-icon-48x48.png" />
+    <Content Include="Content\images\icon\android-icon-72x72.png" />
+    <Content Include="Content\images\icon\android-icon-96x96.png" />
+    <Content Include="Content\images\icon\apple-icon-114x114.png" />
+    <Content Include="Content\images\icon\apple-icon-120x120.png" />
+    <Content Include="Content\images\icon\apple-icon-144x144.png" />
+    <Content Include="Content\images\icon\apple-icon-152x152.png" />
+    <Content Include="Content\images\icon\apple-icon-180x180.png" />
+    <Content Include="Content\images\icon\apple-icon-57x57.png" />
+    <Content Include="Content\images\icon\apple-icon-60x60.png" />
+    <Content Include="Content\images\icon\apple-icon-72x72.png" />
+    <Content Include="Content\images\icon\apple-icon-76x76.png" />
+    <Content Include="Content\images\icon\apple-icon-precomposed.png" />
+    <Content Include="Content\images\icon\apple-icon.png" />
+    <Content Include="Content\images\icon\browserconfig.xml" />
+    <Content Include="Content\images\icon\favicon-16x16.png" />
+    <Content Include="Content\images\icon\favicon-32x32.png" />
+    <Content Include="Content\images\icon\favicon-96x96.png" />
+    <Content Include="Content\images\icon\favicon.ico" />
+    <Content Include="Content\images\icon\ms-icon-144x144.png" />
+    <Content Include="Content\images\icon\ms-icon-150x150.png" />
+    <Content Include="Content\images\icon\ms-icon-310x310.png" />
+    <Content Include="Content\images\icon\ms-icon-70x70.png" />
     <Content Include="Content\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -359,6 +385,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="index.html" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -374,6 +401,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="manifest.json" />
     <None Include="Properties\PublishProfiles\pickuphockey - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-2.2.3.intellisense.js" />
