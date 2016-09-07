@@ -1,3 +1,4 @@
+[![Codeship Status for morrisonbrett/pickuphockey](https://codeship.com/projects/5afe9df0-363e-0133-91de-2ad56f320ece/status?branch=master)](https://codeship.com/projects/100891)
 [![Join the chat at https://gitter.im/morrisonbrett/pickuphockey](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/morrisonbrett/pickuphockey?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Pickup Hockey
