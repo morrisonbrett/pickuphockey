@@ -382,7 +382,7 @@ namespace pickuphockey.Controllers
             }
 
             // Sign in the user with this external login provider if the user already has a login
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: true);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -474,7 +474,7 @@ namespace pickuphockey.Controllers
                         var updateResult = await UserManager.UpdateAsync(user);
                         if (updateResult.Succeeded)
                         {
-                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                            await SignInManager.SignInAsync(user, isPersistent: true, rememberBrowser: true);
                             
                             //return RedirectToLocal(returnUrl);
                             // Ignoring "Redirect to local.  Instead, send them to the preferences screen
