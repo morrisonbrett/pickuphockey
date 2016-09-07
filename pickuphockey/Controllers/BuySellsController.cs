@@ -60,7 +60,7 @@ namespace pickuphockey.Controllers
                         _emailServices.SendMail(subject, body, seller.Email);
 
                     subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " BOUGHT";
-                    body = "You bought a spot from " + seller.FirstName + " " + seller.LastName + "." + Environment.NewLine + Environment.NewLine;
+                    body = "You bought a spot from " + seller.FirstName + " " + seller.LastName + ", and your team assignment is " + seller.TeamAssignment + "." + Environment.NewLine + Environment.NewLine;
                     body += "Click here for the details: " + sessionurl + Environment.NewLine;
                     if (seller.NotificationPreference != NotificationPreference.None)
                         _emailServices.SendMail(subject, body, buyer.Email);
