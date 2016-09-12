@@ -42,7 +42,7 @@ namespace pickuphockey.Controllers
 
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
-        private void SendSessionEmail(Session session, ApplicationUser seller, ApplicationUser buyer, SessionAction sessionAction)
+        private void SendSessionEmail(Session session, ApplicationUser seller, ApplicationUser buyer, SessionAction sessionAction, BuySell buySell)
         {
             if (Request.Url == null) return;
 
@@ -60,7 +60,7 @@ namespace pickuphockey.Controllers
                         _emailServices.SendMail(subject, body, seller.Email);
 
                     subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " BOUGHT";
-                    body = "You bought a spot from " + seller.FirstName + " " + seller.LastName + ", and your team assignment is " + seller.TeamAssignment + "." + Environment.NewLine + Environment.NewLine;
+                    body = "You bought a spot from " + seller.FirstName + " " + seller.LastName + ", and your team assignment is " + buySell.TeamAssignment + "." + Environment.NewLine + Environment.NewLine;
                     body += "Click here for the details: " + sessionurl + Environment.NewLine;
                     if (seller.NotificationPreference != NotificationPreference.None)
                         _emailServices.SendMail(subject, body, buyer.Email);
@@ -182,14 +182,14 @@ namespace pickuphockey.Controllers
 
                     var seller = UserManager.FindById(updateBuySell.SellerUserId);
 
-                    activity = buyer.FirstName + " " + buyer.LastName + " BOUGHT SPOT FROM " + seller.FirstName + " " + seller.LastName;
+                    activity = buyer.FirstName + " " + buyer.LastName + " BOUGHT SPOT FROM " + seller.FirstName + " " + seller.LastName + ". Team assignment: " + updateBuySell.TeamAssignment;
 
                     updateBuySell.BuyerUserId = buyer.Id;
                     updateBuySell.BuyerNote = buySell.BuyerNote;
                     updateBuySell.UpdateDateTime = DateTime.UtcNow;
                     _db.Entry(updateBuySell).State = EntityState.Modified;
 
-                    SendSessionEmail(session, seller, buyer, SessionAction.Buy);
+                    SendSessionEmail(session, seller, buyer, SessionAction.Buy, updateBuySell);
                     users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != seller.Id && t.Id != buyer.Id);
                 }
                 else
@@ -363,7 +363,7 @@ namespace pickuphockey.Controllers
 
                     _db.Entry(updateBuySell).State = EntityState.Modified;
 
-                    SendSessionEmail(session, seller, buyer, SessionAction.Sell);
+                    SendSessionEmail(session, seller, buyer, SessionAction.Sell, updateBuySell);
                     users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != seller.Id && t.Id != buyer.Id);
                 }
                 else
@@ -532,7 +532,7 @@ namespace pickuphockey.Controllers
             _db.Entry(toggleBuySell).State = EntityState.Modified;
             _db.SaveChanges();
 
-            var activity = buyer.FirstName + " " + buyer.LastName + " (BUYER) set PAYMENT STATUS to " + (paymentSent ? "sent" : "unsent");
+            var activity = buyer.FirstName + " " + buyer.LastName + " (BUYER) set PAYMENT STATUS TO " + (paymentSent ? "sent" : "unsent");
             _db.AddActivity(toggleBuySell.SessionId, activity);
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
@@ -567,7 +567,7 @@ namespace pickuphockey.Controllers
             _db.Entry(toggleBuySell).State = EntityState.Modified;
             _db.SaveChanges();
 
-            var activity = seller.FirstName + " " + seller.LastName + " (SELLER) set PAYMENT STATUS to " + (paymentReceived ? "received" : "unreceived");
+            var activity = seller.FirstName + " " + seller.LastName + " (SELLER) set PAYMENT STATUS TO " + (paymentReceived ? "received" : "unreceived");
             _db.AddActivity(toggleBuySell.SessionId, activity);
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
