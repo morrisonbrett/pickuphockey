@@ -352,7 +352,7 @@ namespace pickuphockey.Controllers
 
                     var buyer = UserManager.FindById(updateBuySell.BuyerUserId);
 
-                    activity = seller.FirstName + " " + seller.LastName + " SOLD SPOT TO " + buyer.FirstName + " " + buyer.LastName;
+                    activity = seller.FirstName + " " + seller.LastName + " SOLD SPOT TO " + buyer.FirstName + " " + buyer.LastName + ". Team assignment: " + buySell.TeamAssignment;
 
                     updateBuySell.SellerUserId = seller.Id;
                     updateBuySell.SellerNote = buySell.SellerNote;
