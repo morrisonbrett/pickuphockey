@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Net;
-using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace pickuphockey.Services
 {
@@ -18,24 +17,23 @@ namespace pickuphockey.Services
 
         public Task SendMail(string subject, string body, string recipient)
         {
-            return SendMail(subject, body, new List<string> { recipient });   
+            return SendMail(subject, body, new List<EmailAddress> { new EmailAddress(recipient ) });   
         }
 
-        public Task SendMail(string subject, string body, IEnumerable<string> recipientList)
+        public async Task SendMail(string subject, string body, List<EmailAddress> recipientList)
         {
-            var message = new SendGridMessage { From = new MailAddress(ConfigurationManager.AppSettings["SendGridFromAddress"]) };
+			var message = new SendGridMessage();
+			message.SetFrom(new EmailAddress(ConfigurationManager.AppSettings["SendGridFromAddress"]));
 
-            message.AddTo(recipientList);
+            message.AddTos(recipientList);
 
-            message.Subject = ConfigurationManager.AppSettings["SiteTitle"] + " - " + subject;
-            message.Html = body.Replace(Environment.NewLine, "<br />").Replace("\r", "<br />").Replace("\n", "<br />");
-            message.Text = body;
+            message.SetSubject(ConfigurationManager.AppSettings["SiteTitle"] + " - " + subject);
+            message.AddContent(MimeType.Html, body.Replace(Environment.NewLine, "<br />").Replace("\r", "<br />").Replace("\n", "<br />"));
+            message.AddContent(MimeType.Text, body);
 
-            var credentials = new NetworkCredential(ConfigurationManager.AppSettings["SendGridUsername"], ConfigurationManager.AppSettings["SendGridPassword"]);
+			var client = new SendGridClient(ConfigurationManager.AppSettings["SendGridApiKey"]);
 
-            var transportWeb = new Web(credentials);
-
-            return transportWeb.DeliverAsync(message);
+			var response = await client.SendEmailAsync(message);
         }
     }
 }
