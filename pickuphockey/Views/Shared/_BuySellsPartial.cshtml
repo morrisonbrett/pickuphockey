@@ -81,6 +81,8 @@
                         <input type="hidden" name="tax_rate" value="0.000">
                         <input type="hidden" name="shipping" value="0.00">
                         <input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynow_SM.gif:NonHostedGuest">
+                        <input type="hidden" name="return" value="@HttpContext.Current.Request.Url.AbsoluteUri">
+                        <input type="hidden" name="cancel_return" value="@HttpContext.Current.Request.Url.AbsoluteUri">
                         <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynow_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
                         <img alt="" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
                     </form>
