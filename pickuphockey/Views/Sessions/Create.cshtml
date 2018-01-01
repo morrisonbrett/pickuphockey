@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Create Session";
+    ViewBag.dst = new pickuphockey.Models.Session()._defaultStartTime.ToString(@"hh\:mm");
 }
 
 <h2>Create Session</h2>
@@ -40,3 +41,13 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+@section Scripts {
+    <script type="text/javascript" defer>
+        var dst = '@ViewBag.dst';
+
+        $('#SessionDate').datetimepicker({
+            defaultTime: dst
+        });
+    </script>
+}

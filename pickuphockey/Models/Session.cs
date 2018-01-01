@@ -17,6 +17,7 @@ namespace pickuphockey.Models
         private readonly TimeZoneInfo _pstZone;
         private readonly TimeSpan _sessionEndTime;
         private readonly int _buyDayMinimum;
+		public readonly TimeSpan _defaultStartTime;
 
         public Session()
         {
@@ -25,7 +26,8 @@ namespace pickuphockey.Models
             _pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
             _sessionEndTime = TimeSpan.Parse(System.Configuration.ConfigurationManager.AppSettings["SessionEndTime"]);
             _buyDayMinimum = int.Parse(System.Configuration.ConfigurationManager.AppSettings["BuyDayMinimum"]);
-        }
+			_defaultStartTime = TimeSpan.Parse(System.Configuration.ConfigurationManager.AppSettings["DefaultStartTime"]);
+		}
 
         [Key]
         public int SessionId { get; set; }

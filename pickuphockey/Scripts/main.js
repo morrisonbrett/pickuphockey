@@ -22,7 +22,6 @@
         format: 'dddd, MM/DD/YYYY, HH:mm',
         formatTime: 'HH:mm',
         formatDate: 'dddd, MM/DD/YYYY',
-        defaultTime: '07:40',
         step: 5,
         onSelectDate: onDateTimeSelect,
         onSelectTime: onDateTimeSelect
