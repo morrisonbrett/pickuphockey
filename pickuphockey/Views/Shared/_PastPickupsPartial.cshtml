@@ -7,10 +7,10 @@
     @foreach (var item in list)
     {
         <tr>
-            <td>
+            <td width="70%">
                 @Html.ActionLink(item.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm"), "Details", "Sessions", new { id = item.SessionId }, null)
             </td>
-            <td>
+            <td width="30%">
                 @Html.DisplayFor(itemList => item.Note)
             </td>
         </tr>

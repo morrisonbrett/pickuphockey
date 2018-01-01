@@ -20,14 +20,14 @@
 <span class="alert-success alert">@ViewBag.StatusMessage</span>
 }
 <div class="row">
-    <div class="col-md-3">
+    <div>
         <h2>Upcoming Pickups</h2>
         @Html.Partial("_CurrentPickupsPartial", Model)
     </div>
 </div>
 
 <div class="row">
-    <div class="col-md-3">
+    <div>
         <h2>Past Pickups</h2>
         @Html.Partial("_PastPickupsPartial", Model)
     </div>

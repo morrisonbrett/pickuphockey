@@ -7,15 +7,15 @@
     @foreach (var item in list)
     {
         <tr>
-            <td>
+            <td width="70%">
                 @Html.ActionLink(item.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm"), "Details", "Sessions", new { id = item.SessionId }, null)
             </td>
-            <td>
+            <td width="25%">
                 @Html.DisplayFor(itemList => item.Note)
             </td>
             @if (User!= null && User.IsInRole("Admin"))
             {
-                <td>
+                <td width="5%">
                     @if (item.CanEdit)
                     {
                         @Html.ActionLink("Edit", "Edit", "Sessions", new { id = item.SessionId }, null) <span>|</span>
