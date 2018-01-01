@@ -53,13 +53,13 @@ namespace pickuphockey.Controllers
                 case SessionAction.Buy:
                 case SessionAction.Sell:
                 {
-                    var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " SOLD";
+                    var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " SOLD";
                     var body = "Your spot has been sold to " + buyer.FirstName + " " + buyer.LastName + "." + Environment.NewLine + Environment.NewLine;
                     body += "Click here for the details: " + sessionurl + Environment.NewLine;
                     if (seller.NotificationPreference != NotificationPreference.None)
                         _emailServices.SendMail(subject, body, seller.Email);
 
-                    subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " BOUGHT";
+                    subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " BOUGHT";
                     body = "You bought a spot from " + seller.FirstName + " " + seller.LastName + ", and your team assignment is " + buySell.TeamAssignment + "." + Environment.NewLine + Environment.NewLine;
                     body += "Click here for the details: " + sessionurl + Environment.NewLine;
                     if (seller.NotificationPreference != NotificationPreference.None)
@@ -211,7 +211,7 @@ namespace pickuphockey.Controllers
 
                 _db.AddActivity(buySell.SessionId, activity);
 
-                var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
+                var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " ACTIVITY";
                 var body = activity + "." + Environment.NewLine + Environment.NewLine;
                 body += "Click here for the details: " + sessionurl + Environment.NewLine;
                 foreach (var u in users)
@@ -391,7 +391,7 @@ namespace pickuphockey.Controllers
                 user.TeamAssignment = buySell.TeamAssignment;
                 UserManager.Update(user);
 
-                var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
+                var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " ACTIVITY";
                 var body = activity + "." + Environment.NewLine + Environment.NewLine;
                 body += "Click here for the details: " + sessionurl + Environment.NewLine;
                 foreach (var u in users)
@@ -446,7 +446,7 @@ namespace pickuphockey.Controllers
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
             var users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active);
-            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
+            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " ACTIVITY";
             var body = activity + "." + Environment.NewLine + Environment.NewLine;
             body += "Click here for the details: " + sessionurl + Environment.NewLine;
             foreach (var u in users)
@@ -495,7 +495,7 @@ namespace pickuphockey.Controllers
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
             var users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active);
-            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
+            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " ACTIVITY";
             var body = activity + "." + Environment.NewLine + Environment.NewLine;
             body += "Click here for the details: " + sessionurl + Environment.NewLine;
             foreach (var u in users)
@@ -571,7 +571,7 @@ namespace pickuphockey.Controllers
             _db.AddActivity(toggleBuySell.SessionId, activity);
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
-            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
+            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " ACTIVITY";
             var body = activity + "." + Environment.NewLine + Environment.NewLine;
             body += "Click here for the details: " + sessionurl + Environment.NewLine;
 

@@ -3,7 +3,7 @@
 @model pickuphockey.Models.Session
 
 @{
-    ViewBag.Title = "Session Detail - " + Model.SessionDate.ToString("dddd, MM/dd/yyyy");
+    ViewBag.Title = "Session Detail - " + Model.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm");
 }
 
 <h2>@Html.DisplayFor(model => model.SessionDate)</h2>

@@ -115,8 +115,8 @@ namespace pickuphockey.Controllers
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
 
-            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " CREATED";
-            var body = "A new pickup session has been created by " + user.FirstName + " " + user.LastName + " for " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + "." + Environment.NewLine + Environment.NewLine;
+            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " CREATED";
+            var body = "A new pickup session has been created by " + user.FirstName + " " + user.LastName + " for " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + "." + Environment.NewLine + Environment.NewLine;
             if (!string.IsNullOrEmpty(session.Note))
             {
                 body += session.Note + Environment.NewLine + Environment.NewLine;

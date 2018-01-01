@@ -30,8 +30,8 @@ namespace pickuphockey.Models
         [Key]
         public int SessionId { get; set; }
 
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dddd, MM/dd/yyyy}")]
-        [DisplayName("Session")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dddd, MM/dd/yyyy HH:mm}")]
+		[DisplayName("Session Date")]
         public DateTime SessionDate { get; set; }
 
         [DisplayName("Created")]

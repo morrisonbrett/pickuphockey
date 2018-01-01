@@ -1,5 +1,32 @@
 ﻿$(document).ready(function () {
-    $('#SessionDate').datepicker({ dateFormat: "DD, mm/dd/yy" });
+    $.datetimepicker.setDateFormatter({
+        parseDate: function (date, format) {
+            var d = moment(date, format);
+            return d.isValid() ? d.toDate() : false;
+        },
+
+        formatDate: function (date, format) {
+            return moment(date).format(format);
+        }
+    });
+
+    function onDateTimeSelect(e) {
+        var m = moment(e);
+        var f = m.format('dddd, MM/DD/YYYY, HH:mm');
+        $('#SessionDate').val(f);
+    }
+
+    $('#SessionDate').datetimepicker({
+        timePicker: true,
+        closeOnDateSelect: true,
+        format: 'dddd, MM/DD/YYYY, HH:mm',
+        formatTime: 'HH:mm',
+        formatDate: 'dddd, MM/DD/YYYY',
+        defaultTime: '07:40',
+        step: 5,
+        onSelectDate: onDateTimeSelect,
+        onSelectTime: onDateTimeSelect
+    });
 });
 
 $(document).ready(function () {
@@ -49,6 +76,5 @@ $(document).ready(function () {
                 $("[id^=ActiveMessage_" + id + "]").html(result.Message);
             }
         });
-
     });
 });

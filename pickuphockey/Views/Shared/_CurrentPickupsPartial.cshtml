@@ -8,7 +8,7 @@
     {
         <tr>
             <td>
-                @Html.ActionLink(item.SessionDate.ToString("dddd, MM/dd/yyyy"), "Details", "Sessions", new { id = item.SessionId }, null)
+                @Html.ActionLink(item.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm"), "Details", "Sessions", new { id = item.SessionId }, null)
             </td>
             <td>
                 @Html.DisplayFor(itemList => item.Note)
