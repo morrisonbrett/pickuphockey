@@ -52,20 +52,18 @@ namespace pickuphockey.Models
         public ICollection<BuySell> BuySells { get; set; }
 
         [NotMapped]
-        public bool IsPast => SessionDate.Date < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date ||
-                              (SessionDate.Date == TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date &&
-                               TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).TimeOfDay > _sessionEndTime);
+        public bool IsPast => SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone);
 
         [NotMapped]
-        public bool CanDelete => SessionDate.Date > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
+        public bool CanDelete => SessionDate > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone);
 
         [NotMapped]
-        public bool CanEdit => SessionDate.Date > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date;
+        public bool CanEdit => SessionDate > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone);
 
         [NotMapped]
-        public bool CanBuy => TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone).Date >= SessionDate.Date.AddDays(-1 * _buyDayMinimum);
+        public bool CanBuy => TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone) >= SessionDate.AddDays(-1 * _buyDayMinimum);
 
         [NotMapped]
-        public DateTime BuyDateTime => SessionDate.Date.AddDays(-1 * _buyDayMinimum);
+        public DateTime BuyDateTime => SessionDate.AddDays(-1 * _buyDayMinimum);
     }
 }

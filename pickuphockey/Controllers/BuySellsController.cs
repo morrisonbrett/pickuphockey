@@ -146,7 +146,7 @@ namespace pickuphockey.Controllers
 
             if (!session.CanBuy)
             {
-                ModelState.AddModelError("", "Spots cannot be bought until " + session.BuyDateTime.Date + ".");
+                ModelState.AddModelError("", "Spots cannot be bought until " + session.BuyDateTime.ToString("dddd, MM/dd/yyyy, HH:mm") + ".");
             }
 
             if (ModelState.IsValid)

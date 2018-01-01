@@ -25,7 +25,7 @@
                 }
                 else
                 {
-                    <div>Spots cannot be bought until @Model.BuyDateTime.Date.</div>
+                    <div>Spots cannot be bought until @Model.BuyDateTime.ToString("dddd, MM/dd/yyyy, HH:mm").</div>
                 }
             </div>
         </div>
