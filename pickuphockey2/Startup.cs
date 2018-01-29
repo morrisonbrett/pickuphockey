@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
+using pickuphockey2.Models;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace pickuphockey2
@@ -26,6 +28,8 @@ namespace pickuphockey2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            var connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<ActivityLogContext>(options => options.UseSqlServer(connection));
 
             services.AddSwaggerGen(c =>
             {
