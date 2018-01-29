@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace pickuphockey2
@@ -27,7 +29,21 @@ namespace pickuphockey2
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v2", new Info { Title = "api", Version = "v2" });
+                c.SwaggerDoc("v2", new Info
+                {
+                    Version = "v2",
+                    Title = "Pickuphockey API",
+                    Description = "RESTful API for Pickuphockey operations",
+                    TermsOfService = "None",
+                    Contact = new Contact { Name = "Brett Morrison", Email = "", Url = "https://brettmorrison.com" },
+                    License = new License { Name = "Use under MIT License", Url = "https://raw.githubusercontent.com/morrisonbrett/pickuphockey/master/LICENSE" }
+                });
+
+                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                var xmlPath = Path.Combine(basePath, "pickuphockey2.xml");
+                c.IncludeXmlComments(xmlPath);
+
+                c.DescribeAllEnumsAsStrings();
             });
         }
 

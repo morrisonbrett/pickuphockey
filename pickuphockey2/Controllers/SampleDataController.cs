@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace pickuphockey2.Controllers
@@ -14,16 +13,33 @@ namespace pickuphockey2.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
+        /// <summary>
+        /// Gets various weather forecasts
+        /// </summary>
+        /// <remarks>List of days and weather</remarks>
+        /// <response code="200">If there are items</response>
+        /// <response code="204">If there are no items</response>
         [HttpGet("[action]")]
-        public IEnumerable<WeatherForecast> WeatherForecasts()
+        [ProducesResponseType(typeof(IEnumerable<WeatherForecast>), 200)]
+        [ProducesResponseType(204)]
+        public IActionResult WeatherForecasts()
         {
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            var ret = Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 DateFormatted = DateTime.Now.AddDays(index).ToString("d"),
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
             });
+
+            if (ret.Count() > 0)
+            {
+                return new ObjectResult(ret);
+            }
+            else
+            {
+                return NoContent();
+            }
         }
 
         public class WeatherForecast

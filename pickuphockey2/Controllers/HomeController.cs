@@ -11,7 +11,9 @@ namespace pickuphockey2.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            // TODO Undo this re-direct after primary development
+            return Redirect("/swagger");
+            // return View();
         }
 
         public IActionResult Error()
