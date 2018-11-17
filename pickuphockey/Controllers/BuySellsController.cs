@@ -61,6 +61,7 @@ namespace pickuphockey.Controllers
 
                     subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " BOUGHT";
                     body = "You bought a spot from " + seller.FirstName + " " + seller.LastName + ", and your team assignment is " + buySell.TeamAssignment + "." + Environment.NewLine + Environment.NewLine;
+                    body += "You are now obligated to pay the seller for their spot immediately. Please visit the site now and click through and complete the payment process. Then, return to the site, and be sure and click the 'Sent' checkbox for your transaction so the buyer knows that you initiated payment." + Environment.NewLine + Environment.NewLine;
                     body += "Click here for the details: " + sessionurl + Environment.NewLine;
                     if (seller.NotificationPreference != NotificationPreference.None)
                         _emailServices.SendMail(subject, body, buyer.Email);
