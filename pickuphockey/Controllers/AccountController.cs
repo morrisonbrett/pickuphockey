@@ -250,14 +250,14 @@ namespace pickuphockey.Controllers
 
                 if (string.IsNullOrEmpty(user.PasswordHash))
                 {
-                    ModelState.AddModelError("", "You account was registered via 3rd party authentication.  You have no password.  Sign in with the same service you created the account with.");
+                    ModelState.AddModelError("", "Your account was registered via 3rd party authentication.  You have no password.  Sign in with the same service you created the account with.");
 
                     return View(model);
                 }
 
                 if (!await UserManager.IsEmailConfirmedAsync(user.Id))
                 {
-                    ModelState.AddModelError("", "You account has not been confirmed.  You must click the confirmation link.  Check your email.");
+                    ModelState.AddModelError("", "Your account has not been confirmed.  You must click the confirmation link.  Check your email.");
 
                     return View(model);
                 }
