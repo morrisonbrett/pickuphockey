@@ -178,7 +178,8 @@ namespace pickuphockey.Controllers
                     // Make sure this spot is available to buy
                     if (!string.IsNullOrEmpty(updateBuySell.BuyerUserId))
                     {
-                        return RedirectToAction("Sell", "BuySells", new { id = buySell.SessionId });
+                        TempData["Message"] = "The spot you attempted to buy has been sold.";
+                        return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
                     }
 
                     var seller = UserManager.FindById(updateBuySell.SellerUserId);
