@@ -62,8 +62,9 @@ namespace pickuphockey.Controllers
                     subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " BOUGHT";
                     body = "You bought a spot from " + seller.FirstName + " " + seller.LastName + ", and your team assignment is " + buySell.TeamAssignment + "." + Environment.NewLine + Environment.NewLine;
                     body += "You are now obligated to pay the seller for their spot immediately. Please visit the site now and click through and complete the payment process. Then, return to the site, and be sure and click the 'Sent' checkbox for your transaction so the buyer knows that you initiated payment." + Environment.NewLine + Environment.NewLine;
+                    body += "Your team assignment may change before or during play, so please ensure you bring the opposite jersey to the bench." + Environment.NewLine + Environment.NewLine;
                     body += "Click here for the details: " + sessionurl + Environment.NewLine;
-                    if (seller.NotificationPreference != NotificationPreference.None)
+                    if (buyer.NotificationPreference != NotificationPreference.None)
                         _emailServices.SendMail(subject, body, buyer.Email);
 
                     break;
@@ -581,6 +582,70 @@ namespace pickuphockey.Controllers
                 _emailServices.SendMail(subject, body, buyer.Email);
 
             return Json(new { Success = true, Message = "Updated" });
+        }
+
+        [HttpPost]
+        public JsonResult UpdateTeamAssignment(int id, TeamAssignment teamAssignment)
+        {
+            if (Request.Url == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var updateTeamAssignmentBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
+            if (Request.Url == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var session = _db.Sessions.Find(updateTeamAssignmentBuySell.SessionId);
+            if (Request.Url == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var seller = UserManager.FindById(updateTeamAssignmentBuySell.SellerUserId);
+            if (Request.Url == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var buyer = UserManager.FindById(updateTeamAssignmentBuySell.BuyerUserId);
+
+            var canUpdateTeamAssignment = User.IsInRole("Admin");
+
+            // Make sure person has rights to do this
+            if (!canUpdateTeamAssignment) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var activity = string.Empty;
+
+            // If there's a buyer, then they are the person getting their team assignment changed. Otherwise it's the seller which is valid but usually
+            // you wouldn't change it until it's sold
+            if (buyer != null)
+                activity = $"{buyer.FirstName} {buyer.LastName} team assignment changed from {updateTeamAssignmentBuySell.TeamAssignment} to {teamAssignment}";
+            else
+                activity = $"{seller.FirstName} {seller.LastName} team assignment changed from {updateTeamAssignmentBuySell.TeamAssignment} to {teamAssignment}";
+
+            updateTeamAssignmentBuySell.TeamAssignment = teamAssignment;
+            updateTeamAssignmentBuySell.UpdateDateTime = DateTime.UtcNow;
+            _db.Entry(updateTeamAssignmentBuySell).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            _db.AddActivity(updateTeamAssignmentBuySell.SessionId, activity);
+
+            var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
+            var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY - TEAM ASSIGNMENT CHANGED";
+            var body = activity + "." + Environment.NewLine + Environment.NewLine;
+
+            body += "Click here for the details: " + sessionurl + Environment.NewLine;
+
+            var users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active);
+            foreach (var u in users)
+            {
+                _emailServices.SendMail(subject, body, u.Email);
+            }
+
+            // If there's a buyer, also send him a separate email
+            if (buyer != null) {
+                body = activity + "." + Environment.NewLine + Environment.NewLine;
+
+                body += $"{buyer.FirstName}, Please ensure that you wear the jersey you are assigned and bring the opposite jersey to the bench. Team assignments may be changed before or during play." + Environment.NewLine + Environment.NewLine;
+
+                body += "Click here for the details: " + sessionurl + Environment.NewLine;
+
+                if (buyer.NotificationPreference != NotificationPreference.None)
+                    _emailServices.SendMail(subject, body, buyer.Email);
+            }
+
+            return Json(new { Success = true, Message = "Team Assignment Updated" });
         }
 
         protected override void Dispose(bool disposing)

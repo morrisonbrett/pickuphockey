@@ -63,8 +63,15 @@
             @Html.DisplayFor(modelItem => item.BuyerNote)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TeamAssignment)
-        </td>
+            @if (isAdmin)
+            {
+                @Html.EnumDropDownListFor(modelItem => item.TeamAssignment, htmlAttributes: new { id = "TeamAssignment_" + item.BuySellId, @class = "form-control" })
+           }
+            else
+                {
+                    @Html.DisplayFor(modelItem => item.TeamAssignment)
+            }
+            </td>
         <td>
             @if (item.PaymentPreference == PaymentPreference.PayPal && !string.IsNullOrEmpty(item.SellerUserId) && !string.IsNullOrEmpty(item.BuyerUserId) && item.BuyerUserId == User.Identity.GetUserId() && !item.PaymentSent)
             {

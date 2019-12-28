@@ -76,4 +76,21 @@ $(document).ready(function () {
             }
         });
     });
+
+    $("[id^=TeamAssignment_]").change(function () {
+        var teamAssignment = $(this).val();
+        var id = $(this).attr('id').replace(/TeamAssignment_/, '');
+        var data = { id: id, teamAssignment: teamAssignment };
+        console.info(data);
+
+        $.ajax({
+            type: "POST",
+            url: "/BuySells/UpdateTeamAssignment",
+            data: data,
+            dataType: "json",
+            success: function (result) {
+                location.reload();
+            }
+        });
+    });
 });
