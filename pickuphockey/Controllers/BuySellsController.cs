@@ -590,13 +590,13 @@ namespace pickuphockey.Controllers
             if (Request.Url == null) return Json(new { Success = false, Message = "Invalid Request" });
 
             var updateTeamAssignmentBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
-            if (Request.Url == null) return Json(new { Success = false, Message = "Invalid Request" });
+            if (updateTeamAssignmentBuySell == null) return Json(new { Success = false, Message = "Invalid Request" });
 
             var session = _db.Sessions.Find(updateTeamAssignmentBuySell.SessionId);
-            if (Request.Url == null) return Json(new { Success = false, Message = "Invalid Request" });
+            if (session == null || session.IsPast) return Json(new { Success = false, Message = "Invalid Request" });
 
             var seller = UserManager.FindById(updateTeamAssignmentBuySell.SellerUserId);
-            if (Request.Url == null) return Json(new { Success = false, Message = "Invalid Request" });
+            if (seller == null) return Json(new { Success = false, Message = "Invalid Request" });
 
             var buyer = UserManager.FindById(updateTeamAssignmentBuySell.BuyerUserId);
 

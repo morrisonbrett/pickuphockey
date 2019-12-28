@@ -63,13 +63,13 @@
             @Html.DisplayFor(modelItem => item.BuyerNote)
         </td>
         <td>
-            @if (isAdmin)
+            @if (isAdmin && !item.Session.IsPast)
             {
                 @Html.EnumDropDownListFor(modelItem => item.TeamAssignment, htmlAttributes: new { id = "TeamAssignment_" + item.BuySellId, @class = "form-control" })
-           }
+            }
             else
-                {
-                    @Html.DisplayFor(modelItem => item.TeamAssignment)
+            {
+                @Html.DisplayFor(modelItem => item.TeamAssignment)
             }
             </td>
         <td>
