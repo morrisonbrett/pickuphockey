@@ -195,6 +195,7 @@ namespace pickuphockey.Controllers
 
                     user.NotificationPreference = NotificationPreference.OnlyMyBuySell;
                     user.PaymentPreference = PaymentPreference.PayPal;
+                    user.Active = false;
                     var updateResult = await UserManager.UpdateAsync(user);
                     if (updateResult.Succeeded)
                     {

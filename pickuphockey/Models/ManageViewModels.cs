@@ -115,5 +115,8 @@ namespace pickuphockey.Models
 
         [Display(Name = "Notification Preference")]
         public NotificationPreference NotificationPreference { get; set; }
+
+        [Display(Name = "Active")]
+        public bool Active { get; set; }
     }
 }

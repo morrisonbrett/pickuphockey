@@ -5,6 +5,13 @@
 
 <h2>@ViewBag.Title</h2>
 
+@if (Model.Active == false)
+{
+    <div>
+        Your account is Inactive. If you're a new player and would like your account activated, please send an email to Brett Morrison (brett@brettmorrison.com) and John Bryan (90266jb@gmail.com) stating who referred you to the pickup list.  Your account will be considered for inclusion as an Active player.<br />
+    </div>
+}
+
 @using (Html.BeginForm("Preferences", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()

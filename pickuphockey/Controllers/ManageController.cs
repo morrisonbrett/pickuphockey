@@ -322,7 +322,7 @@ namespace pickuphockey.Controllers
                 return View();
             }
 
-            return View(new PreferencesViewModel { FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, PaymentPreference = user.PaymentPreference, TeamAssignment = user.TeamAssignment, NotificationPreference = user.NotificationPreference, PayPalEmail = user.PayPalEmail });
+            return View(new PreferencesViewModel { FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, PaymentPreference = user.PaymentPreference, TeamAssignment = user.TeamAssignment, NotificationPreference = user.NotificationPreference, PayPalEmail = user.PayPalEmail, Active = user.Active });
         }
 
         //
