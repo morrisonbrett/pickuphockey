@@ -7,33 +7,36 @@
 <h2>Pickup Players</h2>
 
 <table class="table">
-        <tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PayPalEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TeamAssignment)
+        </th>
+        @if (User.IsInRole("Admin"))
+        {
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @Html.DisplayNameFor(model => model.NotificationPreference)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => model.Active)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.Preferred)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PayPalEmail)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TeamAssignment)
-            </th>
-            @if (User.IsInRole("Admin"))
-            {
-                <th>
-                    @Html.DisplayNameFor(model => model.NotificationPreference)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Active)
-                </th>
-                <th>&nbsp;</th>
-            }
-        </tr>
+            <th>&nbsp;</th>
+        }
+    </tr>
         @foreach (var item in Model) {
         <tr>
             <td>
@@ -60,10 +63,17 @@
                     @Html.CheckBoxFor(modelItem => item.Active, htmlAttributes: new { id = "UserActive_" + item.Id })
                 </td>
                 <td>
+                    @Html.CheckBoxFor(modelItem => item.Preferred, htmlAttributes: new { id = "UserPreferred_" + item.Id })
+                </td>
+                <td>
                     @{
-                        var spanid = "ActiveMessage_" + item.Id;
+                        var spanid_a = "ActiveMessage_" + item.Id;
+                        var spanid_p = "PreferredMessage_" + item.Id;
                     }
-                    <span id="@spanid"></span>
+                    @{
+                        <span id="@spanid_a"></span><br />
+                        <span id="@spanid_p"></span>
+                    }
                 </td>
             }
         </tr>

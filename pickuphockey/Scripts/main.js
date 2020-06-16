@@ -77,6 +77,22 @@ $(document).ready(function () {
         });
     });
 
+    $("[id^=UserPreferred_]").change(function () {
+        var checked = $(this).is(':checked');
+        var id = $(this).attr('id').replace(/UserPreferred_/, '');
+        var data = { id: id, preferred: checked };
+
+        $.ajax({
+            type: "POST",
+            url: "/Users/TogglePreferred",
+            data: data,
+            dataType: "json",
+            success: function (result) {
+                $("[id^=PreferredMessage_" + id + "]").html(result.Message);
+            }
+        });
+    });
+
     $("[id^=TeamAssignment_]").change(function () {
         var teamAssignment = $(this).val();
         var id = $(this).attr('id').replace(/TeamAssignment_/, '');

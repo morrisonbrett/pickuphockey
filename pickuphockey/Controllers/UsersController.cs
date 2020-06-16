@@ -37,6 +37,20 @@ namespace pickuphockey.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        public JsonResult TogglePreferred(string id, bool preferred)
+        {
+            var user = UserManager.FindById(id);
+            if (user == null)
+                return Json(new { Success = false, Message = "User not found" });
+
+            user.Preferred = preferred;
+            UserManager.Update(user);
+
+            return Json(new { Success = true, Message = "Updated Preferred" });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
         public JsonResult ToggleActive(string id, bool active)
         {
             var user = UserManager.FindById(id);
@@ -46,7 +60,7 @@ namespace pickuphockey.Controllers
             user.Active = active;
             UserManager.Update(user);
 
-            return Json(new { Success = true, Message = "Updated" });
+            return Json(new { Success = true, Message = "Updated Active" });
         }
     }
 }
