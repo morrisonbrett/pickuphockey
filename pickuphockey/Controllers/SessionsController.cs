@@ -73,6 +73,9 @@ namespace pickuphockey.Controllers
                 t.BuyerUser = UserManager.FindById(t.BuyerUserId);
             });
 
+            var userid = Thread.CurrentPrincipal.Identity.GetUserId();
+            session.User = UserManager.FindById(userid);
+
             return View(session);
         }
 

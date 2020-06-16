@@ -29,6 +29,14 @@ namespace pickuphockey.Models
 			_defaultStartTime = TimeSpan.Parse(System.Configuration.ConfigurationManager.AppSettings["DefaultStartTime"]);
 		}
 
+        public bool CanBuy(bool IsPreferred)
+        {
+            var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone);
+            var timeCanBuy = SessionDate.AddDays(-1 * _buyDayMinimum);
+
+            return timeNow >= (IsPreferred ? timeCanBuy.AddDays(-1) : timeCanBuy);
+        }
+
         [Key]
         public int SessionId { get; set; }
 
@@ -52,6 +60,9 @@ namespace pickuphockey.Models
         public ICollection<BuySell> BuySells { get; set; }
 
         [NotMapped]
+        public ApplicationUser User;
+
+        [NotMapped]
         public bool IsPast => SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone);
 
         [NotMapped]
@@ -59,9 +70,6 @@ namespace pickuphockey.Models
 
         [NotMapped]
         public bool CanEdit => SessionDate > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone);
-
-        [NotMapped]
-        public bool CanBuy => TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone) >= SessionDate.AddDays(-1 * _buyDayMinimum);
 
         [NotMapped]
         public DateTime BuyDateTime => SessionDate.AddDays(-1 * _buyDayMinimum);

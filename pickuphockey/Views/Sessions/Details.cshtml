@@ -23,12 +23,17 @@
         <div class="form-group">
             <div>
                 <button onclick="location.href='@Url.Action("Sell", "BuySells", new { id = Model.SessionId })';return false;" class="btn">SELL MY SPOT</button>
-                @if (Model.CanBuy) {
+                @if (Model.CanBuy(Model.User.Preferred)) {
                     <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">BUY A SPOT</button>
+                } else {
+                    <div>
+                        <br />Spots will be available for purchase:<br />
+                        <b>Preferred Players</b>: @Model.BuyDateTime.AddDays(-1).ToString("dddd, MM/dd/yyyy, HH:mm")<br />
+                        <b>All Players</b>: @Model.BuyDateTime.ToString("dddd, MM/dd/yyyy, HH:mm")
+                    </div>
                 }
-                else
-                {
-                    <div>Spots cannot be bought until @Model.BuyDateTime.ToString("dddd, MM/dd/yyyy, HH:mm").</div>
+                @if (Model.User.Preferred && !Model.CanBuy(Model.User.Preferred)) {
+                    <div><i>You</i> are a Preferred player and have early access!</div>
                 }
             </div>
         </div>
