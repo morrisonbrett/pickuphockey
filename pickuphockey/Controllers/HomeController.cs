@@ -24,5 +24,12 @@ namespace pickuphockey.Controllers
 
             return View();
         }
+
+        public ActionResult Privacy()
+        {
+            ViewBag.Message = System.Configuration.ConfigurationManager.AppSettings["SiteTitle"];
+
+            return View();
+        }
     }
 }

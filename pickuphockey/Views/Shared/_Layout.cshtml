@@ -100,7 +100,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.UtcNow.Year - @System.Configuration.ConfigurationManager.AppSettings["SiteTitle"]</p>
+            <p>&copy; @DateTime.UtcNow.Year - @System.Configuration.ConfigurationManager.AppSettings["SiteTitle"]&nbsp;-&nbsp;@Html.ActionLink("Privacy Policy", "Privacy", "Home")</p>
         </footer>
     </div>
 
