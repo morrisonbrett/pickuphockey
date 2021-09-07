@@ -32,7 +32,7 @@ namespace pickuphockey.Models
         public bool CanBuy(bool IsPreferred)
         {
             var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone);
-            var timeCanBuy = SessionDate.AddDays(-1 * _buyDayMinimum);
+            var timeCanBuy = SessionDate.AddDays(-1 * _buyDayMinimum).AddHours(2);
 
             return timeNow >= (IsPreferred ? timeCanBuy.AddDays(-1) : timeCanBuy);
         }
@@ -72,6 +72,6 @@ namespace pickuphockey.Models
         public bool CanEdit => SessionDate > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone);
 
         [NotMapped]
-        public DateTime BuyDateTime => SessionDate.AddDays(-1 * _buyDayMinimum);
+        public DateTime BuyDateTime => SessionDate.AddDays(-1 * _buyDayMinimum).AddHours(2);
     }
 }
