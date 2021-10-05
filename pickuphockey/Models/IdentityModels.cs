@@ -45,6 +45,9 @@ namespace pickuphockey.Models
         [DisplayName("PayPal Email")]
         public string PayPalEmail { get; set; }
 
+        [DisplayName("Venmo Account")]
+        public string VenmoAccount { get; set; }
+
         [DisplayName("Active")]
         public bool Active { get; set; }
 

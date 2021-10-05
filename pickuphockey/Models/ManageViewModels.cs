@@ -107,6 +107,9 @@ namespace pickuphockey.Models
         [Display(Name = "PayPal Email")]
         public string PayPalEmail { get; set; }
 
+        [Display(Name = "Venmo Account")]
+        public string VenmoAccount { get; set; }
+
         [Display(Name = "Team Assignment")]
         public TeamAssignment TeamAssignment { get; set; }
 
