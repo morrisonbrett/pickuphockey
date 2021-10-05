@@ -110,6 +110,10 @@ namespace pickuphockey.Models
         [Display(Name = "Venmo Account")]
         public string VenmoAccount { get; set; }
 
+        [Display(Name = "Mobile Last 4")]
+        [RegularExpression(@"^(\d{4})$", ErrorMessage = "Enter a valid 4 digit number")]
+        public string MobileLast4 { get; set; }
+
         [Display(Name = "Team Assignment")]
         public TeamAssignment TeamAssignment { get; set; }
 

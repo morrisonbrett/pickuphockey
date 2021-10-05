@@ -48,6 +48,9 @@ namespace pickuphockey.Models
         [DisplayName("Venmo Account")]
         public string VenmoAccount { get; set; }
 
+        [DisplayName("Mobile Last 4")]
+        public string MobileLast4 { get; set; }
+
         [DisplayName("Active")]
         public bool Active { get; set; }
 

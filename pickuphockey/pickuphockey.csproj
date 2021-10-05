@@ -290,6 +290,10 @@
     <Compile Include="Migrations\202110052307561_AddingVenmo.designer.cs">
       <DependentUpon>202110052307561_AddingVenmo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202110052325444_AddingMobileLast4.cs" />
+    <Compile Include="Migrations\202110052325444_AddingMobileLast4.designer.cs">
+      <DependentUpon>202110052325444_AddingMobileLast4.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -616,6 +620,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110052307561_AddingVenmo.resx">
       <DependentUpon>202110052307561_AddingVenmo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110052325444_AddingMobileLast4.resx">
+      <DependentUpon>202110052325444_AddingMobileLast4.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
