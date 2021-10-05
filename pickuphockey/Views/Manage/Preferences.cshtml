@@ -15,7 +15,6 @@
 @using (Html.BeginForm("Preferences", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(model => model.PaymentPreference)
     <h4>Preferences</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })

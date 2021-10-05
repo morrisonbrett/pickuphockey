@@ -74,7 +74,7 @@
             }
             </td>
         <td>
-            @if (item.PaymentPreference == PaymentPreference.PayPal && !string.IsNullOrEmpty(item.SellerUserId) && !string.IsNullOrEmpty(item.BuyerUserId) && item.BuyerUserId == User.Identity.GetUserId() && !item.PaymentSent)
+            @if (!string.IsNullOrEmpty(item.SellerUserId) && !string.IsNullOrEmpty(item.BuyerUserId) && item.BuyerUserId == User.Identity.GetUserId() && !item.PaymentSent)
             {
                 <div>
                     <form action="@PayPalUrl" method="post" target="_top">

@@ -16,7 +16,7 @@
 
     <div class="form-horizontal">
         @if (!string.IsNullOrEmpty(Model.SellerUserId)) {
-            <h4>Buying spot from @Model.SellerUser.FirstName @Model.SellerUser.LastName, (Team: @Model.TeamAssignment, Payment: @Model.PaymentPreference)</h4>
+            <h4>Buying spot from @Model.SellerUser.FirstName @Model.SellerUser.LastName, (Team: @Model.TeamAssignment)</h4>
         }
         else {
             <h4>Buying spot from TBD</h4>

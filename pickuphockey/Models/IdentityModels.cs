@@ -10,14 +10,6 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace pickuphockey.Models
 {
-    public enum PaymentPreference
-    {
-        Unknown,
-        Cash,
-        PayPal,
-        Check
-    }
-
     public enum TeamAssignment
     {
         Unassigned,
@@ -43,9 +35,6 @@ namespace pickuphockey.Models
 
         [DisplayName("Last Name")]
         public string LastName { get; set; }
-
-        [DisplayName("Payment Preference")]
-        public PaymentPreference PaymentPreference { get; set; }
 
         [DisplayName("Team Assignment")]
         public TeamAssignment TeamAssignment { get; set; }

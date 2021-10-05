@@ -258,9 +258,6 @@ namespace pickuphockey.Controllers
 
             buySell.SellerUser = seller;
             buySell.SellerUserId = seller.Id;
-            buySell.PaymentPreference = seller.PaymentPreference;
-            if (buySell.PaymentPreference == PaymentPreference.PayPal)
-                buySell.PaymentInfo = seller.PayPalEmail;
             buySell.TeamAssignment = seller.TeamAssignment;
 
             // Can't sell to self
@@ -295,7 +292,7 @@ namespace pickuphockey.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Sell([Bind(Include = "BuySellId,SessionId,SellerNote,PaymentPreference,TeamAssignment,BuyerUserId,PaymentInfo")] BuySell buySell)
+        public ActionResult Sell([Bind(Include = "BuySellId,SessionId,SellerNote,TeamAssignment,BuyerUserId")] BuySell buySell)
         {
             if (Request.Url == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -359,9 +356,7 @@ namespace pickuphockey.Controllers
 
                     updateBuySell.SellerUserId = seller.Id;
                     updateBuySell.SellerNote = buySell.SellerNote;
-                    updateBuySell.PaymentPreference = buySell.PaymentPreference;
                     updateBuySell.TeamAssignment = buySell.TeamAssignment;
-                    updateBuySell.PaymentInfo = buySell.PaymentInfo;
                     updateBuySell.UpdateDateTime = DateTime.UtcNow;
 
                     _db.Entry(updateBuySell).State = EntityState.Modified;
@@ -388,9 +383,6 @@ namespace pickuphockey.Controllers
 
                 // Update the users preferences with the values from this sell.
                 var user = UserManager.FindById(User.Identity.GetUserId());
-                user.PaymentPreference = buySell.PaymentPreference;
-                if (user.PaymentPreference == PaymentPreference.PayPal)
-                    user.PayPalEmail = buySell.PaymentInfo;
                 user.TeamAssignment = buySell.TeamAssignment;
                 UserManager.Update(user);
 

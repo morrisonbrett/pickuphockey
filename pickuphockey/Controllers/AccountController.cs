@@ -194,7 +194,6 @@ namespace pickuphockey.Controllers
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here.</a>");
 
                     user.NotificationPreference = NotificationPreference.OnlyMyBuySell;
-                    user.PaymentPreference = PaymentPreference.PayPal;
                     user.Active = false;
                     var updateResult = await UserManager.UpdateAsync(user);
                     if (updateResult.Succeeded)
@@ -468,7 +467,6 @@ namespace pickuphockey.Controllers
                         if (firstName != null) user.FirstName = firstName;
                         if (lastName != null) user.LastName = lastName;
                         user.NotificationPreference = NotificationPreference.OnlyMyBuySell;
-                        user.PaymentPreference = PaymentPreference.PayPal;
 
                         AlertAdmin(user);
 

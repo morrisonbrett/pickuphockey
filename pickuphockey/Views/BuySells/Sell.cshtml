@@ -13,7 +13,6 @@
     @Html.HiddenFor(model => model.BuySellId)
     @Html.HiddenFor(model => model.SessionId)
     @Html.HiddenFor(model => model.BuyerUserId)
-    @Html.HiddenFor(model => model.PaymentPreference)
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
     <div class="form-horizontal">
@@ -31,15 +30,6 @@
                 @Html.ValidationMessageFor(model => model.SellerNote, "", new { @class = "text-danger" })
             </div>
         </div>
-        @if (Model.SellerUser.PaymentPreference == PaymentPreference.PayPal)
-        {
-            <div class="form-group">
-                <label class="col-md-2 control-label">PayPal Email</label>
-                <div class="col-md-10">
-                    @Html.TextBoxFor(model => model.PaymentInfo, new {@class = "form-control"})
-                </div>
-            </div>
-        }
         <div class="form-group">
             @Html.LabelFor(model => model.TeamAssignment, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
