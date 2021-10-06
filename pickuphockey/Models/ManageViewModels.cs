@@ -108,6 +108,7 @@ namespace pickuphockey.Models
         public string PayPalEmail { get; set; }
 
         [Display(Name = "Venmo Account")]
+        [RegularExpression(@"^[^\\\./:\@\*\?\""<>\|]{1}[^\\/:\@\*\?\""<>\|]{0,254}$", ErrorMessage = "Enter a valid Venmo account name")]
         public string VenmoAccount { get; set; }
 
         [Display(Name = "Mobile Last 4")]
