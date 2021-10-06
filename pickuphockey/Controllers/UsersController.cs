@@ -29,7 +29,12 @@ namespace pickuphockey.Controllers
                 _userManager = value;
             }
         }
-        
+
+        public ActionResult DownloadActive()
+        {
+            return View(UserManager.Users.ToList().OrderBy(u => u.LastName));
+        }
+
         public ActionResult Index()
         {
             return View(UserManager.Users.ToList().OrderBy(u => u.LastName));

@@ -5,7 +5,10 @@
 }
 
 <h2>Pickup Players</h2>
-
+@if (User.IsInRole("Admin"))
+{
+    @Html.ActionLink("Download Active", "DownloadActive")
+}
 <table class="table">
     <tr>
         <th>
