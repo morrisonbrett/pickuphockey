@@ -36,9 +36,6 @@ namespace pickuphockey
 			bundles.Add(new ScriptBundle("~/bundles/main").Include(
                       "~/Scripts/main.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/onesignal").Include(
-                      "~/Scripts/OneSignalSDK.js"));
-
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
             BundleTable.EnableOptimizations = true;
