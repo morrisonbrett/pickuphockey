@@ -29,8 +29,11 @@ namespace pickuphockey.Models
 			_defaultStartTime = TimeSpan.Parse(System.Configuration.ConfigurationManager.AppSettings["DefaultStartTime"]);
 		}
 
-        public bool CanBuy(bool IsPreferred)
+        public bool CanBuy(bool IsPreferred, bool IsAdmin)
         {
+            if (IsAdmin)
+                return true;
+
             var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone);
             var timeCanBuy = SessionDate.AddDays(-1 * _buyDayMinimum).AddHours(2);
 

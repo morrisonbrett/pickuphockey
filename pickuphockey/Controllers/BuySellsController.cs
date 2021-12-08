@@ -146,7 +146,7 @@ namespace pickuphockey.Controllers
                 ModelState.AddModelError("", "You cannot buy from a session that has past.");
             }
 
-            if (!session.CanBuy(buyer.Preferred))
+            if (!session.CanBuy(buyer.Preferred, User.IsInRole("Admin")))
             {
                 ModelState.AddModelError("", "Spots cannot be bought until " + session.BuyDateTime.AddDays(-1).ToString("dddd, MM/dd/yyyy, HH:mm") + " for Preferred players and " + session.BuyDateTime.ToString("dddd, MM/dd/yyyy, HH:mm") + " for all players.");
             }

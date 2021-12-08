@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Buy a Spot";
+    var IsAdmin = User.IsInRole("Admin");
 }
 
 <h2>Buy a Spot for @ViewBag.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm")</h2>
@@ -31,13 +32,21 @@
         </div>
         <div class="form-group">
             <div class="col-md-10">
-                If buying for someone else, indicate their name in the note. You as the registered user are responsible for payment.
+                Once your purchase is finalized, your are obligated to pay the seller immediately.
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-10">
-                @if (Html.ViewData.ModelState.IsValid) {
-                    <input type="submit" value="BUY A SPOT" class="btn btn-default" />
+                @if (Html.ViewData.ModelState.IsValid)
+                {
+                    if (IsAdmin)
+                    {
+                        <input type="submit" value="BUY A SPOT (ADMIN)" class="btn btn-default" />
+                    }
+                    else
+                    {
+                        <input type="submit" value="BUY A SPOT" class="btn btn-default" />
+                    }
                 }
                 <button onclick="location.href='@Url.Action("Details", "Sessions", new { id = Model.SessionId })';return false;" class="btn">CANCEL</button>
             </div>
