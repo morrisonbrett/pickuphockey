@@ -25,6 +25,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name='robots' content='noindex,follow' />
     <title>@ViewBag.Title - @System.Configuration.ConfigurationManager.AppSettings["SiteTitle"]</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -41,7 +42,7 @@
 
                 var t = { config: config }, u = document, e = window, o = "script", s = u.createElement(o), i, f;
                 for (s.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js", u.getElementsByTagName(o)[0]
-                        .parentNode.appendChild(s), t.cookie = u
+                    .parentNode.appendChild(s), t.cookie = u
                         .cookie, t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace"];
                     i.length;
                 ) r("track" + i.pop());
