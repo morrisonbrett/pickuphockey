@@ -112,13 +112,14 @@ namespace pickuphockey.Controllers
                 ModelState.AddModelError("", "You cannot buy from yourself");
             }
 
+/*
             // Already bought in this session
             var alreadyBuyer = _db.BuySell.Where(q => q.SessionId == id && !string.IsNullOrEmpty(q.BuyerUserId) && q.BuyerUserId == buyer.Id).OrderBy(d => d.CreateDateTime).FirstOrDefault();
             if (alreadyBuyer != null)
             {
                 ModelState.AddModelError("", "You have already bought a spot for this session");
             }
-
+*/
             return View(buySell);
         }
 
@@ -161,13 +162,14 @@ namespace pickuphockey.Controllers
                     return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
                 }
 
+/*
                 // Already bought in this session
                 var alreadyBuyer = _db.BuySell.Where(q => q.SessionId == buySell.SessionId && !string.IsNullOrEmpty(q.BuyerUserId) && q.BuyerUserId == buyer.Id).OrderBy(d => d.CreateDateTime).FirstOrDefault();
                 if (alreadyBuyer != null)
                 {
                     return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
                 }
-
+*/
                 string activity;
                 IEnumerable<ApplicationUser> users;
 
