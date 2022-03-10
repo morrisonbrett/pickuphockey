@@ -152,14 +152,14 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SendGrid, Version=9.25.2.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\SendGrid.9.25.2\lib\net452\SendGrid.dll</HintPath>
+    <Reference Include="SendGrid, Version=9.26.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\SendGrid.9.26.0\lib\net452\SendGrid.dll</HintPath>
     </Reference>
     <Reference Include="SendGrid.CSharp.HTTP.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SendGrid.CSharp.HTTP.Client.3.4.10\lib\net45\SendGrid.CSharp.HTTP.Client.dll</HintPath>
+      <HintPath>..\packages\SendGrid.CSharp.HTTP.Client.3.4.12\lib\net45\SendGrid.CSharp.HTTP.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SendGrid.SmtpApi, Version=1.4.3.0, Culture=neutral, PublicKeyToken=5ab2e3607d8f9343, processorArchitecture=MSIL">
-      <HintPath>..\packages\SendGrid.SmtpApi.1.4.3\lib\net452\SendGrid.SmtpApi.dll</HintPath>
+    <Reference Include="SendGrid.SmtpApi, Version=1.4.5.0, Culture=neutral, PublicKeyToken=5ab2e3607d8f9343, processorArchitecture=MSIL">
+      <HintPath>..\packages\SendGrid.SmtpApi.1.4.5\lib\net452\SendGrid.SmtpApi.dll</HintPath>
     </Reference>
     <Reference Include="StarkbankEcdsa, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b2e6337a5d77bfbc, processorArchitecture=MSIL">
       <HintPath>..\packages\starkbank-ecdsa.1.3.3\lib\net452\StarkbankEcdsa.dll</HintPath>
@@ -380,6 +380,10 @@
     <Compile Include="Migrations\202110052325444_AddingMobileLast4.designer.cs">
       <DependentUpon>202110052325444_AddingMobileLast4.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202203101658112_NoteFlags.cs" />
+    <Compile Include="Migrations\202203101658112_NoteFlags.designer.cs">
+      <DependentUpon>202203101658112_NoteFlags.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -523,8 +527,8 @@
     <Content Include="Scripts\jquery-3.6.0.min.js" />
     <Content Include="Scripts\jquery-3.6.0.slim.js" />
     <Content Include="Scripts\jquery-3.6.0.slim.min.js" />
-    <Content Include="Scripts\jquery-ui-1.13.0.js" />
-    <Content Include="Scripts\jquery-ui-1.13.0.min.js" />
+    <Content Include="Scripts\jquery-ui-1.13.1.js" />
+    <Content Include="Scripts\jquery-ui-1.13.1.min.js" />
     <Content Include="Scripts\jquery.datetimepicker.full.js" />
     <Content Include="Scripts\jquery.datetimepicker.full.min.js" />
     <Content Include="Scripts\jquery-3.6.0.slim.min.map" />
@@ -713,6 +717,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110052325444_AddingMobileLast4.resx">
       <DependentUpon>202110052325444_AddingMobileLast4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202203101658112_NoteFlags.resx">
+      <DependentUpon>202203101658112_NoteFlags.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
