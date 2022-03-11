@@ -26,11 +26,17 @@ namespace pickuphockey.Models
         [DisplayName("Seller Note")]
         public string SellerNote { get; set; }
 
+        [DisplayName("Seller Note Flagged")]
+        public bool SellerNoteFlagged { get; set; }
+
         [DisplayName("Team Assignment")]
         public TeamAssignment TeamAssignment { get; set; }
 
         [DisplayName("Buyer Note")]
         public string BuyerNote { get; set; }
+
+        [DisplayName("Buyer Note Flagged")]
+        public bool BuyerNoteFlagged { get; set; }
 
         [DisplayName("Payment Sent")]
         public bool PaymentSent { get; set; }

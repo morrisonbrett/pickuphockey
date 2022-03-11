@@ -127,7 +127,7 @@ namespace pickuphockey.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Buy([Bind(Include = "BuySellId,SessionId,BuyerNote,SellerUserId")] BuySell buySell)
+        public ActionResult Buy([Bind(Include = "BuySellId,SessionId,BuyerNote,BuyerNoteFlag,SellerUserId")] BuySell buySell)
         {
             if (Request.Url == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -189,6 +189,7 @@ namespace pickuphockey.Controllers
 
                     updateBuySell.BuyerUserId = buyer.Id;
                     updateBuySell.BuyerNote = buySell.BuyerNote;
+                    AutoFlagFilterBuyer(ref updateBuySell);
                     updateBuySell.UpdateDateTime = DateTime.UtcNow;
                     _db.Entry(updateBuySell).State = EntityState.Modified;
 
@@ -201,6 +202,7 @@ namespace pickuphockey.Controllers
 
                     buySell.BuyerUserId = User.Identity.GetUserId();
                     buySell.BuyerNote = buySell.BuyerNote;
+                    AutoFlagFilterBuyer(ref buySell);
                     buySell.UpdateDateTime = DateTime.UtcNow;
 
                     buySell.CreateDateTime = DateTime.UtcNow;
@@ -292,7 +294,7 @@ namespace pickuphockey.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Sell([Bind(Include = "BuySellId,SessionId,SellerNote,TeamAssignment,BuyerUserId")] BuySell buySell)
+        public ActionResult Sell([Bind(Include = "BuySellId,SessionId,SellerNote,SellerNoteFlag,TeamAssignment,BuyerUserId")] BuySell buySell)
         {
             if (Request.Url == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -356,6 +358,7 @@ namespace pickuphockey.Controllers
 
                     updateBuySell.SellerUserId = seller.Id;
                     updateBuySell.SellerNote = buySell.SellerNote;
+                    AutoFlagFilterSeller(ref updateBuySell);
                     updateBuySell.TeamAssignment = buySell.TeamAssignment;
                     updateBuySell.UpdateDateTime = DateTime.UtcNow;
 
@@ -371,6 +374,7 @@ namespace pickuphockey.Controllers
                     buySell.CreateDateTime = DateTime.UtcNow;
                     buySell.UpdateDateTime = DateTime.UtcNow;
                     buySell.SellerUserId = User.Identity.GetUserId();
+                    AutoFlagFilterSeller(ref buySell);
 
                     _db.BuySell.Add(buySell);
 
@@ -425,6 +429,7 @@ namespace pickuphockey.Controllers
             {
                 deleteBuySell.SellerUserId = null;
                 deleteBuySell.SellerNote = null;
+                deleteBuySell.SellerNoteFlagged = false;
                 deleteBuySell.TeamAssignment = TeamAssignment.Unassigned;
                 deleteBuySell.UpdateDateTime = DateTime.UtcNow;
                 _db.Entry(deleteBuySell).State = EntityState.Modified;
@@ -475,6 +480,7 @@ namespace pickuphockey.Controllers
             {
                 deleteBuySell.BuyerUserId = null;
                 deleteBuySell.BuyerNote = null;
+                deleteBuySell.BuyerNoteFlagged = false;
                 deleteBuySell.UpdateDateTime = DateTime.UtcNow;
                 _db.Entry(deleteBuySell).State = EntityState.Modified;
             }
@@ -638,6 +644,70 @@ namespace pickuphockey.Controllers
             }
 
             return Json(new { Success = true, Message = "Team Assignment Updated" });
+        }
+
+        [HttpPost]
+        public JsonResult ToggleSellerNoteFlagged(int id, bool sellerNoteFlagged)
+        {
+            if (Request.Url == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var toggleSellerNoteFlagged = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
+            if (toggleSellerNoteFlagged == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var session = _db.Sessions.Find(toggleSellerNoteFlagged.SessionId);
+            if (session == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            toggleSellerNoteFlagged.SellerNoteFlagged = sellerNoteFlagged;
+            _db.Entry(toggleSellerNoteFlagged).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            var activity = (sellerNoteFlagged ? "Flagged" : "Un-Flagged") + " Seller Note for content";
+            _db.AddActivity(toggleSellerNoteFlagged.SessionId, activity);
+
+            return Json(new { Success = true, Message = "Updated" });
+        }
+
+        [HttpPost]
+        public JsonResult ToggleBuyerNoteFlagged(int id, bool buyerNoteFlagged)
+        {
+            if (Request.Url == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var toggleBuyerNoteFlagged = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
+            if (toggleBuyerNoteFlagged == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            var session = _db.Sessions.Find(toggleBuyerNoteFlagged.SessionId);
+            if (session == null) return Json(new { Success = false, Message = "Invalid Request" });
+
+            toggleBuyerNoteFlagged.BuyerNoteFlagged = buyerNoteFlagged;
+            _db.Entry(toggleBuyerNoteFlagged).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            var activity = (buyerNoteFlagged ? "Flagged" : "Un-Flagged") + " Buyer Note for content";
+            _db.AddActivity(toggleBuyerNoteFlagged.SessionId, activity);
+
+            return Json(new { Success = true, Message = "Updated" });
+        }
+
+        private void AutoFlagFilterBuyer(ref BuySell buySell)
+        {
+            // Autoflag note if it has keywords. This could be factored into a more sophisticated content
+            // moderation inspection in the future
+            if (buySell.BuyerNote != null && buySell.BuyerNote.ToLower().Contains("venmo"))
+            {
+                _db.AddActivity(buySell.SessionId, "Buyer Note auto-flagged for content");
+                buySell.BuyerNoteFlagged = true;
+            }
+        }
+
+        private void AutoFlagFilterSeller(ref BuySell buySell)
+        {
+            // Autoflag note if it has keywords. This could be factored into a more sophisticated content
+            // moderation inspection in the future
+            if (buySell.SellerNote != null && buySell.SellerNote.ToLower().Contains("venmo"))
+            {
+                _db.AddActivity(buySell.SessionId, "Seller Note auto-flagged for content");
+                buySell.SellerNoteFlagged = true;
+            }
         }
 
         protected override void Dispose(bool disposing)

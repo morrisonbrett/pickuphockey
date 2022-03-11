@@ -63,10 +63,33 @@
             @sellerName @sellingVerb @buyerName
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.SellerNote)
+            @if (isAdmin)
+            {
+                if (item.SellerNote != null && item.SellerNote.Length > 0)
+                {
+                    <span>Flag:</span>@Html.CheckBoxFor(modelItem => item.SellerNoteFlagged, htmlAttributes: new { id = "SellerNoteFlagged_" + item.BuySellId })
+                    <br />
+                }
+                @Html.DisplayFor(modelItem => item.SellerNote)
+            } else if (!item.SellerNoteFlagged)
+            {
+                @Html.DisplayFor(modelItem => item.SellerNote)
+            }
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.BuyerNote)
+            @if (isAdmin)
+            {
+                if (item.BuyerNote != null && item.BuyerNote.Length > 0)
+                {
+                    <span>Flag:</span>@Html.CheckBoxFor(modelItem => item.BuyerNoteFlagged, htmlAttributes: new { id = "BuyerNoteFlagged_" + item.BuySellId })
+                    <br />
+                }
+                @Html.DisplayFor(modelItem => item.BuyerNote)
+            }
+            else if (!item.BuyerNoteFlagged)
+            {
+                @Html.DisplayFor(modelItem => item.BuyerNote)
+            }
         </td>
         <td>
             @if (isAdmin && !item.Session.IsPast)

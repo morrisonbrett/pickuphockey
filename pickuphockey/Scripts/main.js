@@ -109,4 +109,36 @@ $(document).ready(function () {
             }
         });
     });
+
+    $("[id^=SellerNoteFlagged_]").change(function () {
+        var checked = $(this).is(':checked');
+        var id = $(this).attr('id').replace(/SellerNoteFlagged_/, '');
+        var data = { id: id, sellerNoteFlagged: checked };
+
+        $.ajax({
+            type: "POST",
+            url: "/BuySells/ToggleSellerNoteFlagged",
+            data: data,
+            dataType: "json",
+            success: function (result) {
+                location.reload();
+            }
+        });
+    });
+
+    $("[id^=BuyerNoteFlagged_]").change(function () {
+        var checked = $(this).is(':checked');
+        var id = $(this).attr('id').replace(/BuyerNoteFlagged_/, '');
+        var data = { id: id, buyerNoteFlagged: checked };
+
+        $.ajax({
+            type: "POST",
+            url: "/BuySells/ToggleBuyerNoteFlagged",
+            data: data,
+            dataType: "json",
+            success: function (result) {
+                location.reload();
+            }
+        });
+    });
 });
