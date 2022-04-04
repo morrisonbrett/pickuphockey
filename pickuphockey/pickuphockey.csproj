@@ -152,8 +152,8 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SendGrid, Version=9.26.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\SendGrid.9.26.0\lib\net452\SendGrid.dll</HintPath>
+    <Reference Include="SendGrid, Version=9.27.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\SendGrid.9.27.0\lib\net452\SendGrid.dll</HintPath>
     </Reference>
     <Reference Include="SendGrid.CSharp.HTTP.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SendGrid.CSharp.HTTP.Client.3.4.12\lib\net45\SendGrid.CSharp.HTTP.Client.dll</HintPath>
@@ -688,10 +688,10 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Scripts\moment.min.js.map" />
-    <Content Include="Scripts\moment-with-locales.min.js.map" />
     <Content Include="Views\Home\Privacy.cshtml" />
     <Content Include="Views\Users\DownloadActive.cshtml" />
+    <Content Include="Scripts\moment.min.js.map" />
+    <Content Include="Scripts\moment-with-locales.min.js.map" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
