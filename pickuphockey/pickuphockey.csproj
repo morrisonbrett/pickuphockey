@@ -384,12 +384,17 @@
     <Compile Include="Migrations\202203101658112_NoteFlags.designer.cs">
       <DependentUpon>202203101658112_NoteFlags.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202210032051123_RegularSet.cs" />
+    <Compile Include="Migrations\202210032051123_RegularSet.designer.cs">
+      <DependentUpon>202210032051123_RegularSet.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
     <Compile Include="Models\BuySell.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\RegularSet.cs" />
     <Compile Include="Models\Session.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EmailServices.cs" />
@@ -720,6 +725,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202203101658112_NoteFlags.resx">
       <DependentUpon>202203101658112_NoteFlags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202210032051123_RegularSet.resx">
+      <DependentUpon>202210032051123_RegularSet.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

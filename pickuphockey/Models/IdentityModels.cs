@@ -17,6 +17,13 @@ namespace pickuphockey.Models
         Dark
     }
 
+    public enum PositionPreference
+    {
+        None,
+        Forward,
+        Defense
+    }
+
     public enum NotificationPreference
     {
         [Display(Name = @"None")]
