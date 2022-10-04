@@ -79,11 +79,12 @@ namespace pickuphockey.Models
 
         public int ?RegularSetId { get; set; }
 
-        // [DisplayName("Roster Set")]
+        [DisplayName("Roster Set")]
         [ForeignKey("RegularSetId")]
         public virtual RegularSet RegularSet { get; set; }
 
-        //[DisplayName("Roster")]
-        //public ICollection<Regular> Regulars { get; set; }
+        [DisplayName("Roster")]
+        [NotMapped]
+        public virtual ICollection<Regular> Regulars { get; set; }
     }
 }

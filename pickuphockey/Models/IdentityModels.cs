@@ -102,7 +102,7 @@ namespace pickuphockey.Models
         public DbSet<Session> Sessions { get; set; }
         public DbSet<ActivityLog> ActivityLogs { get; set; }
         public DbSet<BuySell> BuySell { get; set; }
-        public DbSet<RegularSet> RegularSet { get; set; }
+        public DbSet<RegularSet> RegularSets { get; set; }
         public DbSet<Regular> Regulars { get; set; }
     }
 }
