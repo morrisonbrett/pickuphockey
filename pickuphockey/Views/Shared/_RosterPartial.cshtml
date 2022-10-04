@@ -1,6 +1,9 @@
 ﻿@model pickuphockey.Models.Session
+@{ 
+    var isAdmin = User.IsInRole("Admin");
+}
 
-@if (Model.RegularSetId != null)
+@if (isAdmin && Model.RegularSetId != null)
 {
     <h2>Roster - @Model.RegularSet.Description</h2>
     <table class="table">
