@@ -7,13 +7,13 @@ namespace pickuphockey.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class RegularSet : IMigrationMetadata
+    public sealed partial class AddRegularSet : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(RegularSet));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddRegularSet));
         
         string IMigrationMetadata.Id
         {
-            get { return "202210032051123_RegularSet"; }
+            get { return "202210041355107_AddRegularSet"; }
         }
         
         string IMigrationMetadata.Source

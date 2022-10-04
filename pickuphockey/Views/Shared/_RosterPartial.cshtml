@@ -1,0 +1,11 @@
+﻿@model pickuphockey.Models.Session
+
+@if (Model.RegularSetId != null)
+{
+    <h2>Roster @Model.RegularSet.Description</h2>
+    foreach (var item in Model.Regulars)
+    {
+        @Html.DisplayFor(modelItem => item.UserId)
+        <br />
+    }
+}

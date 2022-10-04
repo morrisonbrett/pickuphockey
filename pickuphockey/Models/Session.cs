@@ -77,7 +77,13 @@ namespace pickuphockey.Models
         [NotMapped]
         public DateTime BuyDateTime => SessionDate.AddDays(-1 * _buyDayMinimum).AddHours(2);
 
-        [ForeignKey("RegularSet")]
-        public int RegularSetId { get; set; }
+        public int ?RegularSetId { get; set; }
+
+        // [DisplayName("Roster Set")]
+        [ForeignKey("RegularSetId")]
+        public virtual RegularSet RegularSet { get; set; }
+
+        //[DisplayName("Roster")]
+        //public ICollection<Regular> Regulars { get; set; }
     }
 }

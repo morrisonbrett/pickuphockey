@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace pickuphockey.Models
 {
-    [Table("RegularSet")]
     public class RegularSet
     {
         [Key]
@@ -21,16 +20,21 @@ namespace pickuphockey.Models
         public DateTime CreateDateTime { get; set; }
     }
 
-    [Table("Regulars")]
     public class Regular
     {
-        [Required]
-        [ForeignKey("RegularSet")]
+        [Key, Column("RegularSetId", Order=0)]
         public int RegularSetId { get; set; }
 
-        [Required]
-        [ForeignKey("UserId")]
+        [Key, Column("UserId", Order=1)]
         public string UserId { get; set; }
+
+        [ForeignKey("RegularSetId")]
+        [NotMapped]
+        public RegularSet RegularSet { get; set; }
+
+        [ForeignKey("UserId")]
+        [NotMapped]
+        public ApplicationUser User;
 
         [DisplayName("Team Assignment")]
         public TeamAssignment TeamAssignment { get; set; }

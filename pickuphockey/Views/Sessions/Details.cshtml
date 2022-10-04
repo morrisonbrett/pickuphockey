@@ -57,6 +57,7 @@
         @Html.Partial("_DisqusPartial", Model)
         <hr />
     }
+    @Html.Partial("_RosterPartial", Model)
     @Html.Partial("_ActivityLogsPartial", Model.ActivityLogs.OrderByDescending(i => i.CreateDateTime))
     <hr />
 </div>

@@ -384,9 +384,9 @@
     <Compile Include="Migrations\202203101658112_NoteFlags.designer.cs">
       <DependentUpon>202203101658112_NoteFlags.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202210032051123_RegularSet.cs" />
-    <Compile Include="Migrations\202210032051123_RegularSet.designer.cs">
-      <DependentUpon>202210032051123_RegularSet.cs</DependentUpon>
+    <Compile Include="Migrations\202210041355107_AddRegularSet.cs" />
+    <Compile Include="Migrations\202210041355107_AddRegularSet.designer.cs">
+      <DependentUpon>202210041355107_AddRegularSet.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -697,6 +697,7 @@
     <Content Include="Views\Users\DownloadActive.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\moment-with-locales.min.js.map" />
+    <Content Include="Views\Shared\_RosterPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -726,8 +727,8 @@
     <EmbeddedResource Include="Migrations\202203101658112_NoteFlags.resx">
       <DependentUpon>202203101658112_NoteFlags.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202210032051123_RegularSet.resx">
-      <DependentUpon>202210032051123_RegularSet.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202210041355107_AddRegularSet.resx">
+      <DependentUpon>202210041355107_AddRegularSet.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
