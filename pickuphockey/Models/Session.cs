@@ -86,5 +86,17 @@ namespace pickuphockey.Models
         [DisplayName("Roster")]
         [NotMapped]
         public virtual ICollection<Regular> Regulars { get; set; }
+
+        [NotMapped]
+        public ICollection<BuySell> LightSubs { get; set; }
+
+        [NotMapped]
+        public ICollection<BuySell> DarkSubs { get; set; }
+
+        [NotMapped]
+        public int LightCount { get; set; }
+
+        [NotMapped]
+        public int DarkCount { get; set; }
     }
 }

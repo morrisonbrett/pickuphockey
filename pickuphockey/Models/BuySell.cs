@@ -53,5 +53,8 @@ namespace pickuphockey.Models
         [DisplayName("Session")]
         [ForeignKey("SessionId")]
         public virtual Session Session { get; set; }
+
+        [NotMapped]
+        public bool ReSellingOrSold { get; set; }
     }
 }

@@ -1,33 +1,83 @@
 ﻿@model pickuphockey.Models.Session
-@{ 
-    var isAdmin = User.IsInRole("Admin");
-}
-
-@if (isAdmin && Model.RegularSetId != null)
+@if (Model.RegularSetId != null)
 {
     <h2>Roster - @Model.RegularSet.Description</h2>
     <table class="table">
         <tr>
-            <th>Light</th>
-            <th>Dark</th>
+            <th>Light (@Model.LightCount)</th>
+            <th>Dark (@Model.DarkCount)</th>
         </tr>
         <tr>
             <td valign="top">
                 @foreach (var item in Model.Regulars.Where(r => r.TeamAssignment == pickuphockey.Models.TeamAssignment.Light).OrderByDescending(r => r.PositionPreference).ThenBy(u => u.User.FirstName))
                 {
-                    @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
-                    @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
-                    @Html.DisplayFor(modelItem => item.PositionPreference)
-                    <br />
+                    if (item.SellingOrSoldSpot)
+                    {
+                        <div style="text-decoration: line-through;">
+                            @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
+                            @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
+                            @Html.DisplayFor(modelItem => item.PositionPreference)
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
+                        @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
+                        @Html.DisplayFor(modelItem => item.PositionPreference)
+                        <br />
+                    }
+                }
+                @foreach (var item in Model.LightSubs)
+                {
+                    if (item.ReSellingOrSold)
+                    {
+                        <div style="text-decoration: line-through;">
+                            @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
+                            @Html.DisplayFor(modelItem => item.BuyerUser.LastName)
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
+                        @Html.DisplayFor(modelItem => item.BuyerUser.LastName)
+                        <br />
+                    }
                 }
             </td>
             <td valign="top">
                 @foreach (var item in Model.Regulars.Where(r => r.TeamAssignment == pickuphockey.Models.TeamAssignment.Dark).OrderByDescending(r => r.PositionPreference).ThenBy(u => u.User.FirstName))
                 {
-                    @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
-                    @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
-                    @Html.DisplayFor(modelItem => item.PositionPreference)
-                    <br />
+                    if (item.SellingOrSoldSpot)
+                    {
+                        <div style="text-decoration: line-through;">
+                            @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
+                            @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
+                            @Html.DisplayFor(modelItem => item.PositionPreference)
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
+                        @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
+                        @Html.DisplayFor(modelItem => item.PositionPreference)
+                        <br />
+                    }
+                }
+                @foreach (var item in Model.DarkSubs)
+                {
+                    if (item.ReSellingOrSold)
+                    {
+                        <div style="text-decoration: line-through;">
+                            @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
+                            @Html.DisplayFor(modelItem => item.BuyerUser.LastName)
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
+                        @Html.DisplayFor(modelItem => item.BuyerUser.LastName)
+                        <br />
+                    }
                 }
             </td>
         </tr>

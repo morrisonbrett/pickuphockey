@@ -41,5 +41,8 @@ namespace pickuphockey.Models
 
         [DisplayName("Position Preference")]
         public PositionPreference PositionPreference { get; set; }
+
+        [NotMapped]
+        public bool SellingOrSoldSpot { get; set; }
     }
 }

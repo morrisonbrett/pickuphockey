@@ -71,6 +71,16 @@ namespace pickuphockey.Controllers
             session.Regulars.ForEach(t =>
             {
                 t.User = UserManager.FindById(t.UserId);
+                var buySell = _db.BuySell.Where(q => q.SessionId == id && !string.IsNullOrEmpty(q.SellerUserId) && q.SellerUserId == t.UserId).FirstOrDefault();
+                t.SellingOrSoldSpot = buySell != null;
+                if (t.TeamAssignment == TeamAssignment.Light && !t.SellingOrSoldSpot)
+                {
+                    session.LightCount++;
+                }
+                if (t.TeamAssignment == TeamAssignment.Dark && !t.SellingOrSoldSpot)
+                {
+                    session.DarkCount++;
+                }
             });
 
             session.BuySells = _db.BuySell.Where(q => q.SessionId == session.SessionId).ToList();
@@ -78,6 +88,30 @@ namespace pickuphockey.Controllers
             {
                 t.SellerUser = UserManager.FindById(t.SellerUserId);
                 t.BuyerUser = UserManager.FindById(t.BuyerUserId);
+            });
+
+            session.LightSubs = session.BuySells.Where(r => r.BuyerUserId != null && r.TeamAssignment == TeamAssignment.Light).OrderBy(r => r.BuySellId).ToList();
+            session.LightCount += session.LightSubs.Count();
+
+            session.DarkSubs = session.BuySells.Where(r => r.BuyerUserId != null && r.TeamAssignment == TeamAssignment.Dark).OrderBy(r => r.BuySellId).ToList();
+            session.DarkCount += session.DarkSubs.Count();
+
+            // Go through entire buy sell list and find anyone that bought, and then sold
+            session.BuySells.ForEach(t =>
+            {
+                var buySell = session.BuySells.Where(r => r.SellerUserId != null && !string.IsNullOrEmpty(r.SellerUserId) && r.SellerUserId == t.BuyerUserId).FirstOrDefault();
+                if (buySell != null)
+                {
+                    t.ReSellingOrSold = true;
+                    if (t.TeamAssignment == TeamAssignment.Light)
+                    {
+                        session.LightCount--;
+                    }
+                    else if (t.TeamAssignment == TeamAssignment.Dark)
+                    {
+                        session.DarkCount--;
+                    }
+                }
             });
 
             var userid = Thread.CurrentPrincipal.Identity.GetUserId();
