@@ -13,7 +13,7 @@
         </tr>
         <tr>
             <td valign="top">
-                @foreach (var item in Model.Regulars.Where(r => r.TeamAssignment == pickuphockey.Models.TeamAssignment.Light))
+                @foreach (var item in Model.Regulars.Where(r => r.TeamAssignment == pickuphockey.Models.TeamAssignment.Light).OrderByDescending(r => r.PositionPreference).ThenBy(u => u.User.FirstName))
                 {
                     @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
                     @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
@@ -22,7 +22,7 @@
                 }
             </td>
             <td valign="top">
-                @foreach (var item in Model.Regulars.Where(r => r.TeamAssignment == pickuphockey.Models.TeamAssignment.Dark))
+                @foreach (var item in Model.Regulars.Where(r => r.TeamAssignment == pickuphockey.Models.TeamAssignment.Dark).OrderByDescending(r => r.PositionPreference).ThenBy(u => u.User.FirstName))
                 {
                     @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
                     @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
