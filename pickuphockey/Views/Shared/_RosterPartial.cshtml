@@ -2,10 +2,31 @@
 
 @if (Model.RegularSetId != null)
 {
-    <h2>Roster @Model.RegularSet.Description</h2>
-    foreach (var item in Model.Regulars)
-    {
-        @Html.DisplayFor(modelItem => item.UserId)
-        <br />
-    }
+    <h2>Roster - @Model.RegularSet.Description</h2>
+    <table class="table">
+        <tr>
+            <th>Light</th>
+            <th>Dark</th>
+        </tr>
+        <tr>
+            <td valign="top">
+                @foreach (var item in Model.Regulars.Where(r => r.TeamAssignment == pickuphockey.Models.TeamAssignment.Light))
+                {
+                    @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
+                    @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
+                    @Html.DisplayFor(modelItem => item.PositionPreference)
+                    <br />
+                }
+            </td>
+            <td valign="top">
+                @foreach (var item in Model.Regulars.Where(r => r.TeamAssignment == pickuphockey.Models.TeamAssignment.Dark))
+                {
+                    @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
+                    @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
+                    @Html.DisplayFor(modelItem => item.PositionPreference)
+                    <br />
+                }
+            </td>
+        </tr>
+    </table>
 }

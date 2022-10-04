@@ -1,9 +1,9 @@
 ﻿-- Create a new regular set
 --TRUNCATE TABLE RegularSet
 -- Wednesday
-INSERT INTO RegularSet (DayOfWeek, CreateDateTime, Description) VALUES (4, GETDATE(), 'Wed Group A 2022')
+INSERT INTO RegularSets (DayOfWeek, CreateDateTime, Description) VALUES (4, GETDATE(), 'Wed Group A 2022')
 SELECT @@IDENTITY
-SELECT * FROM RegularSet ORDER BY RegularSetId desc
+SELECT * FROM RegularSets ORDER BY RegularSetId desc
 
 -- Wednesday Light
 SELECT Id, FirstName, LastName from AspNetUsers WHERE
@@ -21,9 +21,9 @@ AND Active = 1
 -- INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES
 
 -- Friday 
-INSERT INTO RegularSet (DayOfWeek, CreateDateTime, Description) VALUES (6, GETDATE(), 'Fri Group A 2022')
+INSERT INTO RegularSets (DayOfWeek, CreateDateTime, Description) VALUES (6, GETDATE(), 'Fri Group A 2022')
 SELECT @@IDENTITY
-SELECT * FROM RegularSet ORDER BY RegularSetId desc
+SELECT * FROM RegularSets ORDER BY RegularSetId desc
 
 -- Friday Light
 SELECT Id, FirstName, LastName from AspNetUsers WHERE

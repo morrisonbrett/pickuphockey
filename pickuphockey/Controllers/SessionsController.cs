@@ -68,6 +68,10 @@ namespace pickuphockey.Controllers
 
             session.RegularSet = _db.RegularSets.Where(q => q.RegularSetId == session.RegularSetId).FirstOrDefault();
             session.Regulars = _db.Regulars.Where(q => q.RegularSetId == session.RegularSetId).ToList();
+            session.Regulars.ForEach(t =>
+            {
+                t.User = UserManager.FindById(t.UserId);
+            });
 
             session.BuySells = _db.BuySell.Where(q => q.SessionId == session.SessionId).ToList();
             session.BuySells.ForEach(t =>
