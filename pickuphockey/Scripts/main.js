@@ -141,4 +141,8 @@ $(document).ready(function () {
             }
         });
     });
+
+    $("[id^=RegularSetId]").change(function () {
+        this.form.submit();
+    });
 });

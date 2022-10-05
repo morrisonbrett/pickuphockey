@@ -189,6 +189,17 @@ namespace pickuphockey.Controllers
             {
                 return HttpNotFound();
             }
+
+            session.Regulars = _db.Regulars.Where(q => q.RegularSetId == session.RegularSetId).ToList();
+            session.Regulars.ForEach(t =>
+            {
+                t.User = UserManager.FindById(t.UserId);
+            });
+
+            // TODO change order by day of week
+            ViewBag.RegularSets = _db.RegularSets.OrderByDescending(t => t.CreateDateTime).ToList();
+            ViewBag.AllRegulars = _db.Regulars.ToList();
+
             return View(session);
         }
 
@@ -198,7 +209,7 @@ namespace pickuphockey.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Edit([Bind(Include = "SessionId,SessionDate,CreateDateTime,Note")] Session session)
+        public ActionResult Edit([Bind(Include = "SessionId,SessionDate,CreateDateTime,Note,RegularSetId")] Session session)
         {
             if (!ModelState.IsValid) return View(session);
 
