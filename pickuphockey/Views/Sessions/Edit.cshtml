@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Edit Session";
+    var regularSetId = Model.RegularSetId;
 }
 
 <h2>Edit Session</h2>
@@ -9,7 +10,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>@Html.DisplayFor(model => model.SessionDate)</h4>
         <hr />
@@ -41,41 +42,42 @@
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
-        @if (Model.RegularSetId != null)
-        {
-            <div class="form-group">
-                <h2>Roster - @Model.RegularSet.Description</h2>
-                <table class="table">
-                    <tr>
-                        <th>Light</th>
-                        <th>Dark</th>
-                    </tr>
-                    <tr>
-                        <td valign="top">
-                            @foreach (var item in Model.Regulars.Where(r => r.TeamAssignment == pickuphockey.Models.TeamAssignment.Light).OrderByDescending(r => r.PositionPreference).ThenBy(u => u.User.FirstName))
-                            {
-                                @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
-                                @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
-                                @Html.DisplayFor(modelItem => item.PositionPreference)
-                                <br />
-                            }
-                        </td>
-                        <td valign="top">
-                            @foreach (var item in Model.Regulars.Where(r => r.TeamAssignment == pickuphockey.Models.TeamAssignment.Dark).OrderByDescending(r => r.PositionPreference).ThenBy(u => u.User.FirstName))
-                            {
-                                @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
-                                @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
-                                @Html.DisplayFor(modelItem => item.PositionPreference)
-                                <br />
-                            }
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        }
+        <div class="form-group">
+            <h2><span id="RegularSetDescription"></span></h2>
+            <table class="table">
+                <tr>
+                    <th>Light</th>
+                    <th>Dark</th>
+                </tr>
+                <tr>
+                    <td valign="top" id="LightRegulars"></td>
+                    <td valign="top" id="DarkRegulars"></td>
+                </tr>
+            </table>
+        </div>
     </div>
 }
 
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+@section Scripts {
+@Scripts.Render("~/bundles/main")
+
+<script type="text/javascript" defer>
+    $(document).ready(function () {
+        var val = '@Html.Raw(regularSetId)';
+        var rsid = 0;
+        if (val.length == 0) {
+            var sel = document.getElementById("RegularSetId");
+            var regularSetId = sel.options[sel.selectedIndex].value;
+            rsid = regularSetId;
+        } else {
+            rsid = val;
+        }
+
+        LoadRegularSet(rsid);
+    });
+</script>
+}

@@ -1,4 +1,55 @@
-﻿$(document).ready(function () {
+﻿function LoadRegularSet(id) {
+    var data = { id: id };
+
+    if (id == undefined)
+        return;
+
+    var regularSetDescription = document.getElementById("RegularSetDescription");
+    regularSetDescription.innerHTML = 'Loading...';
+
+    var lr = document.getElementById("LightRegulars");
+    var dr = document.getElementById("DarkRegulars");
+    lr.innerHTML = '';
+    dr.innerHTML = '';
+
+    $.ajax({
+        type: "POST",
+        url: "/Sessions/RegularSet",
+        data: data,
+        dataType: "json",
+        success: function (result) {
+            if (result == undefined)
+                return;
+
+            // Set the header
+            regularSetDescription.innerHTML = 'Roster - ' + result[0].RegularSet.Description;
+
+            var lrt = '';
+            var drt = '';
+            for (let i = 0; i < result.length; i++) {
+                var s = '';
+                s += result[i].User.FirstName;
+                s += '<span> </span>';
+                s += result[i].User.LastName;
+                s += '<span>, </span>';
+                s += result[i].PositionPreference == 1 ? 'Forward' : 'Defense';
+                s += '<br />'
+
+                if (result[i].TeamAssignment == 1) {
+                    lrt += s;
+                } else if (result[i].TeamAssignment == 2) {
+                    drt += s;
+                }
+            }
+
+            // Replace the TD with the data
+            lr.innerHTML = lrt;
+            dr.innerHTML = drt;
+        }
+    });
+}
+
+$(document).ready(function () {
     $.datetimepicker.setDateFormatter({
         parseDate: function (date, format) {
             var d = moment(date, format);
@@ -143,6 +194,9 @@ $(document).ready(function () {
     });
 
     $("[id^=RegularSetId]").change(function () {
-        this.form.submit();
+        var sel = document.getElementById("RegularSetId");
+        var regularSetId = sel.options[sel.selectedIndex].value;
+
+        LoadRegularSet(regularSetId);
     });
 });

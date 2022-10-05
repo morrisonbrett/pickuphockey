@@ -261,6 +261,34 @@ namespace pickuphockey.Controllers
             return RedirectToAction("Index");
         }
 
+        // POST: Sessions/RegularSet/5
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public JsonResult RegularSet(int? id)
+        {
+            if (id == null)
+            {
+                return Json(new { Success = false, Message = "Invalid Request" });
+            }
+
+            var regulars = _db.Regulars.Where(r => r.RegularSetId == id).ToList();
+            if (regulars == null)
+            {
+                return Json(new { Success = false, Message = "Not Found" });
+            }
+
+            var rs = _db.RegularSets.Find(id);
+            regulars.ForEach(r =>
+            {
+                r.RegularSet = rs;
+                r.User = UserManager.FindById(r.UserId);
+            });
+
+            regulars = regulars.OrderByDescending(r => r.PositionPreference).ThenBy(u => u.User.FirstName).ToList();
+
+            return Json(regulars);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
