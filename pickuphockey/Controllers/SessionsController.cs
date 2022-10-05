@@ -124,9 +124,7 @@ namespace pickuphockey.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
-            // TODO change order by day of week
             ViewBag.RegularSets = _db.RegularSets.OrderByDescending(t => t.CreateDateTime).ToList();
-            ViewBag.AllRegulars = _db.Regulars.ToList();
 
             return View();
         }
@@ -194,9 +192,7 @@ namespace pickuphockey.Controllers
                 return HttpNotFound();
             }
 
-            // TODO change order by day of week
             ViewBag.RegularSets = _db.RegularSets.OrderByDescending(t => t.CreateDateTime).ToList();
-            ViewBag.AllRegulars = _db.Regulars.ToList();
 
             return View(session);
         }
