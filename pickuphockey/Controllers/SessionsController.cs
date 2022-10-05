@@ -124,6 +124,10 @@ namespace pickuphockey.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
+            // TODO change order by day of week
+            ViewBag.RegularSets = _db.RegularSets.OrderByDescending(t => t.CreateDateTime).ToList();
+            ViewBag.AllRegulars = _db.Regulars.ToList();
+
             return View();
         }
 
@@ -133,7 +137,7 @@ namespace pickuphockey.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "SessionId,SessionDate,Note")] Session session)
+        public ActionResult Create([Bind(Include = "SessionId,SessionDate,Note,RegularSetId")] Session session)
         {
             if (!ModelState.IsValid) return View(session);
             
@@ -189,12 +193,6 @@ namespace pickuphockey.Controllers
             {
                 return HttpNotFound();
             }
-
-            session.Regulars = _db.Regulars.Where(q => q.RegularSetId == session.RegularSetId).ToList();
-            session.Regulars.ForEach(t =>
-            {
-                t.User = UserManager.FindById(t.UserId);
-            });
 
             // TODO change order by day of week
             ViewBag.RegularSets = _db.RegularSets.OrderByDescending(t => t.CreateDateTime).ToList();
