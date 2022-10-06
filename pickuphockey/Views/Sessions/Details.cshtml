@@ -67,66 +67,63 @@
                     }
                 }
 
-                @if (IsAdmin)
+                @if (hasRosterSpot <= 0)
                 {
-                    <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">BUY A SPOT (Admin)</button>
+                    if (alreadyBuying)
+                    {
+                        <button disabled="true" class="btn">SUB - CANNOT BUY, ALREADY BUYING</button>
+                    }
+                    else if (alreadyBought)
+                    {
+                        <button disabled="true" class="btn">SUB - CANNOT BUY, ALREADY BOUGHT</button>
+                    }
+                    else if (Model.CanBuy(Model.User.Preferred, IsAdmin))
+                    {
+                        <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">BUY A SPOT</button>
+                    }
+                    else
+                    {
+                        <button disabled="true" class="btn">SUB - CANNOT BUY, YET</button>
+                        <div>
+                            <br />Spots will be available for purchase:<br />
+                            <b>Preferred Players</b>: @Model.BuyDateTime.AddDays(-1).ToString("dddd, MM/dd/yyyy, HH:mm")<br />
+                            <b>All Players</b>: @Model.BuyDateTime.ToString("dddd, MM/dd/yyyy, HH:mm")
+                        </div>
+                    }
+                    if (Model.User.Preferred && !Model.CanBuy(Model.User.Preferred, IsAdmin))
+                    {
+                        <div><i>You</i> are a Preferred player and have early access!</div>
+                    }
                 }
                 else
                 {
-                    if (hasRosterSpot <= 0)
+                    if (alreadyBuying)
                     {
-                        if (alreadyBuying)
+                        <button disabled="true" class="btn">REG - CANNOT BUY, ALREADY BUYING</button>
+                    }
+                    else if (alreadySelling)
+                    {
+                        <button disabled="true" class="btn">REG - CANNOT BUY, AND SELLING</button>
+                    }
+                    else if (alreadySold)
+                    {
+                        if (!alreadyBought)
                         {
-                            <button disabled="true" class="btn">SUB - CANNOT BUY, ALREADY BUYING</button>
-                        }
-                        else if (alreadyBought)
-                        {
-                            <button disabled="true" class="btn">SUB - CANNOT BUY, ALREADY BOUGHT</button>
-                        }
-                        else if (Model.CanBuy(Model.User.Preferred, IsAdmin))
-                        {
-                            <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">BUY A SPOT</button>
+                            <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">RE-BUY A SPOT</button>
                         }
                         else
                         {
-                            <button disabled="true" class="btn">SUB - CANNOT BUY, YET</button>
-                            <div>
-                                <br />Spots will be available for purchase:<br />
-                                <b>Preferred Players</b>: @Model.BuyDateTime.AddDays(-1).ToString("dddd, MM/dd/yyyy, HH:mm")<br />
-                                <b>All Players</b>: @Model.BuyDateTime.ToString("dddd, MM/dd/yyyy, HH:mm")
-                            </div>
-                        }
-                        if (Model.User.Preferred && !Model.CanBuy(Model.User.Preferred, IsAdmin))
-                        {
-                            <div><i>You</i> are a Preferred player and have early access!</div>
+                            <button disabled="true" class="btn">REG - CANNOT BUY, ALREADY BOUGHT</button>
                         }
                     }
                     else
                     {
-                        if (alreadyBuying)
-                        {
-                            <button disabled="true" class="btn">REG - CANNOT BUY, ALREADY BUYING</button>
-                        }
-                        else if (alreadySelling)
-                        {
-                            <button disabled="true" class="btn">REG - CANNOT BUY, AND SELLING</button>
-                        }
-                        else if (alreadySold)
-                        {
-                            if (!alreadyBought)
-                            {
-                                <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">RE-BUY A SPOT</button>
-                            }
-                            else
-                            {
-                                <button disabled="true" class="btn">REG - CANNOT BUY, ALREADY BOUGHT</button>
-                            }
-                        }
-                        else
-                        {
-                            <button disabled="true" class="btn">REG - CANNOT BUY</button>
-                        }
+                        <button disabled="true" class="btn">REG - CANNOT BUY</button>
                     }
+                }
+                @if (IsAdmin)
+                {
+                    <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">BUY A SPOT (Admin)</button>
                 }
             </div>
         </div>
