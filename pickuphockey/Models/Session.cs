@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace pickuphockey.Models
 {
@@ -38,6 +39,47 @@ namespace pickuphockey.Models
             var timeCanBuy = SessionDate.AddDays(-1 * _buyDayMinimum).AddHours(2);
 
             return timeNow >= (IsPreferred ? timeCanBuy.AddDays(-1) : timeCanBuy);
+        }
+
+        public int HasRosterSpot()
+        {
+            if (RegularSetId == null || Regulars == null || Regulars.Count == 0)
+                return -1;
+
+            // See if the User has a roster regular spot for this sesson
+            var r = Regulars.Where(t => t.UserId == User.Id);
+            if (r.Any())
+                return 1;
+
+            return 0;
+        }
+
+        public bool AlreadyBuying()
+        {
+            var bs = BuySells.Where(q => !string.IsNullOrEmpty(q.BuyerUserId) && q.BuyerUserId == User.Id && string.IsNullOrEmpty(q.SellerUserId));
+
+            return bs.Any();
+        }
+
+        public bool AlreadyBought()
+        {
+            var bs = BuySells.Where(q => !string.IsNullOrEmpty(q.BuyerUserId) && q.BuyerUserId == User.Id && !string.IsNullOrEmpty(q.SellerUserId));
+
+            return bs.Any();
+        }
+
+        public bool AlreadySelling()
+        {
+            var bs = BuySells.Where(q => !string.IsNullOrEmpty(q.SellerUserId) && q.SellerUserId == User.Id && string.IsNullOrEmpty(q.BuyerUserId));
+
+            return bs.Any();
+        }
+
+        public bool AlreadySold()
+        {
+            var bs = BuySells.Where(q => !string.IsNullOrEmpty(q.SellerUserId) && q.SellerUserId == User.Id && !string.IsNullOrEmpty(q.BuyerUserId));
+
+            return bs.Any();
         }
 
         [Key]
