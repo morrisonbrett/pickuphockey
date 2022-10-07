@@ -388,6 +388,10 @@
     <Compile Include="Migrations\202210041355107_AddRegularSet.designer.cs">
       <DependentUpon>202210041355107_AddRegularSet.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202210062342398_RemoveUserTeamAssignment.cs" />
+    <Compile Include="Migrations\202210062342398_RemoveUserTeamAssignment.designer.cs">
+      <DependentUpon>202210062342398_RemoveUserTeamAssignment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -729,6 +733,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202210041355107_AddRegularSet.resx">
       <DependentUpon>202210041355107_AddRegularSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202210062342398_RemoveUserTeamAssignment.resx">
+      <DependentUpon>202210062342398_RemoveUserTeamAssignment.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

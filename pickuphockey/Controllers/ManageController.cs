@@ -322,7 +322,7 @@ namespace pickuphockey.Controllers
                 return View();
             }
 
-            return View(new PreferencesViewModel { FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, TeamAssignment = user.TeamAssignment, NotificationPreference = user.NotificationPreference, PayPalEmail = user.PayPalEmail, VenmoAccount = user.VenmoAccount, MobileLast4 = user.MobileLast4, Active = user.Active });
+            return View(new PreferencesViewModel { FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, NotificationPreference = user.NotificationPreference, PayPalEmail = user.PayPalEmail, VenmoAccount = user.VenmoAccount, MobileLast4 = user.MobileLast4, Active = user.Active });
         }
 
         //
@@ -345,7 +345,6 @@ namespace pickuphockey.Controllers
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-            user.TeamAssignment = model.TeamAssignment;
             user.Email = model.Email; // TODO if email changed, may want to make the user re-confirm.
             user.UserName = model.Email;
             user.PayPalEmail = model.PayPalEmail;

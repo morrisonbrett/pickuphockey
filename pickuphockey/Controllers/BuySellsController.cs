@@ -258,9 +258,27 @@ namespace pickuphockey.Controllers
                 buySell.BuyerUser = UserManager.FindById(buySell.BuyerUserId);
             }
 
+            var teamAssignment = TeamAssignment.Unassigned;
+            // See if the person already bought, and is selling again. If so, use that team assignment.
+            var alreadyBought = _db.BuySell.Where(q => q.SessionId == id && !string.IsNullOrEmpty(q.BuyerUserId) && q.BuyerUserId == seller.Id).OrderBy(d => d.CreateDateTime).FirstOrDefault();
+            if (alreadyBought != null)
+            {
+                teamAssignment = alreadyBought.TeamAssignment;
+            }
+            else
+            {
+                // Determine if seller is in a roster, and get the team assignment
+                var regulars = _db.Regulars.Where(q => q.RegularSetId == session.RegularSetId).ToList();
+                var regular = regulars.Where(r => r.UserId == seller.Id).FirstOrDefault();
+                if (regular != null)
+                {
+                    teamAssignment = regular.TeamAssignment;
+                }
+            }
+
             buySell.SellerUser = seller;
             buySell.SellerUserId = seller.Id;
-            buySell.TeamAssignment = seller.TeamAssignment;
+            buySell.TeamAssignment = teamAssignment;
 
             // Can't sell to self
             if (buySell.BuyerUserId == seller.Id)
@@ -384,11 +402,6 @@ namespace pickuphockey.Controllers
                 _db.SaveChanges();
 
                 _db.AddActivity(buySell.SessionId, activity);
-
-                // Update the users preferences with the values from this sell.
-                var user = UserManager.FindById(User.Identity.GetUserId());
-                user.TeamAssignment = buySell.TeamAssignment;
-                UserManager.Update(user);
 
                 var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " ACTIVITY";
                 var body = activity + "." + Environment.NewLine + Environment.NewLine;

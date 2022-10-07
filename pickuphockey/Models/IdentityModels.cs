@@ -43,9 +43,6 @@ namespace pickuphockey.Models
         [DisplayName("Last Name")]
         public string LastName { get; set; }
 
-        [DisplayName("Team Assignment")]
-        public TeamAssignment TeamAssignment { get; set; }
-
         [DisplayName("Notification Preference")]
         public NotificationPreference NotificationPreference { get; set; }
 
