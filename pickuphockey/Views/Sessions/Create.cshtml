@@ -1,12 +1,10 @@
 ﻿@model pickuphockey.Models.Session
-
 @{
     ViewBag.Title = "Create Session";
     ViewBag.dst = new pickuphockey.Models.Session()._defaultStartTime.ToString(@"hh\:mm");
 }
 
 <h2>Create Session</h2>
-
 
 @using (Html.BeginForm()) 
 {
