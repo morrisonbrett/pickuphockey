@@ -5,5 +5,5 @@
     var count = Model.User.UnmarkedReceived.Count();
 }
 @if (count > 0) {
-    <h2 class="text-danger">You have @Html.ActionLink(count.ToString(), "UnmarkedReceived", new { User = Model.User }) session spot(s) that are not marked as paid. You cannot buy a spot until every session is confirmed as paid and marked received.</h2>
+    <h2 class="text-danger">You have @Html.ActionLink(count.ToString(), "UnmarkedReceived") session spot(s) that are not marked as paid. You cannot buy a spot until every session is confirmed as paid and marked received.</h2>
 }

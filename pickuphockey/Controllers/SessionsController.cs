@@ -117,18 +117,7 @@ namespace pickuphockey.Controllers
 
             var userid = Thread.CurrentPrincipal.Identity.GetUserId();
             session.User = UserManager.FindById(userid);
-
-            // Get all the unmarked payment received for the user for all past sessions
-            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
-
-            var unmarkedReceived = _db.BuySell.Where(r => r.SellerUserId != null && !string.IsNullOrEmpty(r.SellerUserId) && r.SellerUserId == userid &&
-                                                                        r.BuyerUserId != null && !string.IsNullOrEmpty(r.BuyerUserId) &&
-                                                                        r.PaymentReceived == false).ToList();
-            unmarkedReceived.ForEach(ur =>
-            {
-                ur.Session = _db.Sessions.Where(s => s.SessionId == ur.SessionId).FirstOrDefault();
-            });
-            session.User.UnmarkedReceived = unmarkedReceived.Where(bs => bs.Session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone)).ToList();
+            session.User.UnmarkedReceived = GetUnmarkedReceived(userid);
 
             return View(session);
         }
@@ -296,13 +285,31 @@ namespace pickuphockey.Controllers
             return Json(regulars);
         }
 
-        // GET: Sessions/UnmarkedReceived
-        public ActionResult UnmarkedReceived(ApplicationUser user)
+        private ICollection<BuySell> GetUnmarkedReceived(string userid)
         {
-            if (user == null)
+            // Get all the unmarked payment received for the user for all past sessions
+            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
+
+            var unmarkedReceived = _db.BuySell.Where(r => r.SellerUserId != null && !string.IsNullOrEmpty(r.SellerUserId) && r.SellerUserId == userid &&
+                                                                        r.BuyerUserId != null && !string.IsNullOrEmpty(r.BuyerUserId) &&
+                                                                        r.PaymentReceived == false).ToList();
+            unmarkedReceived.ForEach(ur =>
             {
-                return HttpNotFound();
-            }
+                ur.Session = _db.Sessions.Where(s => s.SessionId == ur.SessionId).FirstOrDefault();
+            });
+
+            var result = unmarkedReceived.Where(bs => bs.Session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone)).ToList();
+
+            return result;
+        }
+
+        // GET: Sessions/UnmarkedReceived
+        public ActionResult UnmarkedReceived()
+        {
+            var userid = Thread.CurrentPrincipal.Identity.GetUserId();
+            var user = UserManager.FindById(userid);
+            user.UnmarkedReceived = GetUnmarkedReceived(userid);
+
             return View(user);
         }
 

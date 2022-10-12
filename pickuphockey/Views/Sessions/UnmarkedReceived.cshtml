@@ -2,14 +2,18 @@
 @{
     ViewBag.Title = "Unmarked Received";
 }
+<h2>Unmarked Received for @Model.FirstName @Model.LastName</h2>
 
-<table class="table">
-    @foreach (var item in Model.UnmarkedReceived.OrderByDescending(r => r.SessionId))
-    {
-    <tr>
-        <td valign="top">
-        @Html.DisplayFor(modelItem => item.Session.SessionDate)
-        </td>
-    </tr>
-    }
-</table>
+@if (Model.UnmarkedReceived != null)
+{
+    <table class="table">
+        @foreach (var item in Model.UnmarkedReceived.OrderByDescending(r => r.SessionId))
+        {
+            <tr>
+                <td valign="top">
+                    @Html.ActionLink(item.Session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm"), "Details", "Sessions", new { id = item.SessionId }, null)
+                </td>
+            </tr>
+        }
+    </table>
+}
