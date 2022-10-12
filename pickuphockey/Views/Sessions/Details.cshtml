@@ -24,6 +24,7 @@
         <span class="text-danger">@TempData["Message"]</span>
     }
     <hr />
+    @Html.Partial("_UnmarkedReceivedPartial", Model)
     @if (!Model.IsPast)
     {
         <div class="form-group">

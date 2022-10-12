@@ -1,0 +1,15 @@
+@model pickuphockey.Models.ApplicationUser
+@{
+    ViewBag.Title = "Unmarked Received";
+}
+
+<table class="table">
+    @foreach (var item in Model.UnmarkedReceived.OrderByDescending(r => r.SessionId))
+    {
+    <tr>
+        <td valign="top">
+        @Html.DisplayFor(modelItem => item.Session.SessionDate)
+        </td>
+    </tr>
+    }
+</table>
