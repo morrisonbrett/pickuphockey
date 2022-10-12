@@ -1,0 +1,10 @@
+﻿@model pickuphockey.Models.Session
+@{ 
+    var count = Model.UnmarkedSent.Count();
+    var word = count > 1 ? "spots" : "spot";
+}
+@if (count > 0) {
+    <div class="banner-message">
+        <h3>You have @Html.ActionLink(count.ToString(), "UnmarkedSent") @word you bought that are not marked as payment sent. You cannot buy until you resolve pending payments.</h3>
+    </div>
+}

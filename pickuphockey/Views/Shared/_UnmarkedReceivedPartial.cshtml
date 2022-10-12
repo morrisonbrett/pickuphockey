@@ -5,6 +5,6 @@
 }
 @if (count > 0) {
     <div class="banner-message">
-        <h3 class="text-danger">You have @Html.ActionLink(count.ToString(), "UnmarkedReceived") @word you sold that are not marked as payment received.</h3>
+        <h3>You have @Html.ActionLink(count.ToString(), "UnmarkedReceived") @word you sold that are not marked as payment received.</h3>
     </div>
 }

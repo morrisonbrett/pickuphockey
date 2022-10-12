@@ -118,6 +118,7 @@ namespace pickuphockey.Controllers
             var userid = Thread.CurrentPrincipal.Identity.GetUserId();
             session.User = UserManager.FindById(userid);
             session.UnmarkedReceived = GetUnmarkedReceived(userid);
+            session.UnmarkedSent = GetUnmarkedSent(userid);
 
             return View(session);
         }
@@ -303,6 +304,24 @@ namespace pickuphockey.Controllers
             return result;
         }
 
+        private ICollection<BuySell> GetUnmarkedSent(string userid)
+        {
+            // Get all the unmarked payment received for the user for all past sessions
+            var pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
+
+            var unmarkedSent = _db.BuySell.Where(r => r.BuyerUserId != null && !string.IsNullOrEmpty(r.BuyerUserId) && r.BuyerUserId == userid &&
+                                                                        r.SellerUserId != null && !string.IsNullOrEmpty(r.SellerUserId) &&
+                                                                        r.PaymentSent == false).ToList();
+            unmarkedSent.ForEach(ur =>
+            {
+                ur.Session = _db.Sessions.Where(s => s.SessionId == ur.SessionId).FirstOrDefault();
+            });
+
+            var result = unmarkedSent.Where(bs => bs.Session.SessionDate < TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pstZone)).ToList();
+
+            return result;
+        }
+
         // GET: Sessions/UnmarkedReceived
         public ActionResult UnmarkedReceived()
         {
@@ -310,6 +329,15 @@ namespace pickuphockey.Controllers
             var unmarkedReceived = GetUnmarkedReceived(userid);
 
             return View(unmarkedReceived);
+        }
+
+        // GET: Sessions/UnmarkedSent
+        public ActionResult UnmarkedSent()
+        {
+            var userid = Thread.CurrentPrincipal.Identity.GetUserId();
+            var unmarkedSent = GetUnmarkedSent(userid);
+
+            return View(unmarkedSent);
         }
 
         protected override void Dispose(bool disposing)

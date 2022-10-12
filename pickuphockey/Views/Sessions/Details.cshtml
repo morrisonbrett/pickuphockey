@@ -10,7 +10,8 @@
     var alreadyBought = Model.AlreadyBought();
     var alreadySelling = Model.AlreadySelling();
     var alreadySold = Model.AlreadySold();
-    var unmarkedReceived = Model.UnmarkedReceived.Count();
+    var unmarkedReceivedCount = Model.UnmarkedReceived.Count();
+    var unmarkedSentCount = Model.UnmarkedSent.Count();
 }
 
 <h2>@Html.DisplayFor(model => model.SessionDate)</h2>
@@ -26,6 +27,7 @@
     }
     <hr />
     @Html.Partial("_UnmarkedReceivedPartial", Model)
+    @Html.Partial("_UnmarkedSentPartial", Model)
     @if (!Model.IsPast)
     {
         <div class="form-group">
@@ -71,7 +73,11 @@
 
                 @if (hasRosterSpot <= 0)
                 {
-                    if (alreadyBuying)
+                    if (unmarkedSentCount > 0)
+                    {
+                        <button disabled="true" class="btn">SUB - CANNOT BUY, UNRESOLVED PAYMENTS</button>
+                    }
+                    else if (alreadyBuying)
                     {
                         <button disabled="true" class="btn">SUB - CANNOT BUY, ALREADY BUYING</button>
                     }
@@ -99,7 +105,11 @@
                 }
                 else
                 {
-                    if (alreadyBuying)
+                    if (unmarkedSentCount > 0)
+                    {
+                        <button disabled="true" class="btn">REG - CANNOT BUY, UNRESOLVED PAYMENTS</button>
+                    }
+                    else if (alreadyBuying)
                     {
                         <button disabled="true" class="btn">REG - CANNOT BUY, ALREADY BUYING</button>
                     }
@@ -137,7 +147,8 @@
     <hr />
     @Html.Partial("_BuySellsPartial", Model.BuySells)
     <hr />
-    @if (!string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["DisqusShortname"])) {
+    @if (!string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["DisqusShortname"]))
+    {
         @Html.Partial("_DisqusPartial", Model)
         <hr />
     }

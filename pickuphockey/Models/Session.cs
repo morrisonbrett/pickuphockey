@@ -143,5 +143,8 @@ namespace pickuphockey.Models
 
         [NotMapped]
         public ICollection<BuySell> UnmarkedReceived { get; set; }
+
+        [NotMapped]
+        public ICollection<BuySell> UnmarkedSent { get; set; }
     }
 }

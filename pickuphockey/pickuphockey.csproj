@@ -704,6 +704,8 @@
     <Content Include="Views\Shared\_RosterPartial.cshtml" />
     <Content Include="Views\Shared\_UnmarkedReceivedPartial.cshtml" />
     <Content Include="Views\Sessions\UnmarkedReceived.cshtml" />
+    <Content Include="Views\Sessions\UnmarkedSent.cshtml" />
+    <Content Include="Views\Shared\_UnmarkedSentPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

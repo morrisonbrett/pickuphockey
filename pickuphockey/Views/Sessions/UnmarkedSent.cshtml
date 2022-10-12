@@ -1,10 +1,10 @@
 @model IEnumerable<pickuphockey.Models.BuySell>
 @{
-    ViewBag.Title = "Unmarked Received";
+    ViewBag.Title = "Unmarked Sent";
 }
-<h2>Unmarked Received - @Model.Count().ToString()</h2>
+<h2>Unmarked Sent - @Model.Count().ToString()</h2>
 <p>
-    View each session below, and if you've received payment, check the 'Received' box.
+    View each session below, and if you've sent payment, check the 'Sent' box.
 </p>
 
 @if (Model != null)
