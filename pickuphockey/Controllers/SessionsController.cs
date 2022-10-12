@@ -117,7 +117,7 @@ namespace pickuphockey.Controllers
 
             var userid = Thread.CurrentPrincipal.Identity.GetUserId();
             session.User = UserManager.FindById(userid);
-            session.User.UnmarkedReceived = GetUnmarkedReceived(userid);
+            session.UnmarkedReceived = GetUnmarkedReceived(userid);
 
             return View(session);
         }
@@ -307,10 +307,9 @@ namespace pickuphockey.Controllers
         public ActionResult UnmarkedReceived()
         {
             var userid = Thread.CurrentPrincipal.Identity.GetUserId();
-            var user = UserManager.FindById(userid);
-            user.UnmarkedReceived = GetUnmarkedReceived(userid);
+            var unmarkedReceived = GetUnmarkedReceived(userid);
 
-            return View(user);
+            return View(unmarkedReceived);
         }
 
         protected override void Dispose(bool disposing)

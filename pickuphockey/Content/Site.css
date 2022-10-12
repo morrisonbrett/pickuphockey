@@ -54,3 +54,9 @@ textarea {
 .navbar-inverse .navbar-nav > li > a {
   color: #E2E2E2;
 }
+.banner-message {
+  background-color: lightgreen;
+  padding: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

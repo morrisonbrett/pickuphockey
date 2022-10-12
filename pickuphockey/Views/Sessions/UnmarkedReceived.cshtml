@@ -1,17 +1,23 @@
-@model pickuphockey.Models.ApplicationUser
+@model IEnumerable<pickuphockey.Models.BuySell>
 @{
     ViewBag.Title = "Unmarked Received";
 }
-<h2>Unmarked Received for @Model.FirstName @Model.LastName</h2>
+<h2>Unmarked Received  - @Model.Count().ToString()</h2>
+<p>
+    View each session below, and if you've received payment, check the 'Received' box.
+</p>
 
-@if (Model.UnmarkedReceived != null)
+@if (Model != null)
 {
+    var count = 0;
+
     <table class="table">
-        @foreach (var item in Model.UnmarkedReceived.OrderByDescending(r => r.SessionId))
+        @foreach (var item in Model.OrderByDescending(r => r.SessionId))
         {
+            count++;
             <tr>
                 <td valign="top">
-                    @Html.ActionLink(item.Session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm"), "Details", "Sessions", new { id = item.SessionId }, null)
+                    @count. @Html.ActionLink(item.Session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm"), "Details", "Sessions", new { id = item.SessionId }, null)
                 </td>
             </tr>
         }

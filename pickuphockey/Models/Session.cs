@@ -140,5 +140,8 @@ namespace pickuphockey.Models
 
         [NotMapped]
         public int DarkCount { get; set; }
+
+        [NotMapped]
+        public ICollection<BuySell> UnmarkedReceived { get; set; }
     }
 }

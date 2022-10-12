@@ -1,9 +1,10 @@
-﻿@using Microsoft.AspNet.Identity
-@using pickuphockey.Models
-@model pickuphockey.Models.Session
+﻿@model pickuphockey.Models.Session
 @{ 
-    var count = Model.User.UnmarkedReceived.Count();
+    var count = Model.UnmarkedReceived.Count();
+    var word = count > 1 ? "spots" : "spot";
 }
 @if (count > 0) {
-    <h2 class="text-danger">You have @Html.ActionLink(count.ToString(), "UnmarkedReceived") session spot(s) that are not marked as paid. You cannot buy a spot until every session is confirmed as paid and marked received.</h2>
+    <div class="banner-message">
+        <h3 class="text-danger">You have @Html.ActionLink(count.ToString(), "UnmarkedReceived") @word you sold that are not marked as payment received.</h3>
+    </div>
 }
