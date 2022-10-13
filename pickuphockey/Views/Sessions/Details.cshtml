@@ -135,6 +135,7 @@
                 }
                 @if (IsAdmin)
                 {
+                    <button onclick="location.href='@Url.Action("Sell", "BuySells", new { id = Model.SessionId })';return false;" class="btn">SELL A SPOT (Admin)</button>
                     <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">BUY A SPOT (Admin)</button>
                 }
             </div>

@@ -2,9 +2,10 @@
 @{ 
     var count = Model.UnmarkedReceived.Count();
     var word = count > 1 ? "spots" : "spot";
+    var word2 = count > 1 ? "are" : "is";
 }
 @if (count > 0) {
     <div class="banner-message">
-        <h3>You have @Html.ActionLink(count.ToString(), "UnmarkedReceived") @word you sold that are not marked as payment received.</h3>
+        <h3>You have @Html.ActionLink(count.ToString(), "UnmarkedReceived") @word you sold that @word2 not marked as payment received.</h3>
     </div>
 }
