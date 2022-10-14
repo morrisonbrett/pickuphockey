@@ -6,6 +6,6 @@
 }
 @if (count > 0) {
     <div class="banner-message">
-        <h3>You have @Html.ActionLink(count.ToString(), "UnmarkedSent") @word you bought that @word2 not marked as payment sent. You cannot buy until you resolve pending payments.</h3>
+        <h3>You have @Html.ActionLink(count.ToString(), "UnmarkedSent") @word you bought that @word2 not marked as payment sent. You cannot buy until you resolve pending payments. Click @Html.ActionLink("here", "UnmarkedSent") to resolve.</h3>
     </div>
 }
