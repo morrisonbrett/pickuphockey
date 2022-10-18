@@ -101,7 +101,7 @@ namespace pickuphockey.Controllers
             session.BuySells.ForEach(t =>
             {
                 var buySell = session.BuySells.Where(r => r.SellerUserId != null && !string.IsNullOrEmpty(r.SellerUserId) && r.SellerUserId == t.BuyerUserId).FirstOrDefault();
-                if (buySell != null)
+                if (buySell != null && t.BuySellId < buySell.BuySellId)
                 {
                     t.ReSellingOrSold = true;
                     if (t.TeamAssignment == TeamAssignment.Light)
