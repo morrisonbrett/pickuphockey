@@ -94,9 +94,17 @@ namespace pickuphockey.Controllers
             });
 
             session.LightSubs = session.BuySells.Where(r => r.BuyerUserId != null && r.TeamAssignment == TeamAssignment.Light).OrderBy(r => r.BuySellId).ToList();
+            session.LightSubs.ForEach(t =>
+            {
+                session.LightTotalRating += t.BuyerUser.Rating;
+            });
             session.LightCount += session.LightSubs.Count();
 
             session.DarkSubs = session.BuySells.Where(r => r.BuyerUserId != null && r.TeamAssignment == TeamAssignment.Dark).OrderBy(r => r.BuySellId).ToList();
+            session.DarkSubs.ForEach(t =>
+            {
+                session.DarkTotalRating += t.BuyerUser.Rating;
+            });
             session.DarkCount += session.DarkSubs.Count();
 
             // Go through entire buy sell list and find anyone that bought, and then sold
@@ -109,12 +117,12 @@ namespace pickuphockey.Controllers
                     if (t.TeamAssignment == TeamAssignment.Light)
                     {
                         session.LightCount--;
-                        session.LightTotalRating -= t.SellerUser.Rating;
+                        session.LightTotalRating -= t.BuyerUser.Rating;
                     }
                     else if (t.TeamAssignment == TeamAssignment.Dark)
                     {
                         session.DarkCount--;
-                        session.DarkTotalRating -= t.SellerUser.Rating;
+                        session.DarkTotalRating -= t.BuyerUser.Rating;
                     }
                 }
             });
