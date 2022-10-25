@@ -1,8 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Data.Entity;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using pickuphockey.Models;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace pickuphockey.Controllers
 {
@@ -29,6 +33,8 @@ namespace pickuphockey.Controllers
                 _userManager = value;
             }
         }
+
+        private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         public ActionResult DownloadActive()
         {
@@ -77,5 +83,19 @@ namespace pickuphockey.Controllers
 
             return View(user);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public ActionResult Details([Bind(Include = "Id,FirstName,LastName,UserName,Email,PayPalEmail,VenmoAccount,MobileLast4,NotificationPreference,Active,Preferred,Rating")] ApplicationUser user)
+        {
+            if (!ModelState.IsValid) return View(user);
+
+            _db.Entry(user).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            return View(user);
+        }
+
     }
 }

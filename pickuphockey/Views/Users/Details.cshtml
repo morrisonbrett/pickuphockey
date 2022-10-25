@@ -5,57 +5,113 @@
 }
 
 <h2>Pickup Player Details</h2>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PayPalEmail)
-        </th>
-        @if (User.IsInRole("Admin"))
-        {
-            <th>
-                @Html.DisplayNameFor(model => model.NotificationPreference)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Active)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Preferred)
-            </th>
-        }
-    </tr>
-    <tr>
-        <td>
-            @Html.DisplayFor(model => model.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.PayPalEmail)
-        </td>
-        @if (User.IsInRole("Admin"))
-        {
+@using (Html.BeginForm("Details", "Users", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <table class="table">
+        <tr>
             <td>
-                @Html.DisplayFor(model => model.NotificationPreference)
+                @Html.DisplayNameFor(model => model.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Id)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.FirstName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.LastName)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.LastName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.UserName)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.UserName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.Email)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Email)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.PayPalEmail)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.PayPalEmail)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.VenmoAccount)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.VenmoAccount)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.MobileLast4)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.MobileLast4)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.NotificationPreference)
+            </td>
+            <td>
+                @Html.EnumDropDownListFor(model => model.NotificationPreference, htmlAttributes: new { @class = "form-control" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.Active)
             </td>
             <td>
                 @Html.CheckBoxFor(model => model.Active)
             </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.Preferred)
+            </td>
             <td>
                 @Html.CheckBoxFor(model => model.Preferred)
             </td>
-        }
-    </tr>
-</table>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.Rating)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Rating)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                <input type="submit" value="Save" class="btn btn-default" />
+            </td>
+        </tr>
+    </table>
+}

@@ -142,6 +142,12 @@ namespace pickuphockey.Models
         public int DarkCount { get; set; }
 
         [NotMapped]
+        public decimal LightTotalRating { get; set; }
+
+        [NotMapped]
+        public decimal DarkTotalRating { get; set; }
+
+        [NotMapped]
         public ICollection<BuySell> UnmarkedReceived { get; set; }
 
         [NotMapped]

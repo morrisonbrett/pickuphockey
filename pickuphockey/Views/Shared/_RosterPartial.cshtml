@@ -1,4 +1,8 @@
 ﻿@model pickuphockey.Models.Session
+@{ 
+    var isAdmin = User.IsInRole("Admin");
+    var isSubAdmin = User.IsInRole("SubAdmin");
+}
 @if (Model.RegularSetId != null)
 {
     <h2>Roster - @Model.RegularSet.Description</h2>
@@ -16,14 +20,22 @@
                         <div style="text-decoration: line-through;">
                             @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
                             @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
-                            @Html.DisplayFor(modelItem => item.PositionPreference)
+                            @Html.DisplayFor(modelItem => item.PositionPreference)@if (isAdmin || isSubAdmin)
+                            {<span>, </span>
+                                var rating = string.Format("{0:0.0}", item.User.Rating);
+                                @Html.DisplayFor(modelItem => rating)
+                            }
                         </div>
                     }
                     else
                     {
                         @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
                         @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
-                        @Html.DisplayFor(modelItem => item.PositionPreference)
+                        @Html.DisplayFor(modelItem => item.PositionPreference)if (isAdmin || isSubAdmin)
+                        {<span>, </span>
+                            var rating = string.Format("{0:0.0}", item.User.Rating);
+                            @Html.DisplayFor(modelItem => rating)
+                        }
                         <br />
                     }
                 }
@@ -33,13 +45,21 @@
                     {
                         <div style="text-decoration: line-through;">
                             @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
-                            @Html.DisplayFor(modelItem => item.BuyerUser.LastName)
+                            @Html.DisplayFor(modelItem => item.BuyerUser.LastName)@if (isAdmin || isSubAdmin)
+                            {<span>, </span>
+                                var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
+                                @Html.DisplayFor(modelItem => rating)
+                            }
                         </div>
                     }
                     else
                     {
                         @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
-                        @Html.DisplayFor(modelItem => item.BuyerUser.LastName)
+                        @Html.DisplayFor(modelItem => item.BuyerUser.LastName)if (isAdmin || isSubAdmin)
+                        {<span>, </span>
+                            var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
+                            @Html.DisplayFor(modelItem => string.Format("{0:0.0}", rating))
+                        }
                         <br />
                     }
                 }
@@ -52,14 +72,22 @@
                         <div style="text-decoration: line-through;">
                             @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
                             @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
-                            @Html.DisplayFor(modelItem => item.PositionPreference)
+                            @Html.DisplayFor(modelItem => item.PositionPreference)@if (isAdmin || isSubAdmin)
+                            {<span>, </span>
+                                var rating = string.Format("{0:0.0}", item.User.Rating);
+                                @Html.DisplayFor(modelItem => string.Format("{0:0.0}", rating))
+                            }
                         </div>
                     }
                     else
                     {
                         @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
                         @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
-                        @Html.DisplayFor(modelItem => item.PositionPreference)
+                        @Html.DisplayFor(modelItem => item.PositionPreference)if (isAdmin || isSubAdmin)
+                        {<span>, </span>
+                            var rating = string.Format("{0:0.0}", item.User.Rating);
+                            @Html.DisplayFor(modelItem => rating)
+                        }
                         <br />
                     }
                 }
@@ -69,17 +97,32 @@
                     {
                         <div style="text-decoration: line-through;">
                             @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
-                            @Html.DisplayFor(modelItem => item.BuyerUser.LastName)
+                            @Html.DisplayFor(modelItem => item.BuyerUser.LastName)@if (isAdmin || isSubAdmin)
+                            {<span>, </span>
+                                var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
+                                @Html.DisplayFor(modelItem => rating)
+                            }
                         </div>
                     }
                     else
                     {
                         @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
-                        @Html.DisplayFor(modelItem => item.BuyerUser.LastName)
+                        @Html.DisplayFor(modelItem => item.BuyerUser.LastName)if (isAdmin || isSubAdmin)
+                        {<span>, </span>
+                            var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
+                            @Html.DisplayFor(modelItem => string.Format("{0:0.0}", rating))
+                        }
                         <br />
                     }
                 }
             </td>
         </tr>
+        @if (isAdmin || isSubAdmin)
+        {
+            <tr>
+                <th>Light Rating: Total: @string.Format("{0:0.0}", Model.LightTotalRating), Average: @string.Format("{0:0.00}", @Decimal.Divide(Model.LightTotalRating, Model.LightCount))</th>
+                <th>Dark Rating: Total: @string.Format("{0:0.0}", Model.DarkTotalRating), Average: @string.Format("{0:0.00}", @Decimal.Divide(Model.DarkTotalRating, Model.DarkCount))</th>
+            </tr>
+        }
     </table>
 }

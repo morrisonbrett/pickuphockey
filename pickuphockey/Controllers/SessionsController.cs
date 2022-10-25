@@ -77,10 +77,12 @@ namespace pickuphockey.Controllers
                 if (t.TeamAssignment == TeamAssignment.Light && !t.SellingOrSoldSpot)
                 {
                     session.LightCount++;
+                    session.LightTotalRating += t.User.Rating;
                 }
                 if (t.TeamAssignment == TeamAssignment.Dark && !t.SellingOrSoldSpot)
                 {
                     session.DarkCount++;
+                    session.DarkTotalRating += t.User.Rating;
                 }
             });
 
@@ -107,10 +109,12 @@ namespace pickuphockey.Controllers
                     if (t.TeamAssignment == TeamAssignment.Light)
                     {
                         session.LightCount--;
+                        session.LightTotalRating -= t.SellerUser.Rating;
                     }
                     else if (t.TeamAssignment == TeamAssignment.Dark)
                     {
                         session.DarkCount--;
+                        session.DarkTotalRating -= t.SellerUser.Rating;
                     }
                 }
             });
