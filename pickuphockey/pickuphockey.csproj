@@ -392,6 +392,10 @@
     <Compile Include="Migrations\202210062342398_RemoveUserTeamAssignment.designer.cs">
       <DependentUpon>202210062342398_RemoveUserTeamAssignment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202210251357410_PlayerRating.cs" />
+    <Compile Include="Migrations\202210251357410_PlayerRating.designer.cs">
+      <DependentUpon>202210251357410_PlayerRating.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -740,6 +744,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202210062342398_RemoveUserTeamAssignment.resx">
       <DependentUpon>202210062342398_RemoveUserTeamAssignment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202210251357410_PlayerRating.resx">
+      <DependentUpon>202210251357410_PlayerRating.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
