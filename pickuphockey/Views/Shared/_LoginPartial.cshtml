@@ -3,6 +3,7 @@
     var greeting = "Hello ";
     greeting += !string.IsNullOrEmpty(ViewBag.FirstName) ? ViewBag.FirstName : User.Identity.GetUserName();
     greeting += !string.IsNullOrEmpty(ViewBag.IsAdmin) && ViewBag.IsAdmin.Equals("true") ? " (Admin)" : "";
+    greeting += !string.IsNullOrEmpty(ViewBag.IsSubAdmin) && ViewBag.IsSubAdmin.Equals("true") ? " (SubAdmin)" : "";
     greeting += "!";
 }
 @if (Request.IsAuthenticated)

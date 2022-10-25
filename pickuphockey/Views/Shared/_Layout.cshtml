@@ -15,6 +15,7 @@
                 {
                     ViewBag.FirstName = user.FirstName;
                     ViewBag.IsAdmin = userManager.IsInRole(userid, "Admin") ? "true" : "false";
+                    ViewBag.IsSubAdmin = userManager.IsInRole(userid, "SubAdmin") ? "true" : "false";
                 }
             }
         }

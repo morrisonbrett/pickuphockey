@@ -58,7 +58,7 @@
                         @Html.DisplayFor(modelItem => item.BuyerUser.LastName)if (isAdmin || isSubAdmin)
                         {<span>, </span>
                             var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
-                            @Html.DisplayFor(modelItem => string.Format("{0:0.0}", rating))
+                            @Html.DisplayFor(modelItem => rating)
                         }
                         <br />
                     }
@@ -75,7 +75,7 @@
                             @Html.DisplayFor(modelItem => item.PositionPreference)@if (isAdmin || isSubAdmin)
                             {<span>, </span>
                                 var rating = string.Format("{0:0.0}", item.User.Rating);
-                                @Html.DisplayFor(modelItem => string.Format("{0:0.0}", rating))
+                                @Html.DisplayFor(modelItem => rating)
                             }
                         </div>
                     }
@@ -110,7 +110,7 @@
                         @Html.DisplayFor(modelItem => item.BuyerUser.LastName)if (isAdmin || isSubAdmin)
                         {<span>, </span>
                             var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
-                            @Html.DisplayFor(modelItem => string.Format("{0:0.0}", rating))
+                            @Html.DisplayFor(modelItem => rating)
                         }
                         <br />
                     }
