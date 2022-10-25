@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
@@ -6,7 +7,6 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using pickuphockey.Models;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace pickuphockey.Controllers
 {
@@ -38,12 +38,19 @@ namespace pickuphockey.Controllers
 
         public ActionResult DownloadActive()
         {
-            return View(UserManager.Users.ToList().OrderBy(u => u.LastName));
+            return View(UserManager.Users.Where(u => u.Active == true).ToList().OrderBy(u => u.LastName));
         }
 
-        public ActionResult Index()
+        public ActionResult Index(bool showInactive = false)
         {
-            return View(UserManager.Users.ToList().OrderBy(u => u.LastName));
+            IEnumerable<ApplicationUser> list;
+
+            if (showInactive)
+                list = UserManager.Users.ToList().OrderBy(u => u.LastName);
+            else
+                list = UserManager.Users.Where(u => u.Active == true).ToList().OrderBy(u => u.LastName);
+
+            return View(list);
         }
 
         [HttpPost]
