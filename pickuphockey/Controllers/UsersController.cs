@@ -67,5 +67,15 @@ namespace pickuphockey.Controllers
 
             return Json(new { Success = true, Message = "Updated Active" });
         }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult Details(string id)
+        {
+            var user = UserManager.FindById(id);
+            if (user == null)
+                return Json(new { Success = false, Message = "User not found" });
+
+            return View(user);
+        }
     }
 }

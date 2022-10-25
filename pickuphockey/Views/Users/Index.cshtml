@@ -39,9 +39,18 @@
     </tr>
         @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
+            @if (User.IsInRole("Admin"))
+            {
+                <td>
+                    @Html.ActionLink(item.FirstName, "Details", "Users", new { id = item.Id }, null)
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+            }
             <td>
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
