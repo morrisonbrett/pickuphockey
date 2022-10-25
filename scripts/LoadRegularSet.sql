@@ -1,43 +1,42 @@
 ﻿-- Create a new regular set
---TRUNCATE TABLE RegularSet
 -- Wednesday
-INSERT INTO RegularSets (DayOfWeek, CreateDateTime, Description) VALUES (4, GETDATE(), 'Wed Group A 2022')
+INSERT INTO RegularSets (DayOfWeek, CreateDateTime, Description) VALUES (5, GETDATE(), 'Wed Group B 2022')
 SELECT @@IDENTITY
 SELECT * FROM RegularSets ORDER BY RegularSetId desc
 
 -- Wednesday Light
 SELECT Id, FirstName, LastName from AspNetUsers WHERE
-FirstName IN ('Darin', 'Dave', 'Greg', 'Russ', 'Chuck', 'David', 'Glen', 'Doron', 'Matt', 'Paul')
-AND LastName IN ('St. Ivany', 'Buss', 'Bonanni', 'Belinsky', 'Jarrell', 'Schriger', 'Revivo', 'Azrialy', 'Knox', 'Mellinger')
+FirstName IN ('Darin', 'Michael', 'Greg', 'Russ', 'Chuck', 'David', 'Glen', 'Doron', 'Matt', 'Paul')
+AND LastName IN ('St. Ivany', 'Ganung', 'Bonanni', 'Belinsky', 'Jarrell', 'Schriger', 'Revivo', 'Azrialy', 'Knox', 'Mellinger')
 AND Active = 1
 
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('192e34c9-cf6f-4e50-a089-6c537a0dc4b3', 1, 1, 1)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('40b687d1-3d28-4b76-933c-dc779a9ad6ef', 1, 1, 1)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('4a075289-6299-42a3-87ba-512fe4b586b6', 1, 1, 1)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('570e5dbd-766f-4b84-9c18-fc6fa1d3aa93', 1, 1, 1)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('61f8f892-abd5-4a13-9960-b43e6ce0aba0', 1, 1, 2)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('68eb8101-3b60-490a-838b-d7f1b4b11dc9', 1, 1, 2)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('be74dbf8-6c42-4800-8aa4-d6818190077c', 1, 1, 2)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('bfdc1924-33b1-4bb3-aef1-3f86855c0e37', 1, 1, 1)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('ef907d2e-be9d-4e61-b091-735fbb6b2021', 1, 1, 2)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('f7acdb96-a2ae-4159-9bab-c9fa4069d737', 1, 1, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('192e34c9-cf6f-4e50-a089-6c537a0dc4b3', 4, 1, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('40b687d1-3d28-4b76-933c-dc779a9ad6ef', 4, 1, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('4a075289-6299-42a3-87ba-512fe4b586b6', 4, 1, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('570e5dbd-766f-4b84-9c18-fc6fa1d3aa93', 4, 1, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('68eb8101-3b60-490a-838b-d7f1b4b11dc9', 4, 1, 2)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('be74dbf8-6c42-4800-8aa4-d6818190077c', 4, 1, 2)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('bfdc1924-33b1-4bb3-aef1-3f86855c0e37', 4, 1, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('ef907d2e-be9d-4e61-b091-735fbb6b2021', 4, 1, 2)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('f7acdb96-a2ae-4159-9bab-c9fa4069d737', 4, 1, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('080bdd6c-3116-4360-866b-0ab0f7273dcf', 4, 1, 2)
 
 -- Wednesday Dark
 SELECT Id, FirstName, LastName from AspNetUsers WHERE
-FirstName IN ('David', 'Jeffrey', 'Michael', 'Roger', 'Brandon', 'Brett', 'Brad', 'Matthew', 'Eric', 'John Tyler')
-AND LastName IN ('Coons', 'Sabala', 'Ganung', 'Sackaroff', 'Jolley', 'Morrison', 'Hennegan', 'Dugard', 'Johnson', 'Grant')
+FirstName IN ('David', 'Jeffrey', 'Dave', 'Roger', 'Brandon', 'Brett', 'Brad', 'Matthew', 'Eric', 'John Tyler')
+AND LastName IN ('Coons', 'Sabala', 'Buss', 'Sackaroff', 'Jolley', 'Morrison', 'Hennegan', 'Dugard', 'Johnson', 'Grant')
 AND Active = 1
 
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('063695a9-7cdd-4478-97ed-6eb3eab078d2', 1, 2, 2)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('080bdd6c-3116-4360-866b-0ab0f7273dcf', 1, 2, 2)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('35addb43-49f9-4da3-b927-29d09e9d60e5', 1, 2, 1)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('3d0a1851-5bcb-4364-a40b-37f758255237', 1, 2, 1)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('3eb98864-8345-4425-850e-85e481b425c6', 1, 2, 1)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('4bceaa3c-653c-4f7e-8bbd-572ef30fd3be', 1, 2, 2)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('607daa7d-5e1e-4d6c-86ff-ae75010d1446', 1, 2, 1)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('80c21632-7eb5-4cf2-b66c-5c9efb6a50b8', 1, 2, 1)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('869707a5-b410-47d3-b2a2-51cf41c366cc', 1, 2, 2)
-INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('fdbfe74a-a5c5-4ff0-8edb-c98a5df9d85a', 1, 2, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('063695a9-7cdd-4478-97ed-6eb3eab078d2', 4, 2, 2)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('35addb43-49f9-4da3-b927-29d09e9d60e5', 4, 2, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('3d0a1851-5bcb-4364-a40b-37f758255237', 4, 2, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('3eb98864-8345-4425-850e-85e481b425c6', 4, 2, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('4bceaa3c-653c-4f7e-8bbd-572ef30fd3be', 4, 2, 2)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('607daa7d-5e1e-4d6c-86ff-ae75010d1446', 4, 2, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('80c21632-7eb5-4cf2-b66c-5c9efb6a50b8', 4, 2, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('869707a5-b410-47d3-b2a2-51cf41c366cc', 4, 2, 2)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('fdbfe74a-a5c5-4ff0-8edb-c98a5df9d85a', 4, 2, 1)
+INSERT INTO Regulars (UserId, RegularSetId, TeamAssignment, PositionPreference) VALUES ('61f8f892-abd5-4a13-9960-b43e6ce0aba0', 4, 2, 2)
 
 -- Friday 
 INSERT INTO RegularSets (DayOfWeek, CreateDateTime, Description) VALUES (6, GETDATE(), 'Fri Group A 2022')
