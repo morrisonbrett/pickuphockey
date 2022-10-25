@@ -26,6 +26,13 @@
 
             var lrt = '';
             var drt = '';
+
+            var lightTotal = 0.0;
+            var darkTotal = 0.0;
+
+            var lightCount = 0;
+            var darkCount = 0;
+
             for (let i = 0; i < result.length; i++) {
                 var s = '';
                 s += result[i].User.FirstName;
@@ -33,14 +40,23 @@
                 s += result[i].User.LastName;
                 s += '<span>, </span>';
                 s += result[i].PositionPreference == 1 ? 'Forward' : 'Defense';
+                s += '<span>, </span>';
+                s += result[i].User.Rating.toFixed(1);
                 s += '<br />'
 
                 if (result[i].TeamAssignment == 1) {
+                    lightTotal += result[i].User.Rating;
+                    lightCount++;
                     lrt += s;
                 } else if (result[i].TeamAssignment == 2) {
+                    darkTotal += result[i].User.Rating;
+                    darkCount++;
                     drt += s;
                 }
             }
+
+            lrt += "<br/> <b>Total</b>: " + lightTotal.toFixed(1) + ", <b>Average</b>: " + (lightTotal / lightCount).toFixed(2);
+            drt += "<br/> <b>Total</b>: " + darkTotal.toFixed(1) + ", <b>Average</b>: " + (darkTotal / darkCount).toFixed(2);
 
             // Replace the TD with the data
             lr.innerHTML = lrt;
