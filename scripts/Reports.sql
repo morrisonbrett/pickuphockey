@@ -16,6 +16,18 @@ where not (note is not null and note like '%cancelled%')
 group by year(sessiondate)
 order by year(sessiondate)
 
+/* Top Sellers */
+SELECT SellerUserId, FirstName, LastName, COUNT(SellerUserId) AS SellerCount from BuySells
+INNER JOIN AspNetUsers on SellerUserId = AspNetUsers.id
+GROUP BY SellerUserId, FirstName, LastName
+ORDER BY COUNT(SellerUserId) DESC
+
+/* Top Buyers */
+SELECT BuyerUserId, FirstName, LastName, COUNT(BuyerUserId) AS BuyerCount from BuySells
+INNER JOIN AspNetUsers on BuyerUserId = AspNetUsers.id
+GROUP BY BuyerUserId, FirstName, LastName
+ORDER BY COUNT(BuyerUserId) DESC
+
 /* Recent Activities, shows SessionDate column for context */
 SELECT TOP 100 ActivityLogs.*, Sessions.SessionDate from ActivityLogs
 INNER JOIN Sessions ON ActivityLogs.SessionId = sessions.SessionId
