@@ -120,8 +120,8 @@
         @if (isAdmin || isSubAdmin)
         {
             <tr>
-                <th>Light Rating: Total: @string.Format("{0:0.0}", Model.LightTotalRating), Average: @string.Format("{0:0.00}", @Decimal.Divide(Model.LightTotalRating, Model.LightCount))</th>
-                <th>Dark Rating: Total: @string.Format("{0:0.0}", Model.DarkTotalRating), Average: @string.Format("{0:0.00}", @Decimal.Divide(Model.DarkTotalRating, Model.DarkCount))</th>
+                <th>Light Rating: Total: @string.Format("{0:0.0}", Model.LightTotalRating), Average: @string.Format("{0:0.00}", @Decimal.Divide(Model.LightTotalRating, Model.LightCount > 0 ? Model.LightCount : 1))</th>
+                <th>Dark Rating: Total: @string.Format("{0:0.0}", Model.DarkTotalRating), Average: @string.Format("{0:0.00}", @Decimal.Divide(Model.DarkTotalRating, Model.DarkCount > 0 ? Model.DarkCount : 1))</th>
             </tr>
         }
     </table>
