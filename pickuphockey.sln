@@ -21,6 +21,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{52E376DF-47FB-470F-80C2-096B3D851855}"
 	ProjectSection(SolutionItems) = preProject
 		scripts\LoadRegularSet.sql = scripts\LoadRegularSet.sql
+		README.md = README.md
 		scripts\Reports.sql = scripts\Reports.sql
 		scripts\Updates.sql = scripts\Updates.sql
 	EndProjectSection
