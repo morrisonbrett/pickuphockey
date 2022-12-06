@@ -36,7 +36,7 @@ namespace pickuphockey.Models
                 return true;
 
             var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone);
-            var timeCanBuy = SessionDate.AddDays(-1 * _buyDayMinimum).AddHours(2);
+            var timeCanBuy = SessionDate.AddDays(-1 * (BuyDayMinimum != null ? (int) BuyDayMinimum : _buyDayMinimum)).AddHours(2);
 
             return timeNow >= (IsPreferred ? timeCanBuy.AddDays(-1) : timeCanBuy);
         }
@@ -117,7 +117,7 @@ namespace pickuphockey.Models
         public bool CanEdit => SessionDate > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone);
 
         [NotMapped]
-        public DateTime BuyDateTime => SessionDate.AddDays(-1 * _buyDayMinimum).AddHours(2);
+        public DateTime BuyDateTime => SessionDate.AddDays(-1 * (BuyDayMinimum != null ? (int) BuyDayMinimum : _buyDayMinimum)).AddHours(2);
 
         [DisplayName("Roster Set")]
         public int ?RegularSetId { get; set; }
@@ -153,7 +153,8 @@ namespace pickuphockey.Models
         [NotMapped]
         public ICollection<BuySell> UnmarkedSent { get; set; }
 
-        [DisplayName("BuyDayMinimum")]
+        [DisplayName("Buy Day Minimum")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0}")]
         public int ?BuyDayMinimum { get; set; }
     }
 }

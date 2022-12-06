@@ -150,7 +150,7 @@ namespace pickuphockey.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "SessionId,SessionDate,Note,RegularSetId")] Session session)
+        public ActionResult Create([Bind(Include = "SessionId,SessionDate,Note,RegularSetId,BuyDayMinimum")] Session session)
         {
             if (!ModelState.IsValid) return View(session);
             
@@ -218,7 +218,7 @@ namespace pickuphockey.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Edit([Bind(Include = "SessionId,SessionDate,CreateDateTime,Note,RegularSetId")] Session session)
+        public ActionResult Edit([Bind(Include = "SessionId,SessionDate,CreateDateTime,Note,RegularSetId,BuyDayMinimum")] Session session)
         {
             if (!ModelState.IsValid) return View(session);
 
