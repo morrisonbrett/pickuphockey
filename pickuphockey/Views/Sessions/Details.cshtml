@@ -85,7 +85,7 @@
                     {
                         <button disabled="true" class="btn">SUB - CANNOT BUY, ALREADY BOUGHT</button>
                     }
-                    else if (Model.CanBuy(Model.User.Preferred, IsAdmin))
+                    else if (Model.CanBuy(Model.User.Preferred, false))
                     {
                         <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">BUY A SPOT</button>
                     }
@@ -137,6 +137,11 @@
                 {
                     <button onclick="location.href='@Url.Action("Sell", "BuySells", new { id = Model.SessionId })';return false;" class="btn">SELL A SPOT (Admin)</button>
                     <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">BUY A SPOT (Admin)</button>
+                    <div>
+                        <br />For non-Admins, spots will be available for purchase:<br />
+                        <b>Preferred Players</b>: @Model.BuyDateTime.AddDays(-1).ToString("dddd, MM/dd/yyyy, HH:mm")<br />
+                        <b>All Players</b>: @Model.BuyDateTime.ToString("dddd, MM/dd/yyyy, HH:mm")
+                    </div>
                 }
             </div>
         </div>
