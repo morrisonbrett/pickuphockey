@@ -192,6 +192,8 @@ namespace pickuphockey.Controllers
                     AutoFlagFilterBuyer(ref updateBuySell);
                     updateBuySell.UpdateDateTime = DateTime.UtcNow;
                     _db.Entry(updateBuySell).State = EntityState.Modified;
+                    _db.SaveChanges();
+                    _db.AddActivity(buySell.SessionId, activity);
 
                     SendSessionEmail(session, seller, buyer, SessionAction.Buy, updateBuySell);
                     users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != seller.Id && t.Id != buyer.Id);
@@ -208,13 +210,11 @@ namespace pickuphockey.Controllers
                     buySell.CreateDateTime = DateTime.UtcNow;
 
                     _db.BuySell.Add(buySell);
+                    _db.SaveChanges();
+                    _db.AddActivity(buySell.SessionId, activity);
 
                     users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != buyer.Id);
                 }
-
-                _db.SaveChanges();
-
-                _db.AddActivity(buySell.SessionId, activity);
 
                 var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " ACTIVITY";
                 var body = activity + "." + Environment.NewLine + Environment.NewLine;
