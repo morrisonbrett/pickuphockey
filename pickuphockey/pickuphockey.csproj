@@ -396,6 +396,10 @@
     <Compile Include="Migrations\202210251357410_PlayerRating.designer.cs">
       <DependentUpon>202210251357410_PlayerRating.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202212061630112_BuyDayMinimum.cs" />
+    <Compile Include="Migrations\202212061630112_BuyDayMinimum.designer.cs">
+      <DependentUpon>202212061630112_BuyDayMinimum.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -748,6 +752,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202210251357410_PlayerRating.resx">
       <DependentUpon>202210251357410_PlayerRating.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202212061630112_BuyDayMinimum.resx">
+      <DependentUpon>202212061630112_BuyDayMinimum.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

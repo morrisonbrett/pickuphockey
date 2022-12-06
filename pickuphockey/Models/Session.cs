@@ -152,5 +152,8 @@ namespace pickuphockey.Models
 
         [NotMapped]
         public ICollection<BuySell> UnmarkedSent { get; set; }
+
+        [DisplayName("BuyDayMinimum")]
+        public int ?BuyDayMinimum { get; set; }
     }
 }
