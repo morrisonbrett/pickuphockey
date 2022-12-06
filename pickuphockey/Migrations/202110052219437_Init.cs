@@ -8,6 +8,7 @@
         {
             return;
             
+#pragma warning disable CS0162 // Unreachable code detected
             CreateTable(
                 "dbo.ActivityLogs",
                 c => new
@@ -23,6 +24,7 @@
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId)
                 .Index(t => t.SessionId)
                 .Index(t => t.UserId);
+#pragma warning restore CS0162 // Unreachable code detected
             
             CreateTable(
                 "dbo.Sessions",
@@ -141,7 +143,9 @@
         {
             return;
 
+#pragma warning disable CS0162 // Unreachable code detected
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+#pragma warning restore CS0162 // Unreachable code detected
             DropForeignKey("dbo.ActivityLogs", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.BuySells", "SessionId", "dbo.Sessions");
             DropForeignKey("dbo.BuySells", "SellerUserId", "dbo.AspNetUsers");
