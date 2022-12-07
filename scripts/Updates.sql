@@ -26,3 +26,15 @@ and buyeruserid is not null
 and PaymentReceived = 0
 and year(sessiondate) <= '2022'
 --)
+
+/* Reset a password */
+declare @userid varchar(256)
+set @userid = (select id from AspNetUsers where lastname = 'Hennegan' and firstname = 'John')
+select @userid
+
+select * from AspNetUsers where id = @userid
+select * from aspnetuserlogins where userid = @userid
+delete from AspNetUserLogins where UserId = @userid
+update AspNetUsers set PasswordHash = '123456', SecurityStamp = NEWID(), EmailConfirmed = 1 where id = @userid
+select * from AspNetUsers where id = @userid
+select * from aspnetuserlogins where userid = @userid
