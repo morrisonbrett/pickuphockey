@@ -554,7 +554,7 @@ namespace pickuphockey.Controllers
             var body = activity + "." + Environment.NewLine + Environment.NewLine;
             body += "Click here for the details: " + sessionurl + Environment.NewLine;
 
-            if (seller.NotificationPreference != NotificationPreference.None && session.SessionDate.Year > 2021)
+            if (seller.NotificationPreference != NotificationPreference.None)
                 _emailServices.SendMail(subject, body, seller.Email);
 
             return Json(new { Success = true, Message = "Updated" });
@@ -589,7 +589,7 @@ namespace pickuphockey.Controllers
             var body = activity + "." + Environment.NewLine + Environment.NewLine;
             body += "Click here for the details: " + sessionurl + Environment.NewLine;
 
-            if (buyer.NotificationPreference != NotificationPreference.None && session.SessionDate.Year > 2021)
+            if (buyer.NotificationPreference != NotificationPreference.None)
                 _emailServices.SendMail(subject, body, buyer.Email);
 
             return Json(new { Success = true, Message = "Updated" });
