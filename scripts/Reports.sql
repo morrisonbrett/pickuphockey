@@ -1,3 +1,8 @@
+/* Recent Activities, shows SessionDate column for context */
+SELECT TOP 200 ActivityLogs.*, Sessions.SessionDate from ActivityLogs
+INNER JOIN Sessions ON ActivityLogs.SessionId = sessions.SessionId
+ORDER BY ActivityLogs.CreateDateTime DESC
+
 /* Number of sessions by day of week */
 select datename(weekday, sessiondate) as Weekday, count(sessionid) as '# of Sessions' from Sessions
 where note not like '%cancelled%'
@@ -27,8 +32,3 @@ SELECT BuyerUserId, FirstName, LastName, COUNT(BuyerUserId) AS BuyerCount from B
 INNER JOIN AspNetUsers on BuyerUserId = AspNetUsers.id
 GROUP BY BuyerUserId, FirstName, LastName
 ORDER BY COUNT(BuyerUserId) DESC
-
-/* Recent Activities, shows SessionDate column for context */
-SELECT TOP 200 ActivityLogs.*, Sessions.SessionDate from ActivityLogs
-INNER JOIN Sessions ON ActivityLogs.SessionId = sessions.SessionId
-ORDER BY ActivityLogs.CreateDateTime DESC
