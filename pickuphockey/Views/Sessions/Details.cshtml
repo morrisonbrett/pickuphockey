@@ -168,6 +168,8 @@
     {
         @Html.ActionLink("Edit", "Edit", new { id = Model.SessionId })
         <span> | </span>
+        @Html.ActionLink("Download Emails", "DownloadEmails", new { id = Model.SessionId })
+        <span> | </span>
     }
     @Html.ActionLink("Back to List", "Index")
 </p>

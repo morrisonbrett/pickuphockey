@@ -1,0 +1,7 @@
+﻿@model IEnumerable<pickuphockey.Models.ApplicationUser>
+
+@foreach (var item in Model)
+{
+    @Html.DisplayFor(modelItem => item.Email)
+    <br />
+}

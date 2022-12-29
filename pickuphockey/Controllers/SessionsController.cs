@@ -360,5 +360,56 @@ namespace pickuphockey.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public ActionResult DownloadEmails(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var session = _db.Sessions.Find(id);
+            if (session == null)
+            {
+                return HttpNotFound();
+            }
+
+            var users = new List<ApplicationUser>();
+
+            session.Regulars = _db.Regulars.Where(q => q.RegularSetId == session.RegularSetId).ToList();
+            session.Regulars.ForEach(t =>
+            {
+                var buySell = _db.BuySell.Where(q => q.SessionId == id && !string.IsNullOrEmpty(q.SellerUserId) && q.SellerUserId == t.UserId).FirstOrDefault();
+                t.SellingOrSoldSpot = buySell != null;
+                if (!t.SellingOrSoldSpot)
+                {
+                    users.Add(UserManager.FindById(t.UserId));
+                }
+            });
+
+            session.BuySells = _db.BuySell.Where(q => q.SessionId == session.SessionId).ToList();
+            session.BuySells.ForEach(t =>
+            {
+                t.SellerUser = UserManager.FindById(t.SellerUserId);
+                t.BuyerUser = UserManager.FindById(t.BuyerUserId);
+
+                if (t.BuyerUser != null && t.SellerUser != null)
+                {
+                    users.Add(UserManager.FindById(t.BuyerUserId));
+                }
+            });
+
+            // Go through entire buy sell list and find anyone that bought, and then sold
+            session.BuySells.ForEach(t =>
+            {
+                var buySell = session.BuySells.Where(r => r.SellerUserId != null && !string.IsNullOrEmpty(r.SellerUserId) && r.SellerUserId == t.BuyerUserId).FirstOrDefault();
+                if (buySell != null && t.BuySellId < buySell.BuySellId)
+                {
+                    users.Remove(UserManager.FindById(buySell.SellerUserId));
+                }
+            });
+
+            return View(users.OrderBy(u => u.LastName));
+        }
     }
 }

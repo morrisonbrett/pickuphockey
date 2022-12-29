@@ -715,6 +715,7 @@
     <Content Include="Views\Sessions\UnmarkedSent.cshtml" />
     <Content Include="Views\Shared\_UnmarkedSentPartial.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
+    <Content Include="Views\Sessions\DownloadEmails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
