@@ -19,23 +19,21 @@
                     {
                         <div style="text-decoration: line-through;">
                             @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
-                            @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
-                            @Html.DisplayFor(modelItem => item.PositionPreference)@if (isAdmin || isSubAdmin)
-                            {<span>, </span>
+                            @Html.DisplayFor(modelItem => item.User.LastName)@if (isAdmin || isSubAdmin)
+                            {
                                 var rating = string.Format("{0:0.0}", item.User.Rating);
-                                @Html.DisplayFor(modelItem => rating)
-                            }
+                                <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>}<span>, </span>
+                            @Html.DisplayFor(modelItem => item.PositionPreference)
                         </div>
                     }
                     else
                     {
                         @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
-                        @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
-                        @Html.DisplayFor(modelItem => item.PositionPreference)if (isAdmin || isSubAdmin)
-                        {<span>, </span>
+                        @Html.DisplayFor(modelItem => item.User.LastName)if (isAdmin || isSubAdmin)
+                        {
                             var rating = string.Format("{0:0.0}", item.User.Rating);
-                            @Html.DisplayFor(modelItem => rating)
-                        }
+                            <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>}<span>, </span>
+                        @Html.DisplayFor(modelItem => item.PositionPreference)
                         <br />
                     }
                 }
@@ -46,9 +44,9 @@
                         <div style="text-decoration: line-through;">
                             @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
                             @Html.DisplayFor(modelItem => item.BuyerUser.LastName)@if (isAdmin || isSubAdmin)
-                            {<span>, </span>
+                            {
                                 var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
-                                @Html.DisplayFor(modelItem => rating)
+                                <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>
                             }
                         </div>
                     }
@@ -56,9 +54,9 @@
                     {
                         @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
                         @Html.DisplayFor(modelItem => item.BuyerUser.LastName)if (isAdmin || isSubAdmin)
-                        {<span>, </span>
+                        {
                             var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
-                            @Html.DisplayFor(modelItem => rating)
+                            <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>
                         }
                         <br />
                     }
@@ -71,23 +69,21 @@
                     {
                         <div style="text-decoration: line-through;">
                             @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
-                            @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
-                            @Html.DisplayFor(modelItem => item.PositionPreference)@if (isAdmin || isSubAdmin)
-                            {<span>, </span>
+                            @Html.DisplayFor(modelItem => item.User.LastName)@if (isAdmin || isSubAdmin)
+                            {
                                 var rating = string.Format("{0:0.0}", item.User.Rating);
-                                @Html.DisplayFor(modelItem => rating)
-                            }
+                                <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>}<span>, </span>
+                            @Html.DisplayFor(modelItem => item.PositionPreference)
                         </div>
                     }
                     else
                     {
                         @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
-                        @Html.DisplayFor(modelItem => item.User.LastName)<span>, </span>
-                        @Html.DisplayFor(modelItem => item.PositionPreference)if (isAdmin || isSubAdmin)
-                        {<span>, </span>
+                        @Html.DisplayFor(modelItem => item.User.LastName)if (isAdmin || isSubAdmin)
+                        {
                             var rating = string.Format("{0:0.0}", item.User.Rating);
-                            @Html.DisplayFor(modelItem => rating)
-                        }
+                            <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>}<span>, </span>
+                        @Html.DisplayFor(modelItem => item.PositionPreference)
                         <br />
                     }
                 }
@@ -98,9 +94,9 @@
                         <div style="text-decoration: line-through;">
                             @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
                             @Html.DisplayFor(modelItem => item.BuyerUser.LastName)@if (isAdmin || isSubAdmin)
-                            {<span>, </span>
+                            {
                                 var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
-                                @Html.DisplayFor(modelItem => rating)
+                                <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>
                             }
                         </div>
                     }
@@ -108,9 +104,9 @@
                     {
                         @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
                         @Html.DisplayFor(modelItem => item.BuyerUser.LastName)if (isAdmin || isSubAdmin)
-                        {<span>, </span>
+                        {
                             var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
-                            @Html.DisplayFor(modelItem => rating)
+                            <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>
                         }
                         <br />
                     }
