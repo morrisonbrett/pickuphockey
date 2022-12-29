@@ -38,10 +38,10 @@
                 s += result[i].User.FirstName;
                 s += '<span> </span>';
                 s += result[i].User.LastName;
-                s += '<span>, </span>';
-                s += result[i].PositionPreference == 1 ? 'Forward' : 'Defense';
-                s += '<span>, </span>';
+                s += '<span> (</span>';
                 s += result[i].User.Rating.toFixed(1);
+                s += '<span>), </span>';
+                s += result[i].PositionPreference == 1 ? 'Forward' : 'Defense';
                 s += '<br />'
 
                 if (result[i].TeamAssignment == 1) {
