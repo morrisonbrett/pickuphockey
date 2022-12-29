@@ -8,6 +8,10 @@
 @using (Html.BeginForm("Details", "Users", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
+    <h4>User Settings</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <p class="text-success">@ViewBag.StatusMessage</p>
     <table class="table">
         <tr>
             <td>

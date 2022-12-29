@@ -82,12 +82,14 @@ namespace pickuphockey.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public ActionResult Details(string id)
+        public ActionResult Details(string id, string message)
         {
             var user = UserManager.FindById(id);
             if (user == null)
                 return Json(new { Success = false, Message = "User not found" });
 
+            ViewBag.StatusMessage = message;
+            
             return View(user);
         }
 
@@ -101,8 +103,7 @@ namespace pickuphockey.Controllers
             _db.Entry(user).State = EntityState.Modified;
             _db.SaveChanges();
 
-            return View(user);
+            return RedirectToAction("Details", new { id = user.Id, Message = "User settings saved" });
         }
-
     }
 }
