@@ -171,49 +171,55 @@ namespace pickuphockey.Controllers
                 string activity;
                 IEnumerable<ApplicationUser> users;
 
-                if (!string.IsNullOrEmpty(buySell.SellerUserId))
+                using (var trans = _db.Database.BeginTransaction())
                 {
-                    var updateBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == buySell.BuySellId);
-                    if (updateBuySell == null) return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
-
-                    // Make sure this spot is available to buy
-                    if (!string.IsNullOrEmpty(updateBuySell.BuyerUserId))
+                    if (!string.IsNullOrEmpty(buySell.SellerUserId))
                     {
-                        TempData["Message"] = "The spot you attempted to buy has been sold.";
-                        return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
+                        var updateBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == buySell.BuySellId);
+                        if (updateBuySell == null) return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
+
+                        // Make sure this spot is available to buy
+                        if (!string.IsNullOrEmpty(updateBuySell.BuyerUserId))
+                        {
+                            TempData["Message"] = "The spot you attempted to buy has been sold.";
+                            trans.Dispose();
+                            return RedirectToAction("Details", "Sessions", new { id = buySell.SessionId });
+                        }
+
+                        var seller = UserManager.FindById(updateBuySell.SellerUserId);
+
+                        activity = buyer.FirstName + " " + buyer.LastName + " BOUGHT SPOT FROM " + seller.FirstName + " " + seller.LastName + ". Team assignment: " + updateBuySell.TeamAssignment;
+
+                        updateBuySell.BuyerUserId = buyer.Id;
+                        updateBuySell.BuyerNote = buySell.BuyerNote;
+                        AutoFlagFilterBuyer(ref updateBuySell);
+                        updateBuySell.UpdateDateTime = DateTime.UtcNow;
+                        _db.Entry(updateBuySell).State = EntityState.Modified;
+                        _db.SaveChanges();
+                        _db.AddActivity(buySell.SessionId, activity);
+
+                        SendSessionEmail(session, seller, buyer, SessionAction.Buy, updateBuySell);
+                        users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != seller.Id && t.Id != buyer.Id);
+                    }
+                    else
+                    {
+                        activity = buyer.FirstName + " " + buyer.LastName + " added to BUYING list";
+
+                        buySell.BuyerUserId = User.Identity.GetUserId();
+                        buySell.BuyerNote = buySell.BuyerNote;
+                        AutoFlagFilterBuyer(ref buySell);
+                        buySell.UpdateDateTime = DateTime.UtcNow;
+
+                        buySell.CreateDateTime = DateTime.UtcNow;
+
+                        _db.BuySell.Add(buySell);
+                        _db.SaveChanges();
+                        _db.AddActivity(buySell.SessionId, activity);
+
+                        users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != buyer.Id);
                     }
 
-                    var seller = UserManager.FindById(updateBuySell.SellerUserId);
-
-                    activity = buyer.FirstName + " " + buyer.LastName + " BOUGHT SPOT FROM " + seller.FirstName + " " + seller.LastName + ". Team assignment: " + updateBuySell.TeamAssignment;
-
-                    updateBuySell.BuyerUserId = buyer.Id;
-                    updateBuySell.BuyerNote = buySell.BuyerNote;
-                    AutoFlagFilterBuyer(ref updateBuySell);
-                    updateBuySell.UpdateDateTime = DateTime.UtcNow;
-                    _db.Entry(updateBuySell).State = EntityState.Modified;
-                    _db.SaveChanges();
-                    _db.AddActivity(buySell.SessionId, activity);
-
-                    SendSessionEmail(session, seller, buyer, SessionAction.Buy, updateBuySell);
-                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != seller.Id && t.Id != buyer.Id);
-                }
-                else
-                {
-                    activity = buyer.FirstName + " " + buyer.LastName + " added to BUYING list";
-
-                    buySell.BuyerUserId = User.Identity.GetUserId();
-                    buySell.BuyerNote = buySell.BuyerNote;
-                    AutoFlagFilterBuyer(ref buySell);
-                    buySell.UpdateDateTime = DateTime.UtcNow;
-
-                    buySell.CreateDateTime = DateTime.UtcNow;
-
-                    _db.BuySell.Add(buySell);
-                    _db.SaveChanges();
-                    _db.AddActivity(buySell.SessionId, activity);
-
-                    users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != buyer.Id);
+                    trans.Commit();
                 }
 
                 var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " ACTIVITY";
