@@ -2,10 +2,14 @@
 
 @if (Model.Any())
 {
+    var zone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+
     <h2>Activity Log</h2>
     foreach (var item in Model)
-    {
-        @item.CreateDateTime.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss.fff")
+{
+        var pst = TimeZoneInfo.ConvertTimeFromUtc(item.CreateDateTime, zone);
+
+        @pst.ToString("MM/dd/yyyy HH:mm:ss.fff")
         <span> - </span>
         @Html.DisplayFor(modelItem => item.User.FirstName)
         <span> </span>
