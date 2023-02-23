@@ -5,7 +5,7 @@
     <h2>Activity Log</h2>
     foreach (var item in Model)
     {
-        @Html.DisplayFor(modelItem => item.CreateDateTime, "LocalDateTime")
+        @item.CreateDateTime.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss.fff")
         <span> - </span>
         @Html.DisplayFor(modelItem => item.User.FirstName)
         <span> </span>
