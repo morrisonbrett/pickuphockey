@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using pickuphockey.Services;
 using pickuphockey.Models;
+using System.Data;
 
 namespace pickuphockey.Controllers
 {
@@ -171,7 +172,7 @@ namespace pickuphockey.Controllers
                 string activity;
                 IEnumerable<ApplicationUser> users;
 
-                using (var trans = _db.Database.BeginTransaction())
+                using (var trans = _db.Database.BeginTransaction(IsolationLevel.Serializable))
                 {
                     if (!string.IsNullOrEmpty(buySell.SellerUserId))
                     {
