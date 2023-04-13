@@ -61,7 +61,7 @@ namespace pickuphockey.Controllers
             }
 
             // TODO Optimize this query into one statement
-            session.ActivityLogs = _db.ActivityLogs.Where(q => q.SessionId == session.SessionId).ToList();
+            session.ActivityLogs = _db.ActivityLogs.Where(q => q.SessionId == session.SessionId).OrderByDescending(q => q.CreateDateTime).ToList();
             session.ActivityLogs.ForEach(t =>
             {
                 t.User = UserManager.FindById(t.UserId);
@@ -86,7 +86,7 @@ namespace pickuphockey.Controllers
                 }
             });
 
-            session.BuySells = _db.BuySell.Where(q => q.SessionId == session.SessionId).ToList();
+            session.BuySells = _db.BuySell.Where(q => q.SessionId == session.SessionId).OrderBy(q => q.CreateDateTime).ToList();
             session.BuySells.ForEach(t =>
             {
                 t.SellerUser = UserManager.FindById(t.SellerUserId);
@@ -153,13 +153,14 @@ namespace pickuphockey.Controllers
         public ActionResult Create([Bind(Include = "SessionId,SessionDate,Note,RegularSetId,BuyDayMinimum")] Session session)
         {
             if (!ModelState.IsValid) return View(session);
-            
-            session.CreateDateTime = DateTime.UtcNow;
-            session.UpdateDateTime = DateTime.UtcNow;
+            var now = DateTime.UtcNow;
+
+            session.CreateDateTime = now;
+            session.UpdateDateTime = now;
             var newSession = _db.Sessions.Add(session);
             _db.SaveChanges();
 
-            _db.AddActivity(newSession.SessionId, "Created Session");
+            _db.AddActivity(newSession.SessionId, "Created Session", now);
 
             EmailSession(newSession);
             
@@ -228,7 +229,9 @@ namespace pickuphockey.Controllers
                 return HttpNotFound();
             }
 
-            _db.AddActivity(session.SessionId, "Edited Session");
+            var now = DateTime.UtcNow;
+
+            _db.AddActivity(session.SessionId, "Edited Session", now);
 
             session.UpdateDateTime = DateTime.UtcNow;
             _db.Entry(session).State = EntityState.Modified;

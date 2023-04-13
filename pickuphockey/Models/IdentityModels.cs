@@ -86,7 +86,7 @@ namespace pickuphockey.Models
             return new ApplicationDbContext();
         }
 
-        public void AddActivity(int sessionId, string activity)
+        public void AddActivity(int sessionId, string activity, DateTime dt)
         {
             var userid = Thread.CurrentPrincipal.Identity.GetUserId();
             
@@ -95,7 +95,7 @@ namespace pickuphockey.Models
             activitylog.UserId = userid;
             activitylog.SessionId = sessionId;
             activitylog.Activity = activity;
-            activitylog.CreateDateTime = DateTime.UtcNow;
+            activitylog.CreateDateTime = dt;
 
             Entry(activitylog).State = EntityState.Added;
             SaveChanges();

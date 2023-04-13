@@ -135,6 +135,8 @@ namespace pickuphockey.Controllers
             var session = _db.Sessions.Find(buySell.SessionId);
             if (session == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
+            var now = DateTime.UtcNow;
+
             ViewBag.SessionDate = session.SessionDate;
             var buyer = UserManager.FindById(User.Identity.GetUserId());
             if (!buyer.Active)
@@ -194,10 +196,10 @@ namespace pickuphockey.Controllers
                         updateBuySell.BuyerUserId = buyer.Id;
                         updateBuySell.BuyerNote = buySell.BuyerNote;
                         AutoFlagFilterBuyer(ref updateBuySell);
-                        updateBuySell.UpdateDateTime = DateTime.UtcNow;
+                        updateBuySell.UpdateDateTime = now;
                         _db.Entry(updateBuySell).State = EntityState.Modified;
                         _db.SaveChanges();
-                        _db.AddActivity(buySell.SessionId, activity);
+                        _db.AddActivity(buySell.SessionId, activity, now);
 
                         SendSessionEmail(session, seller, buyer, SessionAction.Buy, updateBuySell);
                         users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != seller.Id && t.Id != buyer.Id);
@@ -209,13 +211,13 @@ namespace pickuphockey.Controllers
                         buySell.BuyerUserId = User.Identity.GetUserId();
                         buySell.BuyerNote = buySell.BuyerNote;
                         AutoFlagFilterBuyer(ref buySell);
-                        buySell.UpdateDateTime = DateTime.UtcNow;
+                        buySell.UpdateDateTime = now;
 
-                        buySell.CreateDateTime = DateTime.UtcNow;
+                        buySell.CreateDateTime = now;
 
                         _db.BuySell.Add(buySell);
                         _db.SaveChanges();
-                        _db.AddActivity(buySell.SessionId, activity);
+                        _db.AddActivity(buySell.SessionId, activity, now);
 
                         users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active && t.Id != buyer.Id);
                     }
@@ -341,6 +343,7 @@ namespace pickuphockey.Controllers
             if (ModelState.IsValid)
             {
                 var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
+                var now = DateTime.UtcNow;
 
                 // Can't sell to self
                 if (buySell.BuyerUserId == seller.Id)
@@ -385,7 +388,7 @@ namespace pickuphockey.Controllers
                     updateBuySell.SellerNote = buySell.SellerNote;
                     AutoFlagFilterSeller(ref updateBuySell);
                     updateBuySell.TeamAssignment = buySell.TeamAssignment;
-                    updateBuySell.UpdateDateTime = DateTime.UtcNow;
+                    updateBuySell.UpdateDateTime = now;
 
                     _db.Entry(updateBuySell).State = EntityState.Modified;
 
@@ -396,8 +399,8 @@ namespace pickuphockey.Controllers
                 {
                     activity = seller.FirstName + " " + seller.LastName + " added to SELLING list";
 
-                    buySell.CreateDateTime = DateTime.UtcNow;
-                    buySell.UpdateDateTime = DateTime.UtcNow;
+                    buySell.CreateDateTime = now;
+                    buySell.UpdateDateTime = now;
                     buySell.SellerUserId = User.Identity.GetUserId();
                     AutoFlagFilterSeller(ref buySell);
 
@@ -408,7 +411,7 @@ namespace pickuphockey.Controllers
 
                 _db.SaveChanges();
 
-                _db.AddActivity(buySell.SessionId, activity);
+                _db.AddActivity(buySell.SessionId, activity, now);
 
                 var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " ACTIVITY";
                 var body = activity + "." + Environment.NewLine + Environment.NewLine;
@@ -429,6 +432,8 @@ namespace pickuphockey.Controllers
         public ActionResult RemoveSeller(int id)
         {
             if (Request.Url == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var now = DateTime.UtcNow;
 
             var deleteBuySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
             if (deleteBuySell == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -451,7 +456,7 @@ namespace pickuphockey.Controllers
                 deleteBuySell.SellerNote = null;
                 deleteBuySell.SellerNoteFlagged = false;
                 deleteBuySell.TeamAssignment = TeamAssignment.Unassigned;
-                deleteBuySell.UpdateDateTime = DateTime.UtcNow;
+                deleteBuySell.UpdateDateTime = now;
                 _db.Entry(deleteBuySell).State = EntityState.Modified;
             }
             else
@@ -462,7 +467,7 @@ namespace pickuphockey.Controllers
             _db.SaveChanges();
 
             var activity = seller.FirstName + " " + seller.LastName + " removed from SELLING list";
-            _db.AddActivity(deleteBuySell.SessionId, activity);
+            _db.AddActivity(deleteBuySell.SessionId, activity, now);
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
             var users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active);
@@ -490,6 +495,8 @@ namespace pickuphockey.Controllers
             var buyer = UserManager.FindById(deleteBuySell.BuyerUserId);
             if (buyer == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
+            var now = DateTime.UtcNow;
+
             var canRemoveBuyer = !string.IsNullOrEmpty(deleteBuySell.BuyerUserId) && (string.IsNullOrEmpty(deleteBuySell.SellerUserId) || User.IsInRole("Admin")) && ((deleteBuySell.BuyerUserId == User.Identity.GetUserId()) || User.IsInRole("Admin"));
 
             // Make sure person has rights to do this
@@ -501,7 +508,7 @@ namespace pickuphockey.Controllers
                 deleteBuySell.BuyerUserId = null;
                 deleteBuySell.BuyerNote = null;
                 deleteBuySell.BuyerNoteFlagged = false;
-                deleteBuySell.UpdateDateTime = DateTime.UtcNow;
+                deleteBuySell.UpdateDateTime = now;
                 _db.Entry(deleteBuySell).State = EntityState.Modified;
             }
             else
@@ -512,7 +519,7 @@ namespace pickuphockey.Controllers
             _db.SaveChanges();
 
             var activity = buyer.FirstName + " " + buyer.LastName + " removed from BUYING list";
-            _db.AddActivity(deleteBuySell.SessionId, activity);
+            _db.AddActivity(deleteBuySell.SessionId, activity, now);
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
             var users = UserManager.Users.ToList().Where(t => t.NotificationPreference == NotificationPreference.All && t.Active);
@@ -549,12 +556,14 @@ namespace pickuphockey.Controllers
             var seller = UserManager.FindById(toggleBuySell.SellerUserId);
             if (seller == null) return Json(new { Success = false, Message = "Invalid Request" });
 
+            var now = DateTime.UtcNow;
+
             toggleBuySell.PaymentSent = paymentSent;
             _db.Entry(toggleBuySell).State = EntityState.Modified;
             _db.SaveChanges();
 
             var activity = buyer.FirstName + " " + buyer.LastName + " (BUYER) set PAYMENT STATUS TO " + (paymentSent ? "sent" : "unsent");
-            _db.AddActivity(toggleBuySell.SessionId, activity);
+            _db.AddActivity(toggleBuySell.SessionId, activity, now);
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
             var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY";
@@ -584,12 +593,14 @@ namespace pickuphockey.Controllers
             var seller = UserManager.FindById(toggleBuySell.SellerUserId);
             if (seller == null) return Json(new { Success = false, Message = "Invalid Request" });
 
+            var now = DateTime.UtcNow;
+
             toggleBuySell.PaymentReceived = paymentReceived;
             _db.Entry(toggleBuySell).State = EntityState.Modified;
             _db.SaveChanges();
 
             var activity = seller.FirstName + " " + seller.LastName + " (SELLER) set PAYMENT STATUS TO " + (paymentReceived ? "received" : "unreceived");
-            _db.AddActivity(toggleBuySell.SessionId, activity);
+            _db.AddActivity(toggleBuySell.SessionId, activity, now);
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
             var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm") + " ACTIVITY";
@@ -624,6 +635,7 @@ namespace pickuphockey.Controllers
             if (!canUpdateTeamAssignment) return Json(new { Success = false, Message = "Invalid Request" });
 
             var activity = string.Empty;
+            var now = DateTime.UtcNow;
 
             // If there's a buyer, then they are the person getting their team assignment changed. Otherwise it's the seller which is valid but usually
             // you wouldn't change it until it's sold
@@ -633,11 +645,11 @@ namespace pickuphockey.Controllers
                 activity = $"{seller.FirstName} {seller.LastName} team assignment changed from {updateTeamAssignmentBuySell.TeamAssignment} to {teamAssignment}";
 
             updateTeamAssignmentBuySell.TeamAssignment = teamAssignment;
-            updateTeamAssignmentBuySell.UpdateDateTime = DateTime.UtcNow;
+            updateTeamAssignmentBuySell.UpdateDateTime = now;
             _db.Entry(updateTeamAssignmentBuySell).State = EntityState.Modified;
             _db.SaveChanges();
 
-            _db.AddActivity(updateTeamAssignmentBuySell.SessionId, activity);
+            _db.AddActivity(updateTeamAssignmentBuySell.SessionId, activity, now);
 
             var sessionurl = Url.Action("Details", "Sessions", new { id = session.SessionId }, Request.Url.Scheme);
             var subject = "Session " + session.SessionDate.ToString("dddd, MM/dd/yyyy") + " ACTIVITY - TEAM ASSIGNMENT CHANGED";
@@ -674,6 +686,8 @@ namespace pickuphockey.Controllers
             var toggleSellerNoteFlagged = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
             if (toggleSellerNoteFlagged == null) return Json(new { Success = false, Message = "Invalid Request" });
 
+            var now = DateTime.UtcNow;
+
             var session = _db.Sessions.Find(toggleSellerNoteFlagged.SessionId);
             if (session == null) return Json(new { Success = false, Message = "Invalid Request" });
 
@@ -682,7 +696,7 @@ namespace pickuphockey.Controllers
             _db.SaveChanges();
 
             var activity = (sellerNoteFlagged ? "Flagged" : "Un-Flagged") + " Seller Note for content";
-            _db.AddActivity(toggleSellerNoteFlagged.SessionId, activity);
+            _db.AddActivity(toggleSellerNoteFlagged.SessionId, activity, now);
 
             return Json(new { Success = true, Message = "Updated" });
         }
@@ -698,12 +712,14 @@ namespace pickuphockey.Controllers
             var session = _db.Sessions.Find(toggleBuyerNoteFlagged.SessionId);
             if (session == null) return Json(new { Success = false, Message = "Invalid Request" });
 
+            var now = DateTime.UtcNow;
+
             toggleBuyerNoteFlagged.BuyerNoteFlagged = buyerNoteFlagged;
             _db.Entry(toggleBuyerNoteFlagged).State = EntityState.Modified;
             _db.SaveChanges();
 
             var activity = (buyerNoteFlagged ? "Flagged" : "Un-Flagged") + " Buyer Note for content";
-            _db.AddActivity(toggleBuyerNoteFlagged.SessionId, activity);
+            _db.AddActivity(toggleBuyerNoteFlagged.SessionId, activity, now);
 
             return Json(new { Success = true, Message = "Updated" });
         }
@@ -714,7 +730,8 @@ namespace pickuphockey.Controllers
             // moderation inspection in the future
             if (buySell.BuyerNote != null && buySell.BuyerNote.ToLower().Contains("venmo"))
             {
-                _db.AddActivity(buySell.SessionId, "Buyer Note auto-flagged for content");
+                var now = DateTime.UtcNow;
+                _db.AddActivity(buySell.SessionId, "Buyer Note auto-flagged for content", now);
                 buySell.BuyerNoteFlagged = true;
             }
         }
@@ -725,7 +742,8 @@ namespace pickuphockey.Controllers
             // moderation inspection in the future
             if (buySell.SellerNote != null && buySell.SellerNote.ToLower().Contains("venmo"))
             {
-                _db.AddActivity(buySell.SessionId, "Seller Note auto-flagged for content");
+                var now = DateTime.UtcNow;
+                _db.AddActivity(buySell.SessionId, "Seller Note auto-flagged for content", now);
                 buySell.SellerNoteFlagged = true;
             }
         }
