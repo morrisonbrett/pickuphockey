@@ -22,8 +22,9 @@ group by year(sessiondate)
 order by year(sessiondate)
 
 /* Top Sellers */
-SELECT SellerUserId, FirstName, LastName, COUNT(SellerUserId) AS SellerCount from BuySells
+SELECT SellerUserId, FirstName, LastName, COUNT(SellerUserId) AS SellerCount, MAX(SessionDate) As LastSessionSold from BuySells
 INNER JOIN AspNetUsers on SellerUserId = AspNetUsers.id
+INNER JOIN Sessions on Sessions.SessionId = BuySells.SessionId
 WHERE BuyerUserId != SellerUserId
 GROUP BY SellerUserId, FirstName, LastName
 ORDER BY COUNT(SellerUserId) DESC
@@ -42,8 +43,16 @@ GROUP BY SellerUserId, FirstName, LastName
 ORDER BY T1.SellerCount DESC
 
 /* Top Buyers */
-SELECT BuyerUserId, FirstName, LastName, COUNT(BuyerUserId) AS BuyerCount from BuySells
+SELECT BuyerUserId, FirstName, LastName, COUNT(BuyerUserId) AS BuyerCount, MAX(SessionDate) As LastSessionBought from BuySells
 INNER JOIN AspNetUsers on BuyerUserId = AspNetUsers.id
+INNER JOIN Sessions on Sessions.SessionId = BuySells.SessionId
 WHERE SellerUserId != BuyerUserId
 GROUP BY BuyerUserId, FirstName, LastName
 ORDER BY COUNT(BuyerUserId) DESC
+
+/* Active users that have never bought */
+SELECT Id, FirstName, LastName FROM AspNetUsers
+WHERE Id NOT IN (SELECT BuyerUserId from BuySells WHERE BuyerUserId IS NOT NULL)
+AND Id NOT IN (SELECT DISTINCT UserId from Regulars)
+AND Active = 1
+ORDER BY FirstName
