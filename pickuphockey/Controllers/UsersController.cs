@@ -99,8 +99,23 @@ namespace pickuphockey.Controllers
         {
             if (!ModelState.IsValid) return View(user);
 
-            _db.Entry(user).State = EntityState.Modified;
-            _db.SaveChanges();
+            var u = UserManager.FindById(user.Id);
+            if (u == null)
+                return View(user);
+            
+            u.FirstName = user.FirstName;
+            u.LastName = user.LastName;
+            u.UserName = user.UserName;
+            u.Email = user.Email;
+            u.PayPalEmail = user.PayPalEmail;
+            u.VenmoAccount = user.VenmoAccount;
+            u.MobileLast4 = user.MobileLast4;
+            u.NotificationPreference = user.NotificationPreference;
+            u.Active = user.Active;
+            u.Preferred = user.Preferred;
+            u.Rating = user.Rating;
+            
+            UserManager.Update(u);
 
             return RedirectToAction("Details", new { id = user.Id, Message = "User settings saved" });
         }
