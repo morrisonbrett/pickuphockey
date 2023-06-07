@@ -401,6 +401,10 @@
     <Compile Include="Migrations\202212061630112_BuyDayMinimum.designer.cs">
       <DependentUpon>202212061630112_BuyDayMinimum.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202306010130488_AddingPreferredPlus.cs" />
+    <Compile Include="Migrations\202306010130488_AddingPreferredPlus.designer.cs">
+      <DependentUpon>202306010130488_AddingPreferredPlus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -758,6 +762,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202212061630112_BuyDayMinimum.resx">
       <DependentUpon>202212061630112_BuyDayMinimum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202306010130488_AddingPreferredPlus.resx">
+      <DependentUpon>202306010130488_AddingPreferredPlus.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -30,7 +30,7 @@ namespace pickuphockey.Models
 			_defaultStartTime = TimeSpan.Parse(System.Configuration.ConfigurationManager.AppSettings["DefaultStartTime"]);
 		}
 
-        public bool CanBuy(bool IsPreferred, bool IsAdmin)
+        public bool CanBuy(bool IsPreferred, bool IsPreferredPlus, bool IsAdmin)
         {
             if (IsAdmin)
                 return true;
@@ -38,7 +38,7 @@ namespace pickuphockey.Models
             var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _pstZone);
             var timeCanBuy = SessionDate.AddDays(-1 * (BuyDayMinimum != null ? (int) BuyDayMinimum : _buyDayMinimum)).AddHours(2);
 
-            return timeNow >= (IsPreferred ? timeCanBuy.AddDays(-1) : timeCanBuy);
+            return timeNow >= (IsPreferredPlus ? timeCanBuy.AddDays(-1).AddMinutes(-5) : IsPreferred ? timeCanBuy.AddDays(-1) : timeCanBuy);
         }
 
         public int HasRosterSpot()

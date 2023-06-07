@@ -63,6 +63,9 @@ namespace pickuphockey.Models
         [DisplayName("Preferred")]
         public bool Preferred { get; set; }
 
+        [DisplayName("PreferredPlus")]
+        public bool PreferredPlus { get; set; }
+
         [DisplayName("Rating")]
         public decimal Rating { get; set; }
 
