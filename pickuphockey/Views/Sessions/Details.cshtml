@@ -94,7 +94,7 @@
                         <button disabled="true" class="btn">SUB - CANNOT BUY, YET</button>
                         <div>
                             <br />Spots will be available for purchase:<br />
-                            <b>Preferred Plus Players</b>: @Model.BuyDateTime.AddDays(-1).AddMinutes(-5).ToString("dddd, MM/dd/yyyy, HH:mm")<br />
+                            <b>Preferred Plus (Regulars / Family) Players</b>: @Model.BuyDateTime.AddDays(-1).AddMinutes(-5).ToString("dddd, MM/dd/yyyy, HH:mm")<br />
                             <b>Preferred Players</b>: @Model.BuyDateTime.AddDays(-1).ToString("dddd, MM/dd/yyyy, HH:mm")<br />
                             <b>All Players</b>: @Model.BuyDateTime.ToString("dddd, MM/dd/yyyy, HH:mm")
                         </div>
@@ -140,11 +140,12 @@
                 }
                 @if (IsAdmin)
                 {
+                    <hr />
                     <button onclick="location.href='@Url.Action("Sell", "BuySells", new { id = Model.SessionId })';return false;" class="btn">SELL A SPOT (Admin)</button>
                     <button onclick="location.href='@Url.Action("Buy", "BuySells", new { id = Model.SessionId })';return false;" class="btn">BUY A SPOT (Admin)</button>
                     <div>
                         <br />For non-Admins, spots will be available for purchase:<br />
-                        <b>Preferred Plus Players</b>: @Model.BuyDateTime.AddDays(-1).AddMinutes(-5).ToString("dddd, MM/dd/yyyy, HH:mm")<br />
+                        <b>Preferred Plus (Regulars / Family) Players</b>: @Model.BuyDateTime.AddDays(-1).AddMinutes(-5).ToString("dddd, MM/dd/yyyy, HH:mm")<br />
                         <b>Preferred Players</b>: @Model.BuyDateTime.AddDays(-1).ToString("dddd, MM/dd/yyyy, HH:mm")<br />
                         <b>All Players</b>: @Model.BuyDateTime.ToString("dddd, MM/dd/yyyy, HH:mm")
                     </div>
