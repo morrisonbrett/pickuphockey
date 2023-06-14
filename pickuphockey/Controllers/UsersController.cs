@@ -95,7 +95,7 @@ namespace pickuphockey.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Details([Bind(Include = "Id,FirstName,LastName,UserName,Email,PayPalEmail,VenmoAccount,MobileLast4,NotificationPreference,Active,Preferred,PreferredPlus,Rating")] ApplicationUser user)
+        public ActionResult Details([Bind(Include = "Id,FirstName,LastName,UserName,Email,PayPalEmail,VenmoAccount,MobileLast4,NotificationPreference,Active,Preferred,PreferredPlus,Rating,EmergencyName,EmergencyPhone")] ApplicationUser user)
         {
             if (!ModelState.IsValid) return View(user);
 
@@ -115,6 +115,8 @@ namespace pickuphockey.Controllers
             u.Preferred = user.Preferred;
             u.PreferredPlus = user.PreferredPlus;
             u.Rating = user.Rating;
+            u.EmergencyName = user.EmergencyName;
+            u.EmergencyPhone = user.EmergencyPhone;
 
             UserManager.Update(u);
 
