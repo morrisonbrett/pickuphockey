@@ -28,6 +28,7 @@
     <hr />
     @Html.Partial("_UnmarkedReceivedPartial", Model)
     @Html.Partial("_UnmarkedSentPartial", Model)
+    @Html.Partial("_EmergencyInfoPartial", Model.User)
     @if (!Model.IsPast)
     {
         <div class="form-group">

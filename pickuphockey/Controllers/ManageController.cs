@@ -322,7 +322,7 @@ namespace pickuphockey.Controllers
                 return View();
             }
 
-            return View(new PreferencesViewModel { FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, NotificationPreference = user.NotificationPreference, PayPalEmail = user.PayPalEmail, VenmoAccount = user.VenmoAccount, MobileLast4 = user.MobileLast4, Active = user.Active });
+            return View(new PreferencesViewModel { FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, NotificationPreference = user.NotificationPreference, PayPalEmail = user.PayPalEmail, VenmoAccount = user.VenmoAccount, MobileLast4 = user.MobileLast4, Active = user.Active, EmergencyName = user.EmergencyName, EmergencyPhone = user.EmergencyPhone });
         }
 
         //
@@ -351,6 +351,8 @@ namespace pickuphockey.Controllers
             user.VenmoAccount = model.VenmoAccount;
             user.MobileLast4 = model.MobileLast4;
             user.NotificationPreference = model.NotificationPreference;
+            user.EmergencyName = model.EmergencyName;
+            user.EmergencyPhone = model.EmergencyPhone;
 
             var result = UserManager.Update(user);
             if (result.Succeeded)

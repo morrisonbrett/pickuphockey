@@ -1,0 +1,15 @@
+@model pickuphockey.Models.ApplicationUser
+@{
+    ViewBag.Title = "Emergency Info";
+}
+@if (Model != null && (Model.EmergencyName == null || Model.EmergencyPhone == null))
+{
+<h2 class="text-danger">Emergency Contact Info Missing</h2>
+<table class="table">
+    <tr>
+        <td valign="top">
+            @Html.ActionLink("Click here to add your Emergency Contact Information to your profile", "Preferences", "Manage")
+        </td>
+    </tr>
+</table>
+}

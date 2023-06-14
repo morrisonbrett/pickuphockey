@@ -405,6 +405,10 @@
     <Compile Include="Migrations\202306010130488_AddingPreferredPlus.designer.cs">
       <DependentUpon>202306010130488_AddingPreferredPlus.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202306141946419_EmergencyContactInfo.cs" />
+    <Compile Include="Migrations\202306141946419_EmergencyContactInfo.designer.cs">
+      <DependentUpon>202306141946419_EmergencyContactInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -722,6 +726,7 @@
     <Content Include="Views\Shared\_UnmarkedSentPartial.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Sessions\DownloadEmails.cshtml" />
+    <Content Include="Views\Sessions\_EmergencyInfoPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -765,6 +770,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202306010130488_AddingPreferredPlus.resx">
       <DependentUpon>202306010130488_AddingPreferredPlus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202306141946419_EmergencyContactInfo.resx">
+      <DependentUpon>202306141946419_EmergencyContactInfo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

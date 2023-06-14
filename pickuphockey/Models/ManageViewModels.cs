@@ -121,6 +121,14 @@ namespace pickuphockey.Models
         [Display(Name = "Notification Preference")]
         public NotificationPreference NotificationPreference { get; set; }
 
+        [Required]
+        [Display(Name = "Emergency Contact Name")]
+        public string EmergencyName { get; set; }
+
+        [Required]
+        [Display(Name = "Emergency Contact Phone")]
+        public string EmergencyPhone { get; set; }
+
         [Display(Name = "Active")]
         public bool Active { get; set; }
     }
