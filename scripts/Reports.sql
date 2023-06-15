@@ -4,7 +4,7 @@ INNER JOIN Sessions ON ActivityLogs.SessionId = sessions.SessionId
 ORDER BY ActivityLogs.CreateDateTime DESC
 
 /* Emergency Info */
-SELECT * FROM AspNetUsers WHERE EmergencyName IS NOT NULL OR EmergencyPhone IS NOT NULL
+SELECT FirstName, LastName, EmergencyName, EmergencyPhone FROM AspNetUsers WHERE EmergencyName IS NOT NULL OR EmergencyPhone IS NOT NULL
 
 /* Number of sessions by day of week */
 select datename(weekday, sessiondate) as Weekday, count(sessionid) as '# of Sessions' from Sessions
