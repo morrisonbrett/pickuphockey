@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -546,6 +549,127 @@ namespace pickuphockey.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        //
+        // GET: /Account/Impersonate
+        public async Task<ActionResult> Impersonate()
+        {
+            ViewBag.ActiveUsers = await UserManager.Users.Where(u => u.Active == true).OrderBy(u => u.LastName).ToListAsync();
+
+            if (IsImpersonating(HttpContext.User))
+            {
+                var u = UserManager.FindById(HttpContext.User.Identity.GetUserId());
+
+                ViewBag.StatusMessage = $"Impersonating {u.FullName}";
+                ViewBag.Impersonating = true;
+            }
+
+            return View();
+        }
+
+        //
+        // POST: /Account/BeginImpersonate
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> BeginImpersonate([Bind(Include = "Id")] string id)
+        {
+            ViewBag.ActiveUsers = await UserManager.Users.Where(u => u.Active == true).OrderBy(u => u.LastName).ToListAsync();
+
+            await ImpersonateUserAsync(id);
+
+            ViewBag.StatusMessage = $"Impersonating: {id}";
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        //
+        // POST: /Account/RevertImpersonate
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RevertImpersonate()
+        {
+            await RevertImpersonationAsync();
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task ImpersonateUserAsync(string id)
+        {
+            var originalUserId = HttpContext.User.Identity.GetUserId();
+            var impersonatedUser = await UserManager.FindByIdAsync(id);
+            impersonatedUser.SecurityStamp = Guid.NewGuid().ToString();
+
+            var impersonatedIdentity = await UserManager.CreateIdentityAsync(impersonatedUser, DefaultAuthenticationTypes.ApplicationCookie);
+            impersonatedIdentity.AddClaim(new Claim("UserImpersonation", "true"));
+            impersonatedIdentity.AddClaim(new Claim("OriginalUserId", originalUserId));
+
+            var authenticationManager = HttpContext.GetOwinContext().Authentication;
+            authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, impersonatedIdentity);
+        }
+
+        public async Task RevertImpersonationAsync()
+        {
+            if (!IsImpersonating(HttpContext.User))
+            {
+                throw new Exception("Unable to remove impersonation because there is no impersonation");
+            }
+
+            var originalUserId = GetOriginalUserId(HttpContext.User);
+
+            var originalUser = await UserManager.FindByIdAsync(originalUserId);
+
+            var impersonatedIdentity = await UserManager.CreateIdentityAsync(originalUser, DefaultAuthenticationTypes.ApplicationCookie);
+            var authenticationManager = HttpContext.GetOwinContext().Authentication;
+
+            authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, impersonatedIdentity);
+        }
+
+        public static bool IsImpersonating(IPrincipal principal)
+        {
+            if (principal == null)
+            {
+                return false;
+            }
+
+            var claimsPrincipal = principal as ClaimsPrincipal;
+            if (claimsPrincipal == null)
+            {
+                return false;
+            }
+
+            return claimsPrincipal.HasClaim("UserImpersonation", "true");
+        }
+
+        public static string GetOriginalUserId(IPrincipal principal)
+        {
+            if (principal == null)
+            {
+                return string.Empty;
+            }
+
+            var claimsPrincipal = principal as ClaimsPrincipal;
+            if (claimsPrincipal == null)
+            {
+                return string.Empty;
+            }
+
+            if (!IsImpersonating(claimsPrincipal))
+            {
+                return string.Empty;
+            }
+
+            var originalUserIdClaim = claimsPrincipal.Claims.SingleOrDefault(c => c.Type == "OriginalUserId");
+
+            if (originalUserIdClaim == null)
+            {
+                return string.Empty;
+            }
+
+            return originalUserIdClaim.Value;
         }
 
         #region Helpers

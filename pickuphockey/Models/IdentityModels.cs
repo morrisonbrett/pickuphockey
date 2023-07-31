@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -44,6 +45,8 @@ namespace pickuphockey.Models
 
         [DisplayName("Last Name")]
         public string LastName { get; set; }
+
+        public string FullName => string.Format("{0} {1}", FirstName, LastName);
 
         [DisplayName("Notification Preference")]
         public NotificationPreference NotificationPreference { get; set; }

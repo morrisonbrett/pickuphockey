@@ -1,0 +1,44 @@
+﻿@{
+    @model pickuphockey.Models.ApplicationUser
+    ViewBag.Title = "Impersonate";
+    var activeUsers = ViewBag.ActiveUsers;
+    var isImpersonating = ViewBag != null && ViewBag.Impersonating != null && ViewBag.Impersonating == true;
+    var IsAdmin = User.IsInRole("Admin");
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-success">@ViewBag.StatusMessage</p>
+@using (Html.BeginForm("BeginImpersonate", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    if (!isImpersonating && IsAdmin)
+    {
+        <div class="row">
+            <div class="col-md-12 form-group">
+                @Html.DropDownListFor(u => u.Id, new SelectList(ViewBag.ActiveUsers, "Id", "FullName", new { @class = "form-control" }))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <input type="submit" class="btn btn-default" value="Impersonate" />
+            </div>
+        </div>
+    }
+    if (!isImpersonating && !IsAdmin)
+    {
+        <p class="text-warning">Only Admins can Impersonate</p>
+    }
+}
+
+@using (Html.BeginForm("RevertImpersonate", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    if (isImpersonating)
+    {
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <input type="submit" class="btn btn-default" value="Revert Impersonate" />
+            </div>
+        </div>
+    }
+}

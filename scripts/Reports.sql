@@ -18,6 +18,12 @@ where note not like '%cancelled%'
 group by datename(month, sessiondate), month(sessiondate)
 order by count(sessionid) desc
 
+/* Number of sessions by month and year */
+select datename(month, sessiondate) as Month, datename(year, sessiondate) as Year, count(sessionid) as '# of Sessions' from Sessions
+where note not like '%cancelled%' -- and datename(month, sessiondate) = 'August'
+group by datename(month, sessiondate), month(sessiondate), datename(year, sessiondate), year(sessiondate)
+order by year(sessiondate), month(sessiondate)
+
 /* Number of sessions by year */
 select year(sessiondate) as Year, count(sessionid) as '# of Sessions' from Sessions
 where note not like '%cancelled%'

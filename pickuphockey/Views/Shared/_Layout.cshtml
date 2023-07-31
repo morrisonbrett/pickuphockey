@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNet.Identity
 @using Microsoft.AspNet.Identity.Owin
 @{
+    var IsImpersonating = false;
+
     // TODO Move this to .cs file or maybe even ajax
     var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
     if (userManager != null)
@@ -16,6 +18,8 @@
                     ViewBag.FirstName = user.FirstName;
                     ViewBag.IsAdmin = userManager.IsInRole(userid, "Admin") ? "true" : "false";
                     ViewBag.IsSubAdmin = userManager.IsInRole(userid, "SubAdmin") ? "true" : "false";
+                    IsImpersonating = pickuphockey.Controllers.AccountController.IsImpersonating(User);
+                    ViewBag.IsImpersonating = IsImpersonating ? "true" : "false";
                 }
             }
         }
@@ -107,6 +111,10 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    @if (IsImpersonating)
+                    {
+                        <li>@Html.ActionLink("Impersonate", "Impersonate", "Account")</li>
+                    }
                     <li>@Html.ActionLink("Sessions", "Index", "Sessions")</li>
                     <li>@Html.ActionLink("Players", "Index", "Users")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>

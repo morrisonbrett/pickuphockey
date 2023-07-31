@@ -727,6 +727,7 @@
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Sessions\DownloadEmails.cshtml" />
     <Content Include="Views\Sessions\_EmergencyInfoPartial.cshtml" />
+    <Content Include="Views\Account\Impersonate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
