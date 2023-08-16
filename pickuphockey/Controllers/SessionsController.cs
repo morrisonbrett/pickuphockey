@@ -163,6 +163,8 @@ namespace pickuphockey.Controllers
             _db.AddActivity(newSession.SessionId, "Created Session", now);
 
             EmailSession(newSession);
+
+            _ = CalendarService.RebuildCalendar(_db.Sessions.ToList().OrderByDescending(t => t.SessionDate));
             
             return RedirectToAction("Index");
         }
@@ -236,6 +238,9 @@ namespace pickuphockey.Controllers
             session.UpdateDateTime = DateTime.UtcNow;
             _db.Entry(session).State = EntityState.Modified;
             _db.SaveChanges();
+
+            _ = CalendarService.RebuildCalendar(_db.Sessions.ToList().OrderByDescending(t => t.SessionDate));
+
             return RedirectToAction("Index");
         }
 
@@ -270,6 +275,9 @@ namespace pickuphockey.Controllers
 
             _db.Sessions.Remove(session);
             _db.SaveChanges();
+
+            _ = CalendarService.RebuildCalendar(_db.Sessions.ToList().OrderByDescending(t => t.SessionDate));
+
             return RedirectToAction("Index");
         }
 
