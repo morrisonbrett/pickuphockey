@@ -24,6 +24,8 @@
             }
         }
     }
+
+    var webCalUrl = "webcal://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath.TrimEnd('/') + "/hockeypickup.ics";
 }
 <!DOCTYPE html>
 <html>
@@ -115,9 +117,10 @@
                     {
                         <li>@Html.ActionLink("Impersonate", "Impersonate", "Account")</li>
                     }
-                    <li>@Html.ActionLink("Sessions", "Index", "Sessions")</li>
-                    <li>@Html.ActionLink("Players", "Index", "Users")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li title="Sessions">@Html.ActionLink("Sessions", "Index", "Sessions")</li>
+                    <li title="Players">@Html.ActionLink("Players", "Index", "Users")</li>
+                    <li title="About">@Html.ActionLink("About", "About", "Home")</li>
+                    <li title="Sync Calendar"><a href=@webCalUrl><img src="~/Content/calendar.png" width="2" height="2" alt="Sync Calendar" /></a></li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

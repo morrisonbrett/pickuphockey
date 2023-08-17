@@ -26,6 +26,7 @@ namespace pickuphockey.Services
 
             // Base Cal object, events are added to this object
             var calendar = new Calendar();
+            calendar.Name = siteTitle + " Calendar";
 
             sessions.ForEach(s =>
             {
