@@ -31,5 +31,12 @@ namespace pickuphockey.Controllers
 
             return View();
         }
+
+        public ActionResult Calendar()
+        {
+            ViewBag.Message = System.Configuration.ConfigurationManager.AppSettings["SiteTitle"];
+
+            return View();
+        }
     }
 }

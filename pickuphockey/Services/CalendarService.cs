@@ -22,11 +22,12 @@ namespace pickuphockey.Services
             // Site settings
             var siteTitle = System.Configuration.ConfigurationManager.AppSettings["SiteTitle"];
             var pickupLocation = System.Configuration.ConfigurationManager.AppSettings["PickupLocation"];
-            var zone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            var tzid = "America/Los_Angeles";
 
             // Base Cal object, events are added to this object
             var calendar = new Calendar();
-            calendar.Name = siteTitle + " Calendar";
+            calendar.AddProperty("DESCRIPTION", siteTitle + " Calendar");
+            calendar.AddProperty("X-WR-CALNAME", siteTitle + " Calendar");
 
             sessions.ForEach(s =>
             {
@@ -38,8 +39,8 @@ namespace pickuphockey.Services
                 {
                     Summary = siteTitle,
                     Description = string.Format("{0}{1}{2}", url, s.Note != null && s.Note.Length > 0 ? Environment.NewLine : "", s.Note),
-                    DtStart = new CalDateTime(s.SessionDate, zone.StandardName),
-                    DtEnd = new CalDateTime(s.SessionDate.AddHours(1), zone.StandardName),
+                    DtStart = new CalDateTime(s.SessionDate, tzid),
+                    DtEnd = new CalDateTime(s.SessionDate.AddHours(1), tzid),
                     Url = uri,
                     Location = pickupLocation
                 };
