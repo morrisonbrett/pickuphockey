@@ -51,7 +51,7 @@ namespace pickuphockey.Services
             });
 
             var iCalSerializer = new CalendarSerializer();
-            string result = iCalSerializer.SerializeToString(calendar);
+            var result = iCalSerializer.SerializeToString(calendar);
 
             var filePath = AppDomain.CurrentDomain.BaseDirectory;
             var fileName = Path.Combine(filePath, "hockeypickup.ics");
