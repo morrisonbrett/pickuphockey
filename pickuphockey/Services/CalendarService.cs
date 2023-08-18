@@ -12,7 +12,7 @@ using pickuphockey.Models;
 
 namespace pickuphockey.Services
 {
-    public class CalendarService
+    public static class CalendarService
     {
         public static async Task RebuildCalendar(IOrderedEnumerable<Session> sessions)
         {
@@ -40,7 +40,7 @@ namespace pickuphockey.Services
                 var iCalEvent = new CalendarEvent
                 {
                     Summary = siteTitle,
-                    Description = string.Format("{0}{1}{2}", url, s.Note != null && s.Note.Length > 0 ? Environment.NewLine : "", s.Note),
+                    Description = string.Format("{0}{1}", url, !string.IsNullOrEmpty(s.Note) ? Environment.NewLine + Environment.NewLine + s.Note : ""),
                     DtStart = new CalDateTime(s.SessionDate, tzid),
                     DtEnd = new CalDateTime(s.SessionDate.AddHours(1), tzid),
                     Url = uri,
@@ -49,7 +49,6 @@ namespace pickuphockey.Services
 
                 calendar.Events.Add(iCalEvent);
             });
-
 
             var iCalSerializer = new CalendarSerializer();
             string result = iCalSerializer.SerializeToString(calendar);
