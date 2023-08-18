@@ -29,7 +29,9 @@ namespace pickuphockey.Services
             calendar.AddProperty("DESCRIPTION", siteTitle + " Calendar");
             calendar.AddProperty("X-WR-CALNAME", siteTitle + " Calendar");
 
-            sessions.ForEach(s =>
+            var recentSessions = sessions.Where(rs => rs.SessionDate.Year >= 2023 && !(!string.IsNullOrEmpty(rs.Note) && rs.Note.Contains("CANCELLED")));
+
+            recentSessions.ForEach(s =>
             {
                 // Build the session URL
                 var url = baseUrl + "/Session/" + s.SessionId.ToString();
