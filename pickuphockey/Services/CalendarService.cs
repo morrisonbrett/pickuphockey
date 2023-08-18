@@ -7,8 +7,8 @@ using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
-using Microsoft.Ajax.Utilities;
 using pickuphockey.Models;
+using WebGrease.Css.Extensions;
 
 namespace pickuphockey.Services
 {
