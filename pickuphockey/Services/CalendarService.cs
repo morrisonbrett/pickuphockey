@@ -17,7 +17,7 @@ namespace pickuphockey.Services
         public static async Task RebuildCalendar(IOrderedEnumerable<Session> sessions)
         {
             // Get the base root URL
-            var baseUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath.TrimEnd('/') + "/";
+            var baseUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath.TrimEnd('/');
 
             // Site settings
             var siteTitle = System.Configuration.ConfigurationManager.AppSettings["SiteTitle"];
