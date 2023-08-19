@@ -164,7 +164,7 @@ namespace pickuphockey.Controllers
 
             EmailSession(newSession);
 
-            _ = CalendarService.RebuildCalendar(_db.Sessions.ToList().OrderByDescending(t => t.SessionDate));
+            CalendarService.RebuildCalendar(_db.Sessions.ToList().OrderByDescending(t => t.SessionDate));
             
             return RedirectToAction("Index");
         }
@@ -239,7 +239,7 @@ namespace pickuphockey.Controllers
             _db.Entry(session).State = EntityState.Modified;
             _db.SaveChanges();
 
-            _ = CalendarService.RebuildCalendar(_db.Sessions.ToList().OrderByDescending(t => t.SessionDate));
+            CalendarService.RebuildCalendar(_db.Sessions.ToList().OrderByDescending(t => t.SessionDate));
 
             return RedirectToAction("Index");
         }
@@ -276,7 +276,7 @@ namespace pickuphockey.Controllers
             _db.Sessions.Remove(session);
             _db.SaveChanges();
 
-            _ = CalendarService.RebuildCalendar(_db.Sessions.ToList().OrderByDescending(t => t.SessionDate));
+            CalendarService.RebuildCalendar(_db.Sessions.ToList().OrderByDescending(t => t.SessionDate));
 
             return RedirectToAction("Index");
         }

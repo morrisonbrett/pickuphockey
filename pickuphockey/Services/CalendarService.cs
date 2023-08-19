@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
@@ -14,7 +13,7 @@ namespace pickuphockey.Services
 {
     public static class CalendarService
     {
-        public static async Task RebuildCalendar(IOrderedEnumerable<Session> sessions)
+        public static void RebuildCalendar(IOrderedEnumerable<Session> sessions)
         {
             // Get the base root URL
             var baseUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath.TrimEnd('/');
@@ -34,7 +33,7 @@ namespace pickuphockey.Services
             recentSessions.ForEach(s =>
             {
                 // Build the session URL
-                var url = baseUrl + "/Session/" + s.SessionId.ToString();
+                var url = baseUrl + "/Sessions/Details/" + s.SessionId.ToString();
                 var uri = new Uri(url);
 
                 var iCalEvent = new CalendarEvent
@@ -54,11 +53,11 @@ namespace pickuphockey.Services
             var result = iCalSerializer.SerializeToString(calendar);
 
             var filePath = AppDomain.CurrentDomain.BaseDirectory;
-            var fileName = Path.Combine(filePath, "hockeypickup.ics");
+            var fileName = Path.Combine(filePath, "hockey_pickup.ics");
 
             var fileWriter = new StreamWriter(fileName);
 
-            await fileWriter.WriteLineAsync(result);
+            fileWriter.WriteLine(result);
 
             fileWriter.Dispose();
         }
