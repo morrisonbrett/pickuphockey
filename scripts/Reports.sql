@@ -34,8 +34,8 @@ where note not like '%cancelled%'
 group by year(sessiondate)
 order by year(sessiondate)
 
-/* Top Sellers */
-SELECT SellerUserId, FirstName, LastName, COUNT(SellerUserId) AS SellerCount, MAX(SessionDate) As LastSessionSold from BuySells
+/* Top Sellers - All time */
+SELECT FirstName, LastName, COUNT(SellerUserId) AS SellerCount, MAX(SessionDate) As LastSessionSold from BuySells
 INNER JOIN AspNetUsers on SellerUserId = AspNetUsers.id
 INNER JOIN Sessions on Sessions.SessionId = BuySells.SessionId
 WHERE BuyerUserId != SellerUserId
@@ -46,7 +46,7 @@ ORDER BY COUNT(SellerUserId) DESC
 DECLARE @SellerYear INT
 SET @SellerYear = 2023
 DECLARE @SellerWeekday nvarchar(10)
-SET @SellerWeekday = 'Friday'
+SET @SellerWeekday = 'Wednesday'
 
 SELECT T1.FirstName, T1.LastName, T1.SellerCount, T2.SessionCount, CAST((CAST(T1.SellerCount AS decimal) / CAST(T2.SessionCount AS decimal)) AS decimal(18,4)) * 100 AS SellingPercentage, T2.Year, T2.Weekday FROM
 (SELECT SellerUserId, FirstName, LastName, COUNT(SellerUserId) AS SellerCount from BuySells
@@ -60,7 +60,7 @@ GROUP BY SellerUserId, FirstName, LastName
 (SELECT * from SessionsByDate WHERE YEAR = @SellerYear AND SessionsByDate.Weekday = @SellerWeekday) AS T2
 ORDER BY T1.SellerCount DESC
 
-/* Top Buyers */
+/* Top Buyers - All time */
 SELECT FirstName, LastName, COUNT(BuyerUserId) AS BuyerCount, MAX(SessionDate) As LastSessionBought from BuySells
 INNER JOIN AspNetUsers on BuyerUserId = AspNetUsers.id
 INNER JOIN Sessions on Sessions.SessionId = BuySells.SessionId
