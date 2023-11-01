@@ -743,6 +743,7 @@
     <Content Include="Views\Sessions\_EmergencyInfoPartial.cshtml" />
     <Content Include="Views\Account\Impersonate.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
+    <Content Include="Views\Users\GamePucks.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
