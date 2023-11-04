@@ -2,5 +2,52 @@
     ViewBag.Title = "Game Pucks";
 }
 
-<a data-flickr-embed="true" href="https://www.flickr.com/photos/morrisonbrett/albums/72177720312370541" title="John Bryan Pickup Hockey - Game Puck Winners"><img src="https://live.staticflickr.com/65535/53303385329_3111a1e597_c.jpg" width="500" alt="John Bryan Pickup Hockey - Game Puck Winners" /></a>
-<script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script>
+<h2>Game Puck Winners</h2>
+
+<style>
+    #flickr-album {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width: 100%;
+        margin: 20px auto;
+    }
+
+    #flickr-album img {
+        width: 400px;
+        object-fit: cover;
+        margin: 0 5px 5px 0;
+    }
+</style>
+
+<script>
+    const owner = 'morrisonbrett';
+    const apiKey = '80ce3a61ed9e788c8e4e31641582fc0a';
+    const flickrAlbumId = '72177720312370541';
+    const flickrUrl = `https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey}&photoset_id=${flickrAlbumId}&format=json&nojsoncallback=1`;
+
+    fetch(flickrUrl)
+        .then(response => response.json())
+        .then(data => {
+            const photos = data.photoset.photo;
+
+            photos.forEach(photo => {
+                const imgUrl = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_b.jpg`;
+                const flickrPhotoUrl = `https://www.flickr.com/photos/${owner}/${photo.id}`;
+
+                const aElement = document.createElement('a');
+                aElement.href = flickrPhotoUrl;
+                aElement.target = '_blank';
+
+                const imgElement = document.createElement('img');
+                imgElement.src = imgUrl;
+
+                aElement.appendChild(imgElement);
+
+                const flickrAlbum = document.getElementById('flickr-album');
+                flickrAlbum.appendChild(aElement);
+            });
+        });
+</script>
+
+<div id="flickr-album"></div>
