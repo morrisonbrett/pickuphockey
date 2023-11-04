@@ -23,7 +23,7 @@
     const owner = 'morrisonbrett';
     const apiKey = '80ce3a61ed9e788c8e4e31641582fc0a';
     const flickrAlbumId = '72177720312370541';
-    const flickrUrl = `https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey}&photoset_id=${flickrAlbumId}&format=json&nojsoncallback=1`;
+    const flickrUrl = `https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey}&photoset_id=${flickrAlbumId}&format=json&nojsoncallback=1&sort=date-posted-desc`;
 
     fetch(flickrUrl)
         .then(response => response.json())
