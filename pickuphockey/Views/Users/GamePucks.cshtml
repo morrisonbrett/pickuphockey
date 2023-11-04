@@ -8,7 +8,6 @@
     #flickr-album {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
         width: 100%;
         margin: 20px auto;
     }
@@ -33,19 +32,34 @@
 
             photos.forEach(photo => {
                 const imgUrl = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_b.jpg`;
-                const flickrPhotoUrl = `https://www.flickr.com/photos/${owner}/${photo.id}`;
 
-                const aElement = document.createElement('a');
-                aElement.href = flickrPhotoUrl;
-                aElement.target = '_blank';
+                // Make a separate request to get the photo info
+                const flickrPhotoId = photo.id;
+                const flickrPhotoInfoUrl = `https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=${apiKey}&photo_id=${flickrPhotoId}&format=json&nojsoncallback=1`;
 
-                const imgElement = document.createElement('img');
-                imgElement.src = imgUrl;
+                fetch(flickrPhotoInfoUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        const photoInfo = data.photo;
+                        const owner = photoInfo.owner.username;
+                        const title = photoInfo.title._content;
 
-                aElement.appendChild(imgElement);
+                        const aElement = document.createElement('a');
+                        aElement.href = `https://www.flickr.com/photos/${owner}/${photo.id}`;
+                        aElement.target = '_blank';
 
-                const flickrAlbum = document.getElementById('flickr-album');
-                flickrAlbum.appendChild(aElement);
+                        const imgElement = document.createElement('img');
+                        imgElement.src = imgUrl;
+
+                        const captionElement = document.createElement('p');
+                        captionElement.textContent = title;
+
+                        aElement.appendChild(imgElement);
+                        aElement.appendChild(captionElement);
+
+                        const flickrAlbum = document.getElementById('flickr-album');
+                        flickrAlbum.appendChild(aElement);
+                    });
             });
         });
 </script>
