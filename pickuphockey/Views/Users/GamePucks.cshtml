@@ -24,41 +24,58 @@
     const flickrAlbumId = '72177720312370541';
     const flickrUrl = `https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey}&photoset_id=${flickrAlbumId}&format=json&nojsoncallback=1&sort=date-posted-desc`;
 
+    const photoPromises = [];
+
     fetch(flickrUrl)
         .then(response => response.json())
         .then(data => {
             const photos = data.photoset.photo;
 
             photos.forEach(photo => {
-                const imgUrl = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_b.jpg`;
-
-                // Make a separate request to get the photo info
                 const flickrPhotoId = photo.id;
                 const flickrPhotoInfoUrl = `https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=${apiKey}&photo_id=${flickrPhotoId}&format=json&nojsoncallback=1`;
 
-                fetch(flickrPhotoInfoUrl)
+                const photoPromise = fetch(flickrPhotoInfoUrl)
                     .then(response => response.json())
                     .then(data => {
                         const photoInfo = data.photo;
-                        const owner = photoInfo.owner.username;
-                        const title = photoInfo.title._content;
-
-                        const aElement = document.createElement('a');
-                        aElement.href = `https://www.flickr.com/photos/${owner}/${photo.id}`;
-                        aElement.target = '_blank';
-
-                        const imgElement = document.createElement('img');
-                        imgElement.src = imgUrl;
-
-                        const captionElement = document.createElement('p');
-                        captionElement.textContent = title;
-
-                        aElement.appendChild(imgElement);
-                        aElement.appendChild(captionElement);
-
-                        const flickrAlbum = document.getElementById('flickr-album');
-                        flickrAlbum.appendChild(aElement);
+                        const createdDate = new Date(photoInfo.dates.taken);
+                        return { photo, photoInfo, createdDate };
                     });
+
+                photoPromises.push(photoPromise);
+            });
+
+            Promise.all(photoPromises).then(photoData => {
+                // Sort the photo data based on created date
+                photoData.sort((a, b) => a.createdDate - b.createdDate);
+
+                // Reverse the sorted photo data to display in descending order
+                photoData.reverse();
+
+                // Create and append the photo elements to the album
+                const flickrAlbum = document.getElementById('flickr-album');
+
+                for (const { photo, photoInfo, createdDate } of photoData) {
+                    const owner = photoInfo.owner.username;
+                    const title = photoInfo.title._content;
+                    const imgUrl = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_b.jpg`;
+
+                    const aElement = document.createElement('a');
+                    aElement.href = `https://www.flickr.com/photos/${owner}/${photo.id}`;
+                    aElement.target = '_blank';
+
+                    const imgElement = document.createElement('img');
+                    imgElement.src = imgUrl;
+
+                    const captionElement = document.createElement('p');
+                    captionElement.textContent = title;
+
+                    aElement.appendChild(imgElement);
+                    aElement.appendChild(captionElement);
+
+                    flickrAlbum.appendChild(aElement);
+                }
             });
         });
 </script>
