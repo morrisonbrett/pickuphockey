@@ -37,9 +37,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Active)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Preferred)
-            </th>
             <th>&nbsp;</th>
         }
     </tr>
@@ -81,16 +78,11 @@
                     @Html.CheckBoxFor(modelItem => item.Active, htmlAttributes: new { id = "UserActive_" + item.Id })
                 </td>
                 <td>
-                    @Html.CheckBoxFor(modelItem => item.Preferred, htmlAttributes: new { id = "UserPreferred_" + item.Id })
-                </td>
-                <td>
                     @{
                         var spanid_a = "ActiveMessage_" + item.Id;
-                        var spanid_p = "PreferredMessage_" + item.Id;
                     }
                     @{
                         <span id="@spanid_a"></span><br />
-                        <span id="@spanid_p"></span>
                     }
                 </td>
             }
