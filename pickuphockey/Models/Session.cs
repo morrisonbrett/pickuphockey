@@ -13,6 +13,19 @@ namespace pickuphockey.Models
         Sell
     }
 
+    public enum LockerRoom13Status
+    {
+        In,
+        Maybe,
+        Out
+    }
+
+    public class LockerRoom13User
+    {
+        public LockerRoom13Status lockerRoom13Status { get; set; }
+        public ApplicationUser user { get; set; }
+    }
+
     public class Session
     {
         private readonly TimeZoneInfo _pstZone;
@@ -24,6 +37,7 @@ namespace pickuphockey.Models
         {
             ActivityLogs = new HashSet<ActivityLog>();
             BuySells = new HashSet<BuySell>();
+            LockerRoom13Users = new HashSet<LockerRoom13User>();
             _pstZone = TimeZoneInfo.FindSystemTimeZoneById(System.Configuration.ConfigurationManager.AppSettings["DisplayTimeZone"]);
             _sessionEndTime = TimeSpan.Parse(System.Configuration.ConfigurationManager.AppSettings["SessionEndTime"]);
             _buyDayMinimum = int.Parse(System.Configuration.ConfigurationManager.AppSettings["BuyDayMinimum"]);
@@ -46,7 +60,7 @@ namespace pickuphockey.Models
             if (RegularSetId == null || Regulars == null || Regulars.Count == 0)
                 return -1;
 
-            // See if the User has a roster regular spot for this sesson
+            // See if the User has a roster regular spot for this session
             var r = Regulars.Where(t => t.UserId == User.Id);
             if (r.Any())
                 return 1;
@@ -128,6 +142,10 @@ namespace pickuphockey.Models
         [DisplayName("Roster")]
         [NotMapped]
         public virtual ICollection<Regular> Regulars { get; set; }
+
+        [DisplayName("LockerRoom13Users")]
+        [NotMapped]
+        public virtual ICollection<LockerRoom13User> LockerRoom13Users { get; set; }
 
         [NotMapped]
         public ICollection<BuySell> LightSubs { get; set; }

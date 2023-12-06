@@ -1,0 +1,30 @@
+﻿@model IEnumerable<pickuphockey.Models.Session>
+@{
+    var list = Model;
+}
+
+@foreach (var item in list)
+{
+    var lockerRoom13Users = item.LockerRoom13Users.OrderBy(u => u.lockerRoom13Status).ToList();
+
+    <b>@item.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm")</b>
+    <br />
+    foreach (var l in lockerRoom13Users)
+    {
+        if (l.lockerRoom13Status == pickuphockey.Models.LockerRoom13Status.In)
+        {
+            <span>✅ </span>
+        }
+        else if (l.lockerRoom13Status == pickuphockey.Models.LockerRoom13Status.Out)
+        {
+            <span>❌ </span>
+        }
+        else if (l.lockerRoom13Status == pickuphockey.Models.LockerRoom13Status.Maybe)
+        {
+            <span>❔ </span>
+        }
+        @l.user.FullName <span> - </span> @l.lockerRoom13Status.ToString()
+        <br />
+    }
+    <hr />
+}

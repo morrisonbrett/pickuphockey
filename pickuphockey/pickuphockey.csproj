@@ -474,6 +474,7 @@
     <Content Include="Content\images\icon\ms-icon-150x150.png" />
     <Content Include="Content\images\icon\ms-icon-310x310.png" />
     <Content Include="Content\images\icon\ms-icon-70x70.png" />
+    <Content Include="Content\lr13.jpg" />
     <Content Include="Content\paypal.png" />
     <Content Include="Content\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -748,6 +749,8 @@
     <Content Include="Views\Account\Impersonate.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
     <Content Include="Views\Users\GamePucks.cshtml" />
+    <Content Include="Views\Home\LockerRoom13.cshtml" />
+    <Content Include="Views\Shared\_LockerRoom13Partial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

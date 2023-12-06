@@ -1,0 +1,18 @@
+﻿@model IEnumerable<pickuphockey.Models.Session>
+@{
+    ViewBag.Title = "Locker Room 13";
+}
+
+<div class="row">
+    <div class="col-md-4 text-left">
+        <div class="row">
+            <img src="~/Content/lr13.jpg" alt="Locker Room 13" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <h2>Upcoming Pickups</h2>
+        @Html.Partial("_LockerRoom13Partial", Model)
+    </div>
+</div>
