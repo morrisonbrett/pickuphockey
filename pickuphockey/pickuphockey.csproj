@@ -421,6 +421,10 @@
     <Compile Include="Migrations\202306141946419_EmergencyContactInfo.designer.cs">
       <DependentUpon>202306141946419_EmergencyContactInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202312061956109_Locker Room 13.cs" />
+    <Compile Include="Migrations\202312061956109_Locker Room 13.designer.cs">
+      <DependentUpon>202312061956109_Locker Room 13.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -790,6 +794,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202306141946419_EmergencyContactInfo.resx">
       <DependentUpon>202306141946419_EmergencyContactInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202312061956109_Locker Room 13.resx">
+      <DependentUpon>202312061956109_Locker Room 13.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
