@@ -74,3 +74,21 @@ WHERE Id NOT IN (SELECT BuyerUserId from BuySells WHERE BuyerUserId IS NOT NULL)
 AND Id NOT IN (SELECT DISTINCT UserId from Regulars)
 AND Active = 1
 ORDER BY FirstName
+
+/* Subs last bought by date */
+SELECT Name, SessionDate, BuySellsSessionId, BuyerUserId FROM BuySellsByBuyer
+WHERE SellerUserId IS NOT NULL
+  AND SessionDate = (
+    SELECT MAX(SessionDate) FROM BuySellsByBuyer bb
+    WHERE bb.BuyerUserId = BuySellsByBuyer.BuyerUserId
+      AND bb.SellerUserId IS NOT NULL
+      AND NOT EXISTS (
+        SELECT 1 FROM BuySellsByBuyer bb2
+        WHERE bb2.SessionId = bb.SessionId 
+          AND bb2.SellerUserId = bb.BuyerUserId
+      )
+	  AND NOT EXISTS (
+		SELECT UserId from Regulars WHERE UserId = bb.BuyerUserId
+	  )
+  )
+ORDER BY SessionDate DESC
