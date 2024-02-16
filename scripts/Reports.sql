@@ -92,3 +92,52 @@ WHERE SellerUserId IS NOT NULL
 	  )
   )
 ORDER BY SessionDate DESC
+
+/* Times from bought to payment sent */
+WITH RankedTimes AS (
+    SELECT
+        b.FirstName,
+        b.LastName,
+        DATEDIFF(SECOND, b.CreateDateTime, s.CreateDateTime) AS TimeDifference,
+        ROW_NUMBER() OVER (PARTITION BY b.UserId ORDER BY DATEDIFF(SECOND, b.CreateDateTime, s.CreateDateTime) ASC) AS FastestRank,
+        ROW_NUMBER() OVER (PARTITION BY b.UserId ORDER BY DATEDIFF(SECOND, b.CreateDateTime, s.CreateDateTime) DESC) AS SlowestRank,
+        b.SessionId,
+        b.UserId
+    FROM
+        BoughtAndSentView AS b
+    JOIN
+        BoughtAndSentView AS s ON b.SessionId = s.SessionId AND b.UserId = s.UserId
+    JOIN
+        Sessions AS ss ON b.SessionId = ss.SessionId
+    WHERE
+        b.ActivityType = 'BOUGHT' 
+        AND s.ActivityType = 'SENT'
+        AND ss.SessionDate >= '2023-11-01'
+)
+SELECT
+    FirstName,
+    LastName,
+    MIN(TimeDifference) AS FastestTimeS,
+    dbo.FormatDateTimeFromSeconds(MIN(TimeDifference)) AS FastestTime,
+    MAX(TimeDifference) AS SlowestTimeS,
+    dbo.FormatDateTimeFromSeconds(MAX(TimeDifference)) AS SlowestTime,
+    MIN(SessionId) AS FastestSessionID,
+    MAX(SessionId) AS SlowestSessionID,
+    AVG(TimeDifference) AS AverageTimeS,
+    dbo.FormatDateTimeFromSeconds(AVG(TimeDifference)) AS AverageTime,
+    COUNT(DISTINCT SessionId) AS SessionCount,
+    UserId
+FROM
+    RankedTimes
+WHERE
+    FastestRank > 2  -- Exclude top 2 fastest times
+    AND SlowestRank > 2  -- Exclude bottom 2 slowest times
+    AND UserId IN (
+        SELECT UserId
+        FROM BoughtAndSentView
+        GROUP BY UserId
+    )
+GROUP BY
+    UserId, FirstName, LastName
+ORDER BY
+    AverageTimeS;
