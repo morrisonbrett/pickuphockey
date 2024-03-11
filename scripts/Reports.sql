@@ -87,9 +87,21 @@ WHERE SellerUserId IS NOT NULL
         WHERE bb2.SessionId = bb.SessionId 
           AND bb2.SellerUserId = bb.BuyerUserId
       )
-	  AND NOT EXISTS (
-		SELECT UserId from Regulars WHERE UserId = bb.BuyerUserId
-	  )
+  )
+ORDER BY SessionDate DESC
+
+/* Subs first bought by date */
+SELECT Name, SessionDate, BuySellsSessionId, BuyerUserId FROM BuySellsByBuyer
+WHERE SellerUserId IS NOT NULL
+  AND SessionDate = (
+    SELECT MIN(SessionDate) FROM BuySellsByBuyer bb
+    WHERE bb.BuyerUserId = BuySellsByBuyer.BuyerUserId
+      AND bb.SellerUserId IS NOT NULL
+      AND NOT EXISTS (
+        SELECT 1 FROM BuySellsByBuyer bb2
+        WHERE bb2.SessionId = bb.SessionId 
+          AND bb2.SellerUserId = bb.BuyerUserId
+      )
   )
 ORDER BY SessionDate DESC
 
