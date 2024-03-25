@@ -4,16 +4,6 @@
 @{
     var isAdmin = User.IsInRole("Admin");
     var isSubAdmin = User.IsInRole("SubAdmin");
-
-    // https://www.paypal.com/us/smarthelp/article/how-do-i-add-paypal-checkout-to-my-custom-shopping-cart-ts1200
-    var PayPalUrl = "https://www.paypal.com/cgi-bin/webscr";
-    if (HttpContext.Current.Request.Url.AbsoluteUri.Contains("localhost")) {
-        PayPalUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr";
-    }
-
-
-    // https://gabeoleary.com/posts/venmo-deeplinking-including-from-web-apps
-    var VenmoUrl = "https://venmo.com";
 }
 <h2>Buys / Sells</h2>
 
@@ -113,41 +103,7 @@
         <td>
             @if (!string.IsNullOrEmpty(item.SellerUserId) && !string.IsNullOrEmpty(item.BuyerUserId) && item.BuyerUserId == User.Identity.GetUserId() && !item.PaymentSent)
             {
-                <div>
-                    <form action="@PayPalUrl" method="post" target="_top">
-                        <input type="hidden" name="cmd" value="_xclick">
-                        <input type="hidden" name="business" value="@item.SellerUser.PayPalEmail">
-                        <input type="hidden" name="lc" value="US">
-                        <input type="hidden" name="item_name" value="@System.Configuration.ConfigurationManager.AppSettings["SiteTitle"] - @item.Session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm")">
-                        <input type="hidden" name="amount" value="@System.Configuration.ConfigurationManager.AppSettings["SessionBuyPrice"]">
-                        <input type="hidden" name="currency_code" value="USD">
-                        <input type="hidden" name="button_subtype" value="services">
-                        <input type="hidden" name="no_note" value="0">
-                        <input type="hidden" name="tax_rate" value="0.000">
-                        <input type="hidden" name="shipping" value="0.00">
-                        <input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynow_SM.gif:NonHostedGuest">
-                        <input type="hidden" name="return" value="@HttpContext.Current.Request.Url.AbsoluteUri">
-                        <input type="hidden" name="cancel_return" value="@HttpContext.Current.Request.Url.AbsoluteUri">
-                        <input type="image" src="~/Content/paypal.png" width="150" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-                        <img alt="" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-                    </form>
-                </div>
-                if (!string.IsNullOrEmpty(item.SellerUser.VenmoAccount))
-                {
-                    <div>
-                        <form action="@VenmoUrl/@item.SellerUser.VenmoAccount" method="get" target="_blank">
-                            <input type="hidden" name="txn" value="pay">
-                            <input type="hidden" name="note" value="@System.Configuration.ConfigurationManager.AppSettings["SiteTitle"] - @item.Session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm")">
-                            <input type="hidden" name="amount" value="@System.Configuration.ConfigurationManager.AppSettings["SessionBuyPrice"]">
-                            <input type="image" src="~/Content/venmo.png" width="150" border="0" name="submit" alt="Venmo - Fast, safe, social payments">
-                            @if (!string.IsNullOrEmpty(item.SellerUser.MobileLast4)) {
-                                <div style="margin-left:30px;margin-top:-7px">
-                                    <span style="color:royalblue">@string.Format("Last 4: " + @item.SellerUser.MobileLast4)</span>
-                                </div>
-                            }
-                        </form>
-                    </div>
-                }
+                <input type="image" src="~/Content/paynow.png" width="150" border="0" name="paynow" alt="Pay Now" onclick="location.href='@Url.Action("Payment", "BuySells", new { id = item.BuySellId })';return false;">
             }
             @if (!string.IsNullOrEmpty(item.BuyerUserId) && !string.IsNullOrEmpty(item.SellerUserId))
             {

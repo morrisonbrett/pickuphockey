@@ -724,6 +724,24 @@ namespace pickuphockey.Controllers
             return Json(new { Success = true, Message = "Updated" });
         }
 
+        // GET: BuySell/Payment
+        public ActionResult Payment(int id)
+        {
+            if (Request.Url == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var buySell = _db.BuySell.FirstOrDefault(q => q.BuySellId == id);
+            if (buySell == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var session = _db.Sessions.Find(buySell.SessionId);
+            if (session == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            buySell.SellerUser = UserManager.FindById(buySell.SellerUserId);
+            buySell.BuyerUser = UserManager.FindById(buySell.BuyerUserId);
+            ViewBag.SessionDate = session.SessionDate;
+
+            return View(buySell);
+        }
+
         private void AutoFlagFilterBuyer(ref BuySell buySell)
         {
             // Autoflag note if it has keywords. This could be factored into a more sophisticated content
