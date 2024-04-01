@@ -3,19 +3,17 @@
     ViewBag.Title = System.Configuration.ConfigurationManager.AppSettings["SiteTitle"];
 }
 
-<div class="row">
-    <div class="col-md-4 text-left">
-        <div class="row">
-            <img src="~/Content/toyota_ice.jpg" alt="Toyota Center" width="320" height="163" />
-        </div>
+<div class="col-md-4 text-left">
+    <div class="row">
+        <img src="~/Content/toyota_ice.jpg" alt="Toyota Center" width="320" height="163" />
     </div>
-    <div class="col-md-4 text-left">
-        <div class="row">
-            <h1>@System.Configuration.ConfigurationManager.AppSettings["SiteTitle"]</h1>
-            <p class="lead text-left">Welcome to the @System.Configuration.ConfigurationManager.AppSettings["SiteTitle"] official player management portal.  This is your headquarters for viewing, buying, and selling your pickup spots.</p>
-            <p class="lead text-left">The mission since John Bryan founded this pickup in 2004 was and still is:<br /><br />
-            <b>To provide a safe skate for pickup hockey where players can improve their skills and have fun together.</b></p>
-        </div>
+</div>
+<div>
+    <div>
+        <h1>@System.Configuration.ConfigurationManager.AppSettings["SiteTitle"]</h1>
+        <p class="lead text-left">Welcome to the @System.Configuration.ConfigurationManager.AppSettings["SiteTitle"] official player management portal.  This is your headquarters for viewing, buying, and selling your pickup spots.</p>
+        <p class="lead text-left">The mission since John Bryan founded this pickup in 2004 was and still is:<br /><br />
+        <b>To provide a safe skate for pickup hockey where players can improve their skills and have fun together.</b></p>
     </div>
 </div>
 @if (!string.IsNullOrEmpty(ViewBag.StatusMessage)) {
