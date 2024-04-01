@@ -114,5 +114,13 @@ namespace pickuphockey.Controllers
 
             return RedirectToAction("Details", new { id = user.Id, Message = "User settings saved" });
         }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult RegularSets()
+        {
+            ViewBag.RegularSets = _db.RegularSets.OrderByDescending(t => t.CreateDateTime).ToList();
+
+            return View();
+        }
     }
 }

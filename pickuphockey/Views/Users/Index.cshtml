@@ -8,6 +8,8 @@
 @if (User.IsInRole("Admin"))
 {
     @Html.ActionLink("Download Active", "DownloadActive")
+    <br />
+    @Html.ActionLink("Regular Sets", "RegularSets")
 }
 <table class="table">
     <tr>
@@ -40,7 +42,8 @@
             <th>&nbsp;</th>
         }
     </tr>
-        @foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
         <tr>
             @if (User.IsInRole("Admin"))
             {
@@ -87,6 +90,6 @@
                 </td>
             }
         </tr>
-        }
+    }
 </table>
 @Html.ActionLink("Show in-active players", "Index", new { showInactive = "true" })

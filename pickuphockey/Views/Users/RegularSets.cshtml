@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Regular Sets";
+}
+
+<h2>Regular Sets</h2>
+<div class="form-group">
+    <div class="col-md-10">
+        @Html.DropDownList("RegularSetId", new SelectList(ViewBag.RegularSets, "RegularSetId", "Description"), new { @class = "form-control" })
+    </div>
+</div>
+<br />
+<div class="form-group">
+    <h2><span id="RegularSetDescription"></span></h2>
+    <table class="table">
+        <tr>
+            <th>Light</th>
+            <th>Dark</th>
+        </tr>
+        <tr>
+            <td valign="top" id="LightRegulars"></td>
+            <td valign="top" id="DarkRegulars"></td>
+        </tr>
+    </table>
+    <h2>Email Addresses</h2>
+    <span id="RegularSetEmails"></span>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" defer>
+    var dst = '@ViewBag.dst';
+
+    $('#SessionDate').datetimepicker({
+        defaultTime: dst
+    });
+
+    $(document).ready(function () {
+        var sel = document.getElementById("RegularSetId");
+        var regularSetId = sel.options[sel.selectedIndex].value;
+
+        LoadRegularSet(regularSetId);
+    });
+    </script>
+}

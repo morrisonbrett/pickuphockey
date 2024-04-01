@@ -9,8 +9,10 @@
 
     var lr = document.getElementById("LightRegulars");
     var dr = document.getElementById("DarkRegulars");
+    var em = document.getElementById("RegularSetEmails");
     lr.innerHTML = '';
     dr.innerHTML = '';
+    em.innerHTML = '';
 
     $.ajax({
         type: "POST",
@@ -26,6 +28,7 @@
 
             var lrt = '';
             var drt = '';
+            var ems = '';
 
             var lightTotal = 0.0;
             var darkTotal = 0.0;
@@ -53,6 +56,7 @@
                     darkCount++;
                     drt += s;
                 }
+                ems += result[i].User.Email + '<br />';
             }
 
             lrt += "<br/> <b>Total</b>: " + lightTotal.toFixed(1) + ", <b>Average</b>: " + (lightTotal / lightCount).toFixed(2);
@@ -61,6 +65,8 @@
             // Replace the TD with the data
             lr.innerHTML = lrt;
             dr.innerHTML = drt;
+
+            em.innerHTML = ems;
         }
     });
 }

@@ -753,6 +753,7 @@
     <Content Include="Views\Home\LockerRoom13.cshtml" />
     <Content Include="Views\Shared\_LockerRoom13Partial.cshtml" />
     <Content Include="Views\BuySells\Payment.cshtml" />
+    <Content Include="Views\Users\RegularSets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
