@@ -1,10 +1,40 @@
 ﻿@model pickuphockey.Models.Session
-@{ 
+@{
     var isAdmin = User.IsInRole("Admin");
     var isSubAdmin = User.IsInRole("SubAdmin");
 }
+<script>
+    function AddLight(name, pos) {
+        const lightTeamList = document.getElementById("light-list");
+        const listItem = document.createElement("div");
+        listItem.className = "player-item";
+        listItem.textContent = name + ((pos.length > 0) ? ', ' + pos : '');
+        lightTeamList.appendChild(listItem);
+    }
+
+    function AddDark(name, pos) {
+        const darkTeamList = document.getElementById("dark-list");
+        const listItem = document.createElement("div");
+        listItem.className = "player-item";
+        listItem.textContent = name + ((pos.length > 0) ? ', ' + pos : '');
+        darkTeamList.appendChild(listItem);
+    }
+</script>
 @if (Model.RegularSetId != null)
 {
+    <div class="team-container-wrapper">
+        <div class="team-container light-team">
+            <h1 class="team-name">Rockets</h1>
+            <img src="~/Content/Rockets_Logo.jpg" class="logo" />
+            <div id="light-list" class="player-list"></div>
+        </div>
+
+        <div class="team-container dark-team">
+            <h1 class="team-name">Beauties</h1>
+            <img src="~/Content/Beauties_Logo.jpg" class="logo" />
+            <div id="dark-list" , class="player-list"></div>
+        </div>
+    </div>
     <h2>Roster - @Model.RegularSet.Description</h2>
     <table class="table">
         <tr>
@@ -34,6 +64,12 @@
                             var rating = string.Format("{0:0.0}", item.User.Rating);
                             <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>}<span>, </span>
                         @Html.DisplayFor(modelItem => item.PositionPreference)
+                        <script>
+                            var playerName = "@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)";
+                            var playerPosition = "@Html.DisplayFor(modelItem => item.PositionPreference)"
+
+                            AddLight(playerName, playerPosition);
+                        </script>
                         <br />
                     }
                 }
@@ -58,6 +94,11 @@
                             var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
                             <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>
                         }
+                        <script>
+                            var playerName = "@Html.DisplayFor(modelItem => item.BuyerUser.FirstName) @Html.DisplayFor(modelItem => item.BuyerUser.LastName)";
+
+                            AddLight(playerName, '');
+                        </script>
                         <br />
                     }
                 }
@@ -84,6 +125,12 @@
                             var rating = string.Format("{0:0.0}", item.User.Rating);
                             <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>}<span>, </span>
                         @Html.DisplayFor(modelItem => item.PositionPreference)
+                        <script>
+                            var playerName = "@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)";
+                            var playerPosition = "@Html.DisplayFor(modelItem => item.PositionPreference)"
+
+                            AddDark(playerName, playerPosition);
+                        </script>
                         <br />
                     }
                 }
@@ -108,6 +155,11 @@
                             var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
                             <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>
                         }
+                        <script>
+                            var playerName = "@Html.DisplayFor(modelItem => item.BuyerUser.FirstName) @Html.DisplayFor(modelItem => item.BuyerUser.LastName)";
+
+                            AddDark(playerName, '');
+                        </script>
                         <br />
                     }
                 }
@@ -122,3 +174,67 @@
         }
     </table>
 }
+
+<style>
+    .team-container-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 5px;
+        flex-wrap: wrap;
+    }
+
+    .team-container {
+        flex: 1 0 400px;
+        padding: 20px;
+        border-radius: 25px;
+        margin: 10px;
+    }
+
+    .team-name {
+        font-size: 48px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 10px;
+        font-family: "Roboto Condensed", sans-serif;
+    }
+
+    .player-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 10px;
+    }
+
+    .player-item {
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-family: "Roboto Condensed", sans-serif;
+        font-size: 22px;
+    }
+
+    .light-team {
+        background-color: #f0f0f0;
+        color: #333;
+    }
+
+    .light-team .player-item {
+        background-color: #e0e0e0;
+    }
+
+    .dark-team {
+        background-color: #333;
+        color: #fff;
+    }
+
+    .dark-team .player-item {
+        background-color: #444;
+    }
+
+    .logo {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 180px;
+        padding: 10px;
+        border-radius: 25px;
+    }
+</style>
