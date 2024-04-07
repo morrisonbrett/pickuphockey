@@ -756,6 +756,7 @@
     <Content Include="Views\Shared\_LockerRoom13Partial.cshtml" />
     <Content Include="Views\BuySells\Payment.cshtml" />
     <Content Include="Views\Users\RegularSets.cshtml" />
+    <Content Include="Views\Shared\_RosterFormatted.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

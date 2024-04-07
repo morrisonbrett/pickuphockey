@@ -25,10 +25,10 @@
     {
         <span class="text-danger">@TempData["Message"]</span>
     }
-    <hr />
     @Html.Partial("_UnmarkedReceivedPartial", Model)
     @Html.Partial("_UnmarkedSentPartial", Model)
     @Html.Partial("_EmergencyInfoPartial", Model.User)
+    @Html.Partial("_RosterFormatted", Model)
     @if (!Model.IsPast)
     {
         <div class="form-group">
