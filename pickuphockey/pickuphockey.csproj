@@ -164,8 +164,8 @@
     <Reference Include="NodaTime, Version=3.1.11.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
       <HintPath>..\packages\NodaTime.3.1.11\lib\netstandard2.0\NodaTime.dll</HintPath>
     </Reference>
-    <Reference Include="SendGrid, Version=9.29.2.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\SendGrid.9.29.2\lib\net452\SendGrid.dll</HintPath>
+    <Reference Include="SendGrid, Version=9.29.3.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\SendGrid.9.29.3\lib\net452\SendGrid.dll</HintPath>
     </Reference>
     <Reference Include="SendGrid.CSharp.HTTP.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SendGrid.CSharp.HTTP.Client.3.4.12\lib\net45\SendGrid.CSharp.HTTP.Client.dll</HintPath>
