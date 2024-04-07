@@ -1,7 +1,7 @@
 ﻿@model pickuphockey.Models.Session
 <style>
     .team-container-wrapper {
-        display: flex;
+        display: none;
         justify-content: center;
         margin-bottom: 5px;
         flex-wrap: wrap;
@@ -40,18 +40,18 @@
         color: #333;
     }
 
-        .light-team .player-item {
-            background-color: #e0e0e0;
-        }
+    .light-team .player-item {
+        background-color: #e0e0e0;
+    }
 
     .dark-team {
         background-color: #333;
         color: #fff;
     }
 
-        .dark-team .player-item {
-            background-color: #444;
-        }
+    .dark-team .player-item {
+        background-color: #444;
+    }
 
     .logo {
         display: block;
@@ -61,8 +61,37 @@
         padding: 10px;
         border-radius: 25px;
     }
+
+    .toggle-wrapper {
+        text-align: left;
+        margin-top: 10px;
+    }
+
+    #toggleButton {
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 3px 6px;
+        border: none;
+        border-radius: 5px;
+        width: 20px;
+        margin-bottom: 3px;
+    }
 </style>
 <script>
+    function toggleTeamContainer() {
+        var teamContainer = document.getElementById("teamContainerWrapper");
+        var toggleButton = document.getElementById("toggleButton");
+
+        if (teamContainer.style.display === "flex") {
+            teamContainer.style.display = "none";
+            toggleButton.textContent = "+";
+        } else {
+            teamContainer.style.display = "flex";
+            toggleButton.textContent = "-";
+        }
+    }
+
     function AddLight(name, pos) {
         const lightTeamList = document.getElementById("light-list");
         const listItem = document.createElement("div");
@@ -81,17 +110,20 @@
 </script>
 @if (Model.RegularSetId != null)
 {
-    <div class="team-container-wrapper">
-        <div class="team-container light-team">
-            <h1 class="team-name">Rockets</h1>
-            <img src="~/Content/Rockets_Logo.jpg" class="logo" />
-            <div id="light-list" class="player-list"></div>
-        </div>
+    <div class="toggle-wrapper">
+        <button id="toggleButton" class="navbar-inverse" onclick="toggleTeamContainer()">+</button>
+        <div class="team-container-wrapper" id="teamContainerWrapper">
+            <div class="team-container light-team">
+                <h1 class="team-name">Rockets</h1>
+                <img src="~/Content/Rockets_Logo.jpg" class="logo" />
+                <div id="light-list" class="player-list"></div>
+            </div>
 
-        <div class="team-container dark-team">
-            <h1 class="team-name">Beauties</h1>
-            <img src="~/Content/Beauties_Logo.jpg" class="logo" />
-            <div id="dark-list" , class="player-list"></div>
+            <div class="team-container dark-team">
+                <h1 class="team-name">Beauties</h1>
+                <img src="~/Content/Beauties_Logo.jpg" class="logo" />
+                <div id="dark-list" , class="player-list"></div>
+            </div>
         </div>
     </div>
     foreach (var item in Model.Regulars.Where(r => r.TeamAssignment == pickuphockey.Models.TeamAssignment.Light).OrderByDescending(r => r.PositionPreference).ThenBy(u => u.User.FirstName))
