@@ -2,7 +2,7 @@
 EXEC sp_updatestats;
 
 /* Recent Activities, shows SessionDate column for context */
-SELECT TOP 200 FirstName + ' ' + LastName AS Name, DATEADD(HH, -8, ActivityLogs.CreateDateTime) as 'CreateDateTime PST', Activity, DATENAME(WEEKDAY, SessionDate) AS SessionDay, ActivityLogs.SessionId, SessionDate, ActivityLogs.UserId from ActivityLogs
+SELECT TOP 200 FirstName + ' ' + LastName AS Name, DATEADD(HH, -7, ActivityLogs.CreateDateTime) as 'CreateDateTime PST', Activity, DATENAME(WEEKDAY, SessionDate) AS SessionDay, ActivityLogs.SessionId, SessionDate, ActivityLogs.UserId from ActivityLogs
 INNER JOIN Sessions ON ActivityLogs.SessionId = sessions.SessionId
 INNER JOIN AspNetUsers ON AspNetUsers.Id = UserId
 ORDER BY ActivityLogs.CreateDateTime DESC
@@ -44,7 +44,7 @@ ORDER BY COUNT(SellerUserId) DESC
 
 /* Top Sellers - Adjust year and day variables */
 DECLARE @SellerYear INT
-SET @SellerYear = 2023
+SET @SellerYear = 2024
 DECLARE @SellerWeekday nvarchar(10)
 SET @SellerWeekday = 'Wednesday'
 
@@ -153,3 +153,22 @@ GROUP BY
     UserId, FirstName, LastName
 ORDER BY
     AverageTimeS;
+
+/* Number of buyers / session totals */
+SELECT BuySells.SessionId, Sessions.SessionDate, COUNT(DISTINCT CASE WHEN BuyerUserId IS NOT NULL AND SellerUserId IS NOT NULL THEN BuySellId END) AS [Sold Count]
+FROM dbo.BuySells
+INNER JOIN Sessions ON BuySells.SessionId = Sessions.SessionId
+WHERE Sessions.Note NOT LIKE '%cancelled%' AND SessionDate < GETDATE()
+GROUP BY BuySells.SessionId, Sessions.SessionDate
+ORDER BY [Sold Count] ASC
+
+SELECT [Sold Count], COUNT(*) AS [Session Count]
+FROM (
+    SELECT BuySells.SessionId, COUNT(DISTINCT CASE WHEN BuyerUserId IS NOT NULL AND SellerUserId IS NOT NULL THEN BuySellId END) AS [Sold Count]
+    FROM dbo.BuySells
+	INNER JOIN Sessions ON BuySells.SessionId = Sessions.SessionId
+	WHERE Sessions.Note NOT LIKE '%cancelled%' AND SessionDate < GETDATE()
+    GROUP BY BuySells.SessionId
+) AS Subquery
+GROUP BY [Sold Count]
+ORDER BY [Sold Count] ASC;
