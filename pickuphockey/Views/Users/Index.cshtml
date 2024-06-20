@@ -31,6 +31,9 @@
         <th>
             @Html.DisplayNameFor(model => model.PayPalEmail)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VenmoAccount)
+        </th>
         @if (User.IsInRole("Admin"))
         {
             <th>
@@ -71,6 +74,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PayPalEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VenmoAccount)
             </td>
             @if (User.IsInRole("Admin"))
             {
