@@ -51,6 +51,8 @@ namespace calendaralerter
                 // Determine storage file path
                 var storageFilePath = GetStorageFilePath();
 
+                _logger.LogInformation($"Storage file path: {storageFilePath}");
+
                 // Fetch the .ics file
                 using HttpClient client = new();
                 var icsContent = await client.GetStringAsync(CalendarUrl);
@@ -72,6 +74,8 @@ namespace calendaralerter
 
                 // Load previous state
                 var previousState = File.Exists(storageFilePath) ? await File.ReadAllTextAsync(storageFilePath) : string.Empty;
+
+                _logger.LogInformation("Previous state loaded successfully.");
 
                 // Serialize current state
                 var newCalendar = new Calendar();
@@ -95,6 +99,10 @@ namespace calendaralerter
                         // Update stored state only if email sent successfully
                         await File.WriteAllTextAsync(storageFilePath, currentState);
                     }
+                }
+                else
+                {
+                    _logger.LogInformation("No changes detected since last update.");
                 }
             }
             catch (Exception ex)
@@ -122,7 +130,7 @@ namespace calendaralerter
 
                 _logger.LogInformation($"Email send status: {response.StatusCode}");
 
-                if (response.StatusCode != System.Net.HttpStatusCode.OK && response.StatusCode != System.Net.HttpStatusCode.Accepted)
+                if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Accepted)
                 {
                     var responseBody = await response.Body.ReadAsStringAsync();
                     _logger.LogError($"Failed to send email: {responseBody}");
@@ -185,7 +193,7 @@ namespace calendaralerter
 
             // Determine the environment
             var isAzureEnvironment = !string.IsNullOrEmpty(azureHomePath);
-            var storageFilePath = isAzureEnvironment ? Path.Combine(azureHomePath, "site", "wwwroot", "calendar_state.txt") : localPath;
+            var storageFilePath = isAzureEnvironment ? Path.Combine(azureHomePath, "site", "data", "calendar_state.txt") : localPath;
 
             return storageFilePath;
         }
