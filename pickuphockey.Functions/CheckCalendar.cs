@@ -190,16 +190,41 @@ namespace pickuphockey.Functions
             return changes.ToString();
         }
 
-        private static string GetStorageFilePath()
+        private string GetStorageFilePath()
         {
             var localPath = "calendar_state.txt"; // Local development path
             var azureHomePath = Environment.GetEnvironmentVariable("HOME");
 
             // Determine the environment
             var isAzureEnvironment = !string.IsNullOrEmpty(azureHomePath);
-            var storageFilePath = isAzureEnvironment ? Path.Combine(azureHomePath, "site", "data", "calendar_state.txt") : localPath;
 
-            return storageFilePath;
+            if (isAzureEnvironment)
+            {
+                var dataDirectory = Path.Combine(azureHomePath, "site", "data");
+                var storageFilePath = Path.Combine(dataDirectory, "calendar_state.txt");
+
+                // Create the data directory if it doesn't exist
+                if (!Directory.Exists(dataDirectory))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(dataDirectory);
+                        _logger.LogInformation($"Created directory: {dataDirectory}");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Error creating directory: {ex.Message}");
+                        // If we can't create the directory, fall back to the root path
+                        storageFilePath = Path.Combine(azureHomePath, "site", "calendar_state.txt");
+                    }
+                }
+
+                return storageFilePath;
+            }
+            else
+            {
+                return localPath;
+            }
         }
     }
 }
