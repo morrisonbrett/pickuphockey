@@ -2,34 +2,49 @@ using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.Serialization;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Net;
 using System.Text;
 #pragma warning disable CS8601 // Possible null reference assignment.
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CA2254 // Template should be a static expression
 
 namespace calendaralerter
 {
-    public class CheckCalendar
+    public class CheckCalendar(ILoggerFactory loggerFactory)
     {
         private readonly string CalendarUrl = Environment.GetEnvironmentVariable("CalendarUrl");
         private readonly string SendGridApiKey = Environment.GetEnvironmentVariable("SendGridApiKey");
         private readonly string SendGridNotificationAddress = Environment.GetEnvironmentVariable("SendGridNotificationAddress");
         private readonly string SendGridFromAddress = Environment.GetEnvironmentVariable("SendGridFromAddress");
 
-        private readonly ILogger _logger;
-
-        public CheckCalendar(ILoggerFactory loggerFactory)
-        {
-            _logger = loggerFactory.CreateLogger<CheckCalendar>();
-        }
+        private readonly ILogger _logger = loggerFactory.CreateLogger<CheckCalendar>();
 
         [Function("CheckCalendar")]
-        public async Task RunAsync([TimerTrigger("0 17,5 * * *", RunOnStartup = true)] TimerInfo timerInfo) // Runs at 9am and 9pm PST
+        public async Task RunAsync([TimerTrigger("0 0 5,17 * * *", RunOnStartup = true)] TimerInfo timerInfo)
         {
-            _logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            await ExecuteAsync();
+        }
+
+        [Function("CheckCalendarHttp")]
+        public async Task<HttpResponseData> RunHttpAsync([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req)
+        {
+            _logger.LogInformation("HTTP trigger function executed.");
+
+            await ExecuteAsync();
+
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+            response.WriteString("Function executed successfully.");
+            return response;
+        }
+
+        private async Task ExecuteAsync()
+        {
+            _logger.LogInformation($"Function executed at: {DateTime.Now}");
 
             try
             {
@@ -37,7 +52,7 @@ namespace calendaralerter
                 var storageFilePath = GetStorageFilePath();
 
                 // Fetch the .ics file
-                using HttpClient client = new HttpClient();
+                using HttpClient client = new();
                 var icsContent = await client.GetStringAsync(CalendarUrl);
 
                 // Parse the .ics file
@@ -176,6 +191,6 @@ namespace calendaralerter
         }
     }
 }
+#pragma warning restore CA2254 // Template should be a static expression
 #pragma warning restore CS8604 // Possible null reference argument.
 #pragma warning restore CS8601 // Possible null reference assignment.
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
