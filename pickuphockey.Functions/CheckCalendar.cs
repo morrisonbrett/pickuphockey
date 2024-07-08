@@ -24,8 +24,10 @@ namespace pickuphockey.Functions
         private readonly ILogger _logger = loggerFactory.CreateLogger<CheckCalendar>();
 
         [Function("CheckCalendar")]
-        public async Task RunAsync([TimerTrigger("0 0 5,17 * * *", RunOnStartup = true)] TimerInfo timerInfo)
+        public async Task RunAsync([TimerTrigger("0 0 5,17 * * *")] TimerInfo timerInfo)
         {
+            _logger.LogInformation($"HTTP timer function executed.");
+
             await ExecuteAsync();
         }
 
