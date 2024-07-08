@@ -27,7 +27,7 @@ namespace calendaralerter
         }
 
         [Function("CheckCalendar")]
-        public async Task RunAsync([TimerTrigger("0 */12 * * *", RunOnStartup = true)] TimerInfo timerInfo)
+        public async Task RunAsync([TimerTrigger("0 17,5 * * *", RunOnStartup = true)] TimerInfo timerInfo) // Runs at 9am and 9pm PST
         {
             _logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
