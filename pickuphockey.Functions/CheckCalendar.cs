@@ -9,10 +9,9 @@ using SendGrid.Helpers.Mail;
 using System.Net;
 using System.Text;
 using File = System.IO.File;
+
 #pragma warning disable CS8601 // Possible null reference assignment.
 #pragma warning disable CS8604 // Possible null reference argument.
-#pragma warning disable CA2254 // Template should be a static expression
-
 namespace pickuphockey.Functions
 {
     public class CheckCalendar(ILoggerFactory loggerFactory)
@@ -24,10 +23,11 @@ namespace pickuphockey.Functions
 
         private readonly ILogger _logger = loggerFactory.CreateLogger<CheckCalendar>();
 
+        #region interface
         [Function("CheckCalendar")]
         public async Task RunAsync([TimerTrigger("0 0 5,17 * * *")] TimerInfo timerInfo)
         {
-            _logger.LogInformation($"HTTP timer function executed.");
+            _logger.LogInformation("Timer trigger function executed.");
 
             await ExecuteAsync();
         }
@@ -44,7 +44,9 @@ namespace pickuphockey.Functions
             await response.WriteStringAsync("Function executed successfully.");
             return response;
         }
+        #endregion
 
+        #region helpers
         private static async Task<string?> GetICSFromFileSystem()
         {
             var icsFilename = "tspc.ics";
@@ -55,156 +57,10 @@ namespace pickuphockey.Functions
         private async Task<string> GetICSFromHttp()
         {
             using HttpClient client = new();
+            client.Timeout = TimeSpan.FromMinutes(4);
             var icsContent = await client.GetStringAsync(CalendarUrl);
 
             return icsContent;
-        }
-
-        private async Task ExecuteAsync()
-        {
-            _logger.LogInformation($"Function executed at: {DateTime.Now}");
-
-            try
-            {
-                // Determine storage file path
-                var storageFilePath = GetStorageFilePath();
-
-                _logger.LogInformation($"Storage file path: {storageFilePath}");
-
-                // Fetch the .ics file
-                var icsContent = await GetICSFromFileSystem() ?? await GetICSFromHttp();
-
-                // Parse the .ics file
-                var calendar = Calendar.Load(icsContent);
-                var futureEvents = calendar.Events
-                    .Where(e => e.Start.AsUtc > DateTime.UtcNow && e.Summary.Contains("John Bryan"))
-                    .OrderBy(e => e.Start.AsUtc)
-                    .Select(e => new CalendarEvent
-                    {
-                        Start = e.Start,
-                        End = e.End,
-                        Summary = e.Summary,
-                        Location = e.Location,
-                        Description = e.Description
-                    })
-                    .ToList();
-
-                // Load previous state
-                var previousState = File.Exists(storageFilePath) ? await File.ReadAllTextAsync(storageFilePath) : string.Empty;
-
-                _logger.LogInformation("Previous state loaded successfully.");
-
-                // Serialize current state
-                var newCalendar = new Calendar();
-                foreach (var calendarEvent in futureEvents)
-                {
-                    newCalendar.Events.Add(calendarEvent);
-                }
-                var serializer = new CalendarSerializer();
-                var currentState = serializer.SerializeToString(newCalendar);
-
-                // Compare states
-                if (previousState != currentState)
-                {
-                    // Extract changes
-                    var changes = ExtractCalendarChanges(previousState, currentState);
-
-                    // Send notification if there are changes
-                    if (!string.IsNullOrWhiteSpace(changes))
-                    {
-                        await SendNotificationEmail(changes);
-                        // Update stored state only if email sent successfully
-                        await File.WriteAllTextAsync(storageFilePath, currentState);
-                    }
-                    else
-                    {
-                        _logger.LogInformation("No changes detected since last update.");
-                    }
-                }
-                else
-                {
-                    _logger.LogInformation("No changes detected since last update.");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error occurred: {ex.Message}");
-            }
-        }
-
-        private async Task SendNotificationEmail(string changes)
-        {
-            try
-            {
-                var client = new SendGridClient(SendGridApiKey);
-                var from = new EmailAddress(SendGridFromAddress, "Pickup Hockey - Calendar Monitor");
-                var to = new EmailAddress(SendGridNotificationAddress);
-                var subject = "Pickup Hockey - Calendar Update Detected";
-
-                // Format the email body with HTML for better readability
-                var htmlContent = FormatEmailBody(changes);
-
-                var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent: null, htmlContent);
-
-                _logger.LogInformation("Sending email...");
-                var response = await client.SendEmailAsync(msg);
-
-                _logger.LogInformation($"Email send status: {response.StatusCode}");
-
-                if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Accepted)
-                {
-                    var responseBody = await response.Body.ReadAsStringAsync();
-                    _logger.LogError($"Failed to send email: {responseBody}");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Exception occurred while sending email: {ex.Message}");
-            }
-        }
-
-        private static string FormatEmailBody(string changes)
-        {
-            // Format changes into HTML for better readability in the email
-            var htmlBuilder = new StringBuilder();
-            htmlBuilder.Append("<html><body>");
-            htmlBuilder.Append("<h2>Pickup Hockey - Calendar Update Details:</h2>");
-            htmlBuilder.Append("<p>");
-            htmlBuilder.Append(changes.Replace("\n", "<br>"));
-            htmlBuilder.Append("</p>");
-            htmlBuilder.Append("</body></html>");
-
-            return htmlBuilder.ToString();
-        }
-
-        private static string ExtractCalendarChanges(string previousState, string currentState)
-        {
-            // Compare previous and current states to extract changes
-            if (string.IsNullOrEmpty(previousState))
-                return currentState;
-
-            // Split the states into lines for comparison
-            var previousLines = previousState.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            var currentLines = currentState.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-            // Compare line by line, ignoring UID and DTSTAMP
-            var changes = new StringBuilder();
-            for (var i = 0; i < Math.Min(previousLines.Length, currentLines.Length); i++)
-            {
-                // Skip comparing lines that start with UID or DTSTAMP
-                if (!previousLines[i].StartsWith("UID:") && !previousLines[i].StartsWith("DTSTAMP:") &&
-                    !currentLines[i].StartsWith("UID:") && !currentLines[i].StartsWith("DTSTAMP:"))
-                {
-                    if (previousLines[i] != currentLines[i])
-                    {
-                        changes.AppendLine($"Change detected:");
-                        changes.AppendLine($"Previous: {previousLines[i]}");
-                        changes.AppendLine($"Current: {currentLines[i]}");
-                    }
-                }
-            }
-
-            return changes.ToString();
         }
 
         private string GetStorageFilePath()
@@ -243,8 +99,171 @@ namespace pickuphockey.Functions
                 return localPath;
             }
         }
+
+        private async Task SendEmail(string subject, string bodyContent, string bodyTitle)
+        {
+            try
+            {
+                var client = new SendGridClient(SendGridApiKey);
+                var from = new EmailAddress(SendGridFromAddress, "Pickup Hockey - Calendar Monitor");
+                var to = new EmailAddress(SendGridNotificationAddress);
+                var htmlContent = FormatEmailBody(bodyContent, bodyTitle);
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent: null, htmlContent);
+
+                _logger.LogInformation("Sending email...");
+                var response = await client.SendEmailAsync(msg);
+                _logger.LogInformation($"Email send status: {response.StatusCode}");
+
+                if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Accepted)
+                {
+                    var responseBody = await response.Body.ReadAsStringAsync();
+                    _logger.LogError($"Failed to send email: {responseBody}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception occurred while sending email: {ex.Message}");
+            }
+        }
+
+        private static string FormatEmailBody(string content, string title)
+        {
+            return $@"
+                <html>
+                <body><h2>Pickup Hockey - {title}</h2>
+                <p>{content.Replace("\n", "<br>")}</p>
+                </body>
+                </html>";
+        }
+
+        private Task SendExceptionEmail(string errorMessage)
+        {
+            return SendEmail("Pickup Hockey - Calendar Monitor Exception", errorMessage, "Calendar Exception Details");
+        }
+
+        private Task SendNotificationEmail(string changes)
+        {
+            return SendEmail("Pickup Hockey - Calendar Update Detected", changes, "Calendar Update Details");
+        }
+        #endregion
+
+        #region corelogic
+        private async Task ExecuteAsync()
+        {
+            _logger.LogInformation($"{nameof(ExecuteAsync)} executed at: {DateTime.Now}");
+
+            try
+            {
+                var storageFilePath = GetStorageFilePath();
+                _logger.LogInformation($"Storage file path: {storageFilePath}");
+
+                var icsContent = await GetICSFromFileSystem() ?? await GetICSFromHttp();
+
+                var calendar = Calendar.Load(icsContent);
+                var futureEvents = calendar.Events.Where(e => e.Start.AsUtc > DateTime.UtcNow && e.Summary.Contains("John Bryan")).OrderBy(e => e.Start.AsUtc).ToList();
+
+                var previousState = File.Exists(storageFilePath) ? await File.ReadAllTextAsync(storageFilePath) : string.Empty;
+                _logger.LogInformation("Previous state loaded successfully.");
+
+                var newCalendar = new Calendar();
+                foreach (var calendarEvent in futureEvents)
+                {
+                    newCalendar.Events.Add(calendarEvent);
+                }
+                var serializer = new CalendarSerializer();
+                var currentState = serializer.SerializeToString(newCalendar);
+
+                var changes = ExtractCalendarChanges(previousState, currentState);
+
+                await File.WriteAllTextAsync(storageFilePath, currentState);
+
+                if (!string.IsNullOrWhiteSpace(changes))
+                {
+                    await SendNotificationEmail(changes);
+                }
+                else
+                {
+                    _logger.LogInformation("No changes detected since last update.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occurred: {ex.Message}");
+                await SendExceptionEmail(ex.Message);
+            }
+        }
+
+        private static string ExtractCalendarChanges(string previousState, string currentState)
+        {
+            if (string.IsNullOrEmpty(previousState))
+                return "Initial state loaded.";
+
+            var previousCalendar = Calendar.Load(previousState);
+            var currentCalendar = Calendar.Load(currentState);
+
+            var now = DateTimeOffset.UtcNow;
+
+            var previousEvents = previousCalendar.Events.Where(e => e.Start.AsUtc > now && e.Summary.Contains("John Bryan")).ToList();
+            var currentEvents = currentCalendar.Events.Where(e => e.Start.AsUtc > now && e.Summary.Contains("John Bryan")).ToList();
+
+            var changes = new StringBuilder();
+
+            foreach (var currentEvent in currentEvents)
+            {
+                var matchingPreviousEvent = previousEvents.FirstOrDefault(e => EventsMatch(e, currentEvent));
+
+                if (matchingPreviousEvent == null)
+                {
+                    changes.AppendLine("Event Added:");
+                    AppendEventDetails(changes, currentEvent);
+                }
+                else if (!EventsAreEqual(matchingPreviousEvent, currentEvent))
+                {
+                    changes.AppendLine("Event Changed:");
+                    changes.AppendLine("From:");
+                    AppendEventDetails(changes, matchingPreviousEvent);
+                    changes.AppendLine("To:");
+                    AppendEventDetails(changes, currentEvent);
+                }
+
+                previousEvents.Remove(matchingPreviousEvent);
+            }
+
+            foreach (var removedEvent in previousEvents)
+            {
+                changes.AppendLine("Event Removed:");
+                AppendEventDetails(changes, removedEvent);
+            }
+
+            return changes.ToString();
+        }
+
+        private static bool EventsMatch(CalendarEvent e1, CalendarEvent e2)
+        {
+            // Consider events to match if they have the same summary and start within 24 hours of each other
+            return e1.Summary == e2.Summary && Math.Abs((e1.Start.AsUtc - e2.Start.AsUtc).TotalHours) < 24;
+        }
+
+        private static bool EventsAreEqual(CalendarEvent e1, CalendarEvent e2)
+        {
+            return e1.Start.AsUtc == e2.Start.AsUtc &&
+                   e1.End.AsUtc == e2.End.AsUtc &&
+                   e1.Summary == e2.Summary &&
+                   e1.Location == e2.Location &&
+                   e1.Description == e2.Description;
+        }
+
+        private static void AppendEventDetails(StringBuilder sb, CalendarEvent e)
+        {
+            sb.AppendLine($"Start: {e.Start}");
+            sb.AppendLine($"End: {e.End}");
+            sb.AppendLine($"Summary: {e.Summary}");
+            sb.AppendLine($"Location: {e.Location}");
+            sb.AppendLine($"Description: {e.Description}");
+            sb.AppendLine();
+        }
+        #endregion
     }
 }
-#pragma warning restore CA2254 // Template should be a static expression
 #pragma warning restore CS8604 // Possible null reference argument.
 #pragma warning restore CS8601 // Possible null reference assignment.
