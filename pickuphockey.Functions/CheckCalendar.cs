@@ -8,6 +8,7 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Net;
 using System.Text;
+using File = System.IO.File;
 #pragma warning disable CS8601 // Possible null reference assignment.
 #pragma warning disable CS8604 // Possible null reference argument.
 #pragma warning disable CA2254 // Template should be a static expression
@@ -44,6 +45,21 @@ namespace pickuphockey.Functions
             return response;
         }
 
+        private static async Task<string?> GetICSFromFileSystem()
+        {
+            var icsFilename = "tspc.ics";
+
+            return File.Exists(icsFilename) ? await File.ReadAllTextAsync(icsFilename) : null;
+        }
+
+        private async Task<string> GetICSFromHttp()
+        {
+            using HttpClient client = new();
+            var icsContent = await client.GetStringAsync(CalendarUrl);
+
+            return icsContent;
+        }
+
         private async Task ExecuteAsync()
         {
             _logger.LogInformation($"Function executed at: {DateTime.Now}");
@@ -56,8 +72,7 @@ namespace pickuphockey.Functions
                 _logger.LogInformation($"Storage file path: {storageFilePath}");
 
                 // Fetch the .ics file
-                using HttpClient client = new();
-                var icsContent = await client.GetStringAsync(CalendarUrl);
+                var icsContent = await GetICSFromFileSystem() ?? await GetICSFromHttp();
 
                 // Parse the .ics file
                 var calendar = Calendar.Load(icsContent);
