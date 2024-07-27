@@ -14,14 +14,26 @@ using File = System.IO.File;
 #pragma warning disable CS8604 // Possible null reference argument.
 namespace pickuphockey.Functions
 {
-    public class CheckCalendar(ILoggerFactory loggerFactory)
+    public class CheckCalendar
     {
         private readonly string CalendarUrl = Environment.GetEnvironmentVariable("CalendarUrl");
         private readonly string SendGridApiKey = Environment.GetEnvironmentVariable("SendGridApiKey");
         private readonly string SendGridNotificationAddress = Environment.GetEnvironmentVariable("SendGridNotificationAddress");
         private readonly string SendGridFromAddress = Environment.GetEnvironmentVariable("SendGridFromAddress");
 
-        private readonly ILogger _logger = loggerFactory.CreateLogger<CheckCalendar>();
+        private readonly ILogger _logger;
+        private readonly InMemoryLoggerProvider _loggerProvider;
+
+        public CheckCalendar(ILoggerFactory loggerFactory)
+        {
+            _loggerProvider = new InMemoryLoggerProvider();
+            var factory = LoggerFactory.Create(builder =>
+            {
+                builder.AddProvider(_loggerProvider);
+                builder.AddProvider(new ForwardingLoggerProvider(loggerFactory));
+            });
+            _logger = factory.CreateLogger<CheckCalendar>();
+        }
 
         #region interface
         [Function("CheckCalendar")]
@@ -41,7 +53,8 @@ namespace pickuphockey.Functions
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
-            await response.WriteStringAsync("Function executed successfully.");
+            var logs = _loggerProvider.GetLogs();
+            await response.WriteStringAsync($"Function executed successfully.\n\nLog:\n{logs}");
             return response;
         }
         #endregion
