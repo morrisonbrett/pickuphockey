@@ -206,7 +206,7 @@ namespace pickuphockey.Functions
             }
         }
 
-        private static string ExtractCalendarChanges(string previousState, string currentState)
+        private string ExtractCalendarChanges(string previousState, string currentState)
         {
             if (string.IsNullOrEmpty(previousState))
                 return "Initial state loaded.";
@@ -217,10 +217,16 @@ namespace pickuphockey.Functions
             var now = DateTimeOffset.UtcNow;
 
             var previousEvents = previousCalendar.Events.Where(e => e.Start.AsUtc > now && e.Summary.Contains("John Bryan")).ToList();
+            _logger.LogInformation($"{previousEvents.Count} previous events found");
+
             var currentEvents = currentCalendar.Events.Where(e => e.Start.AsUtc > now && e.Summary.Contains("John Bryan")).ToList();
+            _logger.LogInformation($"{currentEvents.Count} current events found");
 
             var changes = new StringBuilder();
 
+            var addedCount = 0;
+            var changedCount = 0;
+            var removedCount = 0;
             foreach (var currentEvent in currentEvents)
             {
                 var matchingPreviousEvent = previousEvents.FirstOrDefault(e => EventsMatch(e, currentEvent));
@@ -229,6 +235,7 @@ namespace pickuphockey.Functions
                 {
                     changes.AppendLine("Event Added:");
                     AppendEventDetails(changes, currentEvent);
+                    addedCount++;
                 }
                 else if (!EventsAreEqual(matchingPreviousEvent, currentEvent))
                 {
@@ -237,6 +244,7 @@ namespace pickuphockey.Functions
                     AppendEventDetails(changes, matchingPreviousEvent);
                     changes.AppendLine("To:");
                     AppendEventDetails(changes, currentEvent);
+                    changedCount++;
                 }
 
                 previousEvents.Remove(matchingPreviousEvent);
@@ -246,7 +254,10 @@ namespace pickuphockey.Functions
             {
                 changes.AppendLine("Event Removed:");
                 AppendEventDetails(changes, removedEvent);
+                removedCount++;
             }
+
+            _logger.LogInformation($"{addedCount} added, {changedCount} changed, {removedCount} removed");
 
             return changes.ToString();
         }
