@@ -279,8 +279,8 @@ namespace pickuphockey.Functions
 
         private static void AppendEventDetails(StringBuilder sb, CalendarEvent e)
         {
-            sb.AppendLine($"Start: {e.Start}");
-            sb.AppendLine($"End: {e.End}");
+            sb.AppendLine($"Start: {e.Start.ToTimeZone("Pacific Standard Time")}");
+            sb.AppendLine($"End: {e.End.ToTimeZone("Pacific Standard Time")}");
             sb.AppendLine($"Summary: {e.Summary}");
             sb.AppendLine($"Location: {e.Location}");
             sb.AppendLine($"Description: {e.Description}");
