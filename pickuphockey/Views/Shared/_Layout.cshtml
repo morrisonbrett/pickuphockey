@@ -149,6 +149,9 @@
     <script>
         function toggleRatingButton() {
             const button = document.getElementById('ratingButton');
+            if (!button) {
+                return;
+            }
 
             if (isRatingsCookieSet()) {
                 button.style.backgroundColor = 'red';
@@ -166,6 +169,10 @@
 
         function setupButton() {
             const button = document.getElementById('ratingButton');
+            if (!button) {
+                return;
+            }
+
             button.addEventListener('click', function () {
                 if (isRatingsCookieSet()) {
                     deleteRatingsCookie();
