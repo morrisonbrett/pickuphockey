@@ -60,3 +60,19 @@ textarea {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+#ratingButton {
+    width: 24px;
+    height: 24px;
+    margin-top: 14px;
+    margin-bottom: 14px;
+    border-radius: 50%;
+    border: 2px;
+    color: white;
+    border-color: black;
+    background-color: #013E82;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}

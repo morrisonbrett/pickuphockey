@@ -41,9 +41,9 @@
                 s += result[i].User.FirstName;
                 s += '<span> </span>';
                 s += result[i].User.LastName;
-                s += '<span> (</span>';
+                s += '<span id="ratingDisplay" display="none"><span> (</span>';
                 s += result[i].User.Rating.toFixed(1);
-                s += '<span>), </span>';
+                s += '</span><span id="ratingDisplay" display="none">)</span><span>, </span>';
                 s += result[i].PositionPreference == 1 ? 'Forward' : 'Defense';
                 s += '<br />'
 
@@ -59,8 +59,8 @@
                 ems += result[i].User.Email + '<br />';
             }
 
-            lrt += "<br/> <b>Total</b>: " + lightTotal.toFixed(1) + ", <b>Average</b>: " + (lightTotal / lightCount).toFixed(2);
-            drt += "<br/> <b>Total</b>: " + darkTotal.toFixed(1) + ", <b>Average</b>: " + (darkTotal / darkCount).toFixed(2);
+            lrt += "<span id='ratingDisplay' display='none'><br/> <b>Total</b>: " + lightTotal.toFixed(1) + ", <b>Average</b>: " + (lightTotal / lightCount).toFixed(2) + "</span>";
+            drt += "<span id='ratingDisplay' display='none'><br/> <b>Total</b>: " + darkTotal.toFixed(1) + ", <b>Average</b>: " + (darkTotal / darkCount).toFixed(2) + "</span>";
 
             // Replace the TD with the data
             lr.innerHTML = lrt;
@@ -222,3 +222,18 @@ $(document).ready(function () {
         LoadRegularSet(regularSetId);
     });
 });
+
+function setRatingsCookie() {
+    const expirationTime = new Date(new Date().getTime() + 30 * 60 * 1000); // 30 minutes from now
+    document.cookie = `ratings=true; expires=${expirationTime.toUTCString()}; path=/`;
+}
+
+// Function to check if the "ratings" cookie is set
+function isRatingsCookieSet() {
+    return document.cookie.split(';').some(item => item.trim().startsWith('ratings='));
+}
+
+// Function to delete the "ratings" cookie
+function deleteRatingsCookie() {
+    document.cookie = 'ratings=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+}

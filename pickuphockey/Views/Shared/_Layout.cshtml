@@ -122,6 +122,10 @@
                     <li title="Game Pucks">@Html.ActionLink("Game Pucks", "GamePucks", "Users")</li>
                     <li title="About">@Html.ActionLink("About", "About", "Home")</li>
                     <li title="Sync Calendar"><a href="@Url.Action("Calendar", "Home")" title="Sync Calendar"><img alt="Sync Calendar" width="20" height="20" src="@Url.Content("~/Content/calendar.png")"></a></li>
+                    @if ((ViewBag.IsAdmin != null && ViewBag.IsAdmin == "true") || (ViewBag.IsSubAdmin != null && ViewBag.IsSubAdmin == "true"))
+                    {
+                        <li title="Ratings Toggle"><button id="ratingButton">R</button></li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -141,5 +145,45 @@
     @Scripts.Render("~/bundles/main")
     @Scripts.Render("~/bundles/moment")
     @RenderSection("scripts", required: false)
+
+    <script>
+        function toggleRatingButton() {
+            const button = document.getElementById('ratingButton');
+
+            if (isRatingsCookieSet()) {
+                button.style.backgroundColor = 'red';
+            } else {
+                button.style.backgroundColor = '#013E82';
+            }
+
+            const ratingSpans = document.querySelectorAll('#ratingDisplay');
+            if (ratingSpans) {
+                ratingSpans.forEach((ratingSpan) => {
+                    ratingSpan.style.display = isRatingsCookieSet() ? 'inline' : 'none';
+                });
+            }
+        }
+
+        function setupButton() {
+            const button = document.getElementById('ratingButton');
+            button.addEventListener('click', function () {
+                if (isRatingsCookieSet()) {
+                    deleteRatingsCookie();
+                } else {
+                    setRatingsCookie();
+                }
+                toggleRatingButton();
+            });
+
+            // Initial button color set and ratings show
+            toggleRatingButton();
+
+            // Periodic check
+            setInterval(toggleRatingButton, 1000); // Check every second
+        }
+
+        // Set up the button when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', setupButton);
+    </script>
 </body>
 </html>

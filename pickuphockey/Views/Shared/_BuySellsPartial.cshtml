@@ -34,13 +34,15 @@
     var buyerName = "TBD";
     var sellerName = "TBD";
     var sellingVerb = "SELLING TO";
+    var buyerRating = " ";
+    var sellerRating = " ";
 
     if (!string.IsNullOrEmpty(item.SellerUserId))
     {
         sellerName = item.SellerUser.FirstName + " " + item.SellerUser.LastName;
         if (isAdmin || isSubAdmin)
         {
-            sellerName += " (" + string.Format("{0:0.0}", item.SellerUser.Rating) + ")";
+            sellerRating = " (" + string.Format("{0:0.0}", item.SellerUser.Rating) + ")";
         }
     }
 
@@ -49,7 +51,7 @@
         buyerName = item.BuyerUser.FirstName + " " + item.BuyerUser.LastName;
         if (isAdmin || isSubAdmin)
         {
-            buyerName += " (" + string.Format("{0:0.0}", item.BuyerUser.Rating) + ")";
+            buyerRating = " (" + string.Format("{0:0.0}", item.BuyerUser.Rating) + ")";
         }
     }
 
@@ -59,7 +61,7 @@
     }
     <tr>
         <td>
-            @sellerName @sellingVerb @buyerName
+            @sellerName<span id="ratingDisplay" style="display:none">@sellerRating</span> @sellingVerb @buyerName<span id="ratingDisplay" style="display:none">@buyerRating</span>
         </td>
         <td>
             @if (isAdmin)
@@ -143,5 +145,4 @@
         </td>
     </tr>
 }
-
 </table>
