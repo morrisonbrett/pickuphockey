@@ -19,7 +19,7 @@
                     {
                         <div style="text-decoration: line-through;">
                             @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
-                            @Html.DisplayFor(modelItem => item.User.LastName)<span id="ratingDisplay" display="none">@if (isAdmin || isSubAdmin)
+                            @Html.DisplayFor(modelItem => item.User.LastName)<span id="ratingDisplay" class="rating-span">@if (isAdmin || isSubAdmin)
                             {
                                 var rating = string.Format("{0:0.0}", item.User.Rating);
                                 <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>}</span><span>, </span>
@@ -29,7 +29,7 @@
                     else
                     {
                         @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
-                        @Html.DisplayFor(modelItem => item.User.LastName)<span id="ratingDisplay" display="none">@if (isAdmin || isSubAdmin)
+                        @Html.DisplayFor(modelItem => item.User.LastName)<span id="ratingDisplay" class="rating-span">@if (isAdmin || isSubAdmin)
                         {
                             var rating = string.Format("{0:0.0}", item.User.Rating);
                             <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>}</span><span>, </span>
@@ -43,7 +43,7 @@
                     {
                         <div style="text-decoration: line-through;">
                             @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
-                            @Html.DisplayFor(modelItem => item.BuyerUser.LastName)<span id="ratingDisplay" display="none">@if (isAdmin || isSubAdmin)
+                            @Html.DisplayFor(modelItem => item.BuyerUser.LastName)<span id="ratingDisplay" class="rating-span">@if (isAdmin || isSubAdmin)
                             {
                                 var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
                                 <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>
@@ -53,7 +53,7 @@
                     else
                     {
                         @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
-                        @Html.DisplayFor(modelItem => item.BuyerUser.LastName)<span id="ratingDisplay" display="none">@if (isAdmin || isSubAdmin)
+                        @Html.DisplayFor(modelItem => item.BuyerUser.LastName)<span id="ratingDisplay" class="rating-span">@if (isAdmin || isSubAdmin)
                         {
                             var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
                             <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>
@@ -69,7 +69,7 @@
                     {
                         <div style="text-decoration: line-through;">
                             @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
-                            @Html.DisplayFor(modelItem => item.User.LastName)<span id="ratingDisplay" display="none">@if (isAdmin || isSubAdmin)
+                            @Html.DisplayFor(modelItem => item.User.LastName)<span id="ratingDisplay" class="rating-span">@if (isAdmin || isSubAdmin)
                             {
                                 var rating = string.Format("{0:0.0}", item.User.Rating);
                                 <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>}</span><span>, </span>
@@ -79,7 +79,7 @@
                     else
                     {
                         @Html.DisplayFor(modelItem => item.User.FirstName)<span> </span>
-                        @Html.DisplayFor(modelItem => item.User.LastName)<span id="ratingDisplay" display="none">@if (isAdmin || isSubAdmin)
+                        @Html.DisplayFor(modelItem => item.User.LastName)<span id="ratingDisplay" class="rating-span">@if (isAdmin || isSubAdmin)
                         {
                             var rating = string.Format("{0:0.0}", item.User.Rating);
                             <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>}</span><span>, </span>
@@ -93,7 +93,7 @@
                     {
                         <div style="text-decoration: line-through;">
                             @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
-                            @Html.DisplayFor(modelItem => item.BuyerUser.LastName)<span id="ratingDisplay" display="none">@if (isAdmin || isSubAdmin)
+                            @Html.DisplayFor(modelItem => item.BuyerUser.LastName)<span id="ratingDisplay" class="rating-span">@if (isAdmin || isSubAdmin)
                             {
                                 var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
                                 <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>
@@ -103,7 +103,7 @@
                     else
                     {
                         @Html.DisplayFor(modelItem => item.BuyerUser.FirstName)<span> </span>
-                        @Html.DisplayFor(modelItem => item.BuyerUser.LastName)<span id="ratingDisplay" display="none">@if (isAdmin || isSubAdmin)
+                        @Html.DisplayFor(modelItem => item.BuyerUser.LastName)<span id="ratingDisplay" class="rating-span">@if (isAdmin || isSubAdmin)
                         {
                             var rating = string.Format("{0:0.0}", item.BuyerUser.Rating);
                             <span> (</span>@Html.DisplayFor(modelItem => rating)<span>)</span>
@@ -116,10 +116,10 @@
         @if (isAdmin || isSubAdmin)
         {
             <tr>
-                <th><span id="ratingDisplay" display="none">
+                <th><span id="ratingDisplay" class="rating-span">
                     Light Rating: Total: @string.Format("{0:0.0}", Model.LightTotalRating), Average: @string.Format("{0:0.00}", @Decimal.Divide(Model.LightTotalRating, Model.LightCount > 0 ? Model.LightCount : 1))
                 </span></th>
-                <th><span id="ratingDisplay" display="none">
+                <th><span id="ratingDisplay" class="rating-span">
                     Dark Rating: Total: @string.Format("{0:0.0}", Model.DarkTotalRating), Average: @string.Format("{0:0.00}", @Decimal.Divide(Model.DarkTotalRating, Model.DarkCount > 0 ? Model.DarkCount : 1))
                 </span></th>
             </tr>

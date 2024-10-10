@@ -41,9 +41,9 @@
                 s += result[i].User.FirstName;
                 s += '<span> </span>';
                 s += result[i].User.LastName;
-                s += '<span id="ratingDisplay" display="none"><span> (</span>';
+                s += '<span id="ratingDisplay" class="rating-span"><span> (</span>';
                 s += result[i].User.Rating.toFixed(1);
-                s += '</span><span id="ratingDisplay" display="none">)</span><span>, </span>';
+                s += '</span><span id="ratingDisplay" class="rating-span">)</span><span>, </span>';
                 s += result[i].PositionPreference == 1 ? 'Forward' : 'Defense';
                 s += '<br />'
 

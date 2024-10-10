@@ -65,6 +65,7 @@ textarea {
     width: 24px;
     height: 24px;
     margin-top: 14px;
+    margin-left: 13px;
     margin-bottom: 14px;
     border-radius: 50%;
     border: 2px;
@@ -75,4 +76,8 @@ textarea {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+.rating-span {
+    display: none;
 }
