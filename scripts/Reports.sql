@@ -203,3 +203,17 @@ FROM (
 ) AS Subquery
 GROUP BY [Sold Count]
 ORDER BY [Sold Count] ASC;
+
+/* Skaters that have never bought or sold */
+SELECT TOP (2000) Id, Email, EmailConfirmed, PasswordHash, SecurityStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEndDateUtc, LockoutEnabled, AccessFailedCount, UserName, FirstName, LastName, NotificationPreference, PayPalEmail, Active, Preferred, 
+             VenmoAccount, MobileLast4, Rating, PreferredPlus, EmergencyName, EmergencyPhone, LockerRoom13
+FROM   dbo.AspNetUsers
+WHERE (Id NOT IN
+                 (SELECT DISTINCT BuyerUserId
+                 FROM    dbo.BuySells
+                 WHERE (BuyerUserId IS NOT NULL))) AND (Email NOT LIKE '%brettmorrison%') AND (Id NOT IN
+                 (SELECT DISTINCT SellerUserId
+                 FROM    dbo.BuySells AS BuySells_1
+                 WHERE (SellerUserId IS NOT NULL))) AND (Email NOT LIKE '%brettmorrison%') AND (Id NOT IN
+                 (SELECT DISTINCT UserId
+                 FROM    dbo.ActivityLogs))
