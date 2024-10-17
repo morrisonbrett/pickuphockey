@@ -21,6 +21,7 @@ namespace pickuphockey.Controllers
     {
         private ApplicationUserManager _userManager;
         private readonly EmailServices _emailServices;
+        private readonly string _inviteCode = System.Configuration.ConfigurationManager.AppSettings["InviteCode"];
 
         public AccountController()
         {
@@ -185,6 +186,14 @@ namespace pickuphockey.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, PayPalEmail = model.PayPalEmail, FirstName = model.FirstName, LastName = model.LastName, Active = false, NotificationPreference = NotificationPreference.OnlyMyBuySell };
+
+                if (model.InviteCode != _inviteCode)
+                {
+                    ModelState.AddModelError("", "Invalid Invite Code");
+
+                    return View(model);
+                }
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
