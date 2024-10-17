@@ -81,8 +81,8 @@ namespace pickuphockey.Models
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Confirm Password")]
+        [Compare("Password", ErrorMessage = "The Password and Confirm Password fields do not match.")]
         public string ConfirmPassword { get; set; }
 
         [Required]
@@ -97,7 +97,7 @@ namespace pickuphockey.Models
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
-        [Display(Name = "InviteCode")]
+        [Display(Name = "Invite Code")]
         public string InviteCode { get; set; }
     }
 
@@ -116,7 +116,7 @@ namespace pickuphockey.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "The Password and Confirm Password fields do not match.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
