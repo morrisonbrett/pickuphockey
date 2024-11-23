@@ -1,4 +1,5 @@
-﻿/// <reference path="jquery-ui-1-13.3.js" />
+﻿/// <reference path="jquery-ui-1-14.1.js jquery-ui-1.14.1.js" />
+/// <reference path="jquery-ui-1-13.3.js" />
 /// <reference path="jquery-3.7.1.js" />
 /// <autosync enabled="true" />
 /// <reference path="ai.0.22.9-build00167.min.js" />
