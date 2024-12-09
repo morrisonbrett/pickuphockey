@@ -37,7 +37,7 @@ namespace pickuphockey.Functions
 
         #region interface
         [Function("CheckCalendar")]
-        public async Task RunAsync([TimerTrigger("0 0 5,17 * * *")] TimerInfo timerInfo)
+        public async Task RunAsync([TimerTrigger("0 0 10 */4 *")] TimerInfo timerInfo)
         {
             _logger.LogInformation("Timer trigger function executed.");
 
