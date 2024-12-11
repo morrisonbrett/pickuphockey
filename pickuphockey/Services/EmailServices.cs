@@ -22,8 +22,8 @@ namespace pickuphockey.Services
 
         public async Task SendMail(string subject, string body, List<EmailAddress> recipientList)
         {
-            //if (ConfigurationManager.AppSettings["DisableEmail"] != null && ConfigurationManager.AppSettings["DisableEmail"] == "true")
-            //    return;
+            if (ConfigurationManager.AppSettings["DisableEmail"] != null && ConfigurationManager.AppSettings["DisableEmail"] == "true")
+                return;
 
 			var message = new SendGridMessage();
 			message.SetFrom(new EmailAddress(ConfigurationManager.AppSettings["SendGridFromAddress"]));
