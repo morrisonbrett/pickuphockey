@@ -14,6 +14,8 @@
 
     // https://gabeoleary.com/posts/venmo-deeplinking-including-from-web-apps
     var VenmoUrl = "https://venmo.com";
+
+    var cost = (item.Session.Cost == 0) ? System.Configuration.ConfigurationManager.AppSettings["SessionBuyPrice"] : item.Session.Cost.ToString("F2");
 }
 <h2>Payment for a Spot for @ViewBag.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm")</h2>
 <h4>
@@ -26,7 +28,7 @@
 <div>
     <b>Seller</b>: @item.SellerUser.FullName, @item.SellerUser.Email
     <br />
-    <b>Amount</b>: $@System.Configuration.ConfigurationManager.AppSettings["SessionBuyPrice"]
+    <b>Amount</b>: $@cost
 </div>
 <hr />
 @if (!string.IsNullOrEmpty(item.SellerUserId) && !string.IsNullOrEmpty(item.BuyerUserId) && item.BuyerUserId == userid && !item.PaymentSent)
@@ -37,7 +39,7 @@
             <form action="@VenmoUrl/@item.SellerUser.VenmoAccount" method="get" target="_blank">
                 <input type="hidden" name="txn" value="pay">
                 <input type="hidden" name="note" value="@System.Configuration.ConfigurationManager.AppSettings["SiteTitle"] - @item.Session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm")">
-                <input type="hidden" name="amount" value="@System.Configuration.ConfigurationManager.AppSettings["SessionBuyPrice"]">
+                <input type="hidden" name="amount" value="@cost">
                 <input type="image" src="~/Content/venmo.png" width="150" border="0" name="submit" alt="Venmo - Fast, safe, social payments">
                 @if (!string.IsNullOrEmpty(item.SellerUser.MobileLast4))
                 {
@@ -60,7 +62,7 @@
                 <input type="hidden" name="business" value="@item.SellerUser.PayPalEmail">
                 <input type="hidden" name="lc" value="US">
                 <input type="hidden" name="item_name" value="@System.Configuration.ConfigurationManager.AppSettings["SiteTitle"] - @item.Session.SessionDate.ToString("dddd, MM/dd/yyyy, HH:mm")">
-                <input type="hidden" name="amount" value="@System.Configuration.ConfigurationManager.AppSettings["SessionBuyPrice"]">
+                <input type="hidden" name="amount" value="@cost">
                 <input type="hidden" name="currency_code" value="USD">
                 <input type="hidden" name="button_subtype" value="services">
                 <input type="hidden" name="no_note" value="0">

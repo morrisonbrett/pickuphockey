@@ -425,6 +425,10 @@
     <Compile Include="Migrations\202312061956109_Locker Room 13.designer.cs">
       <DependentUpon>202312061956109_Locker Room 13.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202412112253129_SessionCost.cs" />
+    <Compile Include="Migrations\202412112253129_SessionCost.Designer.cs">
+      <DependentUpon>202412112253129_SessionCost.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -808,6 +812,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202312061956109_Locker Room 13.resx">
       <DependentUpon>202312061956109_Locker Room 13.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202412112253129_SessionCost.resx">
+      <DependentUpon>202412112253129_SessionCost.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

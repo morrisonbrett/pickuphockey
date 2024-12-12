@@ -139,6 +139,9 @@ namespace pickuphockey.Models
         [ForeignKey("RegularSetId")]
         public virtual RegularSet RegularSet { get; set; }
 
+        [DisplayName("Cost")]
+        public decimal Cost { get; set; }
+
         [DisplayName("Roster")]
         [NotMapped]
         public virtual ICollection<Regular> Regulars { get; set; }

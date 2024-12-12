@@ -12,6 +12,7 @@
     var alreadySold = Model.AlreadySold();
     var unmarkedReceivedCount = Model.UnmarkedReceived.Count();
     var unmarkedSentCount = Model.UnmarkedSent.Count();
+    var cost = (Model.Cost == 0) ? System.Configuration.ConfigurationManager.AppSettings["SessionBuyPrice"] : Model.Cost.ToString("F2");
 }
 
 <h2>@Html.DisplayFor(model => model.SessionDate)</h2>
@@ -152,6 +153,7 @@
                     </div>
                 }
             </div>
+            <span>Cost: $@cost</span>
         </div>
     }
     else
