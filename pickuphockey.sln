@@ -27,8 +27,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		scripts\Updates.sql = scripts\Updates.sql
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pickuphockey.Functions", "pickuphockey.Functions\pickuphockey.Functions.csproj", "{2AE362DE-80A9-4503-A99D-77AE42BFFEA6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,10 +41,6 @@ Global
 		{C576A452-E9A3-43C0-9A71-76FCEA2B63FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C576A452-E9A3-43C0-9A71-76FCEA2B63FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C576A452-E9A3-43C0-9A71-76FCEA2B63FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2AE362DE-80A9-4503-A99D-77AE42BFFEA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AE362DE-80A9-4503-A99D-77AE42BFFEA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2AE362DE-80A9-4503-A99D-77AE42BFFEA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2AE362DE-80A9-4503-A99D-77AE42BFFEA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
