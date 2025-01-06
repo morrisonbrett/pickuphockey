@@ -1,6 +1,9 @@
 /* Tune Indexes */
 EXEC sp_updatestats;
 
+--exec [PopulateHistoricalSessionRosters]
+EXEC [GetUserStats] 'fdbfe74a-a5c5-4ff0-8edb-c98a5df9d85a'
+
 /* Recent Activities, shows SessionDate column for context */
 SELECT TOP 200 FirstName + ' ' + LastName AS Name, DATEADD(HH, -8, ActivityLogs.CreateDateTime) as 'CreateDateTime PST', Activity, DATENAME(WEEKDAY, SessionDate) AS SessionDay, ActivityLogs.SessionId, SessionDate, ActivityLogs.UserId from ActivityLogs
 INNER JOIN Sessions ON ActivityLogs.SessionId = sessions.SessionId
